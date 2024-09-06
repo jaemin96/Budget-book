@@ -1,7 +1,0 @@
-# Next
-
-## Install
-
-```
-$ yarn install
-```
