@@ -13,8 +13,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "BudgetBook": "file:",
-    "next": "14.2.8",
+    "next": "^14.2.12",
     "react": "^18",
     "react-dom": "^18"
   },
