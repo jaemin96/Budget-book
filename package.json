@@ -7,15 +7,15 @@
     "yarn": "1.22.22"
   },
   "scripts": {
-    "dev": "next dev -p 3005",
+    "dev": "next dev -p 3021",
     "build": "next build",
-    "start": "next start -p 3005",
+    "start": "next start -p 3021",
     "lint": "next lint"
   },
   "dependencies": {
-    "antd": "^5.20.6",
+    "antd": "^5.23.3",
     "next": "^14.2.12",
-    "react": "^18",
+    "react": "18.3.1",
     "react-dom": "^18"
   },
   "devDependencies": {
