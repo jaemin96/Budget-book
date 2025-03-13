@@ -1,21 +1,11 @@
-"use client";
+'use client';
 
-import { DatePicker, Space } from 'antd';
-import { DatePickerProps } from 'antd/es/date-picker';
-
-const Page = () =>{
-  const onChange: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString);
-  };
+const Page = () => {
   return (
     <>
-      <div>
-        <Space>
-          <DatePicker onChange={onChange} picker='month' />
-        </Space>
-      </div>
+      <div>page</div>
     </>
-  )
-}
+  );
+};
 
 export default Page;
