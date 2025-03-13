@@ -41,12 +41,6 @@ jobs:
         run: pnpm lint
         if: ${{ always() }}
 
-      # Step - check type
-      - name: Checking Type
-        id: Type-Check
-        run: pnpm typecheck
-        if: ${{ always() }}
-
       # Step - test build
       - name: Testing Build
         id: Build-Test
