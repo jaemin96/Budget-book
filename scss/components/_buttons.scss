@@ -1,4 +1,4 @@
-@import '../abstracts/variables';
+@use '../abstracts' as *;
 
 button {
   @include components-button-style($primary-color, 10rem, 2rem);
