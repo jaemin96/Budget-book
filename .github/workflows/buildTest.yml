@@ -34,3 +34,22 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+
+      # Step - test lint
+      - name: Testing Lint
+        id: Lint-Test
+        run: pnpm lint
+        if: ${{ always() }}
+
+      # Step - check type
+      - name: Checking Type
+        id: Type-Check
+        run: pnpm typecheck
+        if: ${{ always() }}
+
+      # Step - test build
+      - name: Testing Build
+        id: Build-Test
+        run: |
+          pnpm build
+        if: ${{ always() }}
