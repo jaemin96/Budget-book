@@ -1,28 +1,9 @@
-/* Abstract */
-@import 'abstracts/mixins';
-@import 'abstracts/variables';
+@charset 'URF-8';
 
-/* Vendor */
-@import 'vendors/tailwind';
-
-/* Base */
-@import 'base/reset';
-@import 'base/animations';
-@import 'base/typography';
-
-/* Components */
-@import 'components/buttons';
-
-/* layout */
-@import 'layout/footer';
-@import 'layout/forms';
-@import 'layout/grid';
-@import 'layout/header';
-@import 'layout/navigation';
-@import 'layout/sidebar';
-
-/* Pages */
-@import 'pages/home';
-
-/* Theme */
-@import 'themes/theme';
+@use 'abstracts';
+@use 'vendors';
+@use 'base';
+@use 'components';
+@use 'layout';
+@use 'pages';
+@use 'themes';
