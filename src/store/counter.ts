@@ -1,3 +1,5 @@
+'use client'
+
 import { createSlice } from '@reduxjs/toolkit';
 
 export interface CounterState {
@@ -5,14 +7,14 @@ export interface CounterState {
   amount: number;
 }
 
-const initialState: CounterState = {
+export const counterInitialState: CounterState = {
   value: 0,
   amount: 1,
 };
 
 export const counterSlice = createSlice({
   name: 'counter',
-  initialState,
+  initialState: counterInitialState,
   reducers: {
     setAmount: (state, action) => {
       state.amount = action.payload;
