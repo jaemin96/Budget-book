@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - test
   pull_request:
     branches:
       - main
@@ -35,15 +36,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      # # Step - test lint
-      # - name: Testing Lint
-      #   id: Lint-Test
-      #   run: pnpm lint
-      #   if: ${{ always() }}
+      # Step - test lint
+      - name: Testing Lint
+        id: Lint-Test
+        run: pnpm lint
+        if: ${{ always() }}
 
-      # # Step - test build
-      # - name: Testing Build
-      #   id: Build-Test
-      #   run: |
-      #     pnpm build
-      #   if: ${{ always() }}
+      # Step - test build
+      - name: Testing Build
+        id: Build-Test
+        run: |
+          pnpm build
+        if: ${{ always() }}
