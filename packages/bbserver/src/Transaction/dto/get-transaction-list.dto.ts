@@ -1,7 +1,7 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { BaseOutput } from 'src/common';
-import { Transaction } from '../entities';
 import { TransactionCategory, TransactionType } from '../enum';
+import { TransactionModel } from '../model';
 
 @InputType()
 export class GetTransactionListInput {
@@ -14,6 +14,6 @@ export class GetTransactionListInput {
 
 @ObjectType()
 export class GetTransactionListOutput extends BaseOutput {
-  @Field(() => Transaction, { nullable: true })
-  transactions: Transaction[];
+  @Field(() => TransactionModel, { nullable: true })
+  transactions: TransactionModel[];
 }

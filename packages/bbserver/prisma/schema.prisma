@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ==============================
+// 📌 Transaction - 입출금 기록
+// ==============================
+enum TransactionType {
+  INCOME   // 예: 입금
+  EXPENSE  // 예: 출금
+}
+
+enum TransactionCategory {
+  FOOD
+  TRANSPORT
+  UTILITIES
+  ETC
+}
+
+enum TransactionWithdrawType {
+  CARD
+  CASH
+  TRANSFER
+}
+
+model Transaction {
+  id           Int                      @id @default(autoincrement())
+  amount       Float
+  depositor    String?
+  description  String
+  type         TransactionType
+  category     TransactionCategory?     @default(ETC)
+  withdrawType TransactionWithdrawType?
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+}
+
+// ==============================
+// 📌 
+// ==============================

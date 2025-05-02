@@ -1,7 +1,5 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Transaction } from './entities';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { PrismaService } from 'src/Prisma/prisma.service';
 import {
   CreateTransactionInput,
   CreateTransactionOutput,
@@ -13,73 +11,62 @@ import {
 
 @Injectable()
 export class TransactionService {
-  constructor(@InjectRepository(Transaction) private readonly transactionRepo: Repository<Transaction>) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   /**
-   * Service - 입출금 항목 추가
-   * @param CreateTransactionInput
-   * @return CreateTransactionOutput
+   * 입출금 항목 추가
    */
   async createTransaction(input: CreateTransactionInput): Promise<CreateTransactionOutput> {
-    const transaction = this.transactionRepo.create({ ...input });
-
-    await this.transactionRepo.save(transaction);
+    const transaction = await this.prisma.transaction.create({
+      data: input,
+    });
 
     return { id: transaction.id };
   }
 
-  /**
-   * Service - 입출금 내역 조회
-   * @param GetTransactionInput
-   * @return GetTransactionOutput
-   */
-  async getTransaction(input: GetTransactionInput): Promise<GetTransactionOutput> {
-    const transaction = await this.transactionRepo.findOne({
-      where: { id: input.id },
-    });
+  // /**
+  //  * 입출금 단건 조회
+  //  */
+  // async getTransaction(input: GetTransactionInput): Promise<GetTransactionOutput> {
+  //   const transaction = await this.prisma.transaction.findUnique({
+  //     where: { id: input.id },
+  //   });
 
-    if (!transaction) {
-      throw new HttpException('입출금 내역이 존재 하지 않습니다.', HttpStatus.NOT_FOUND);
-    }
+  //   if (!transaction) {
+  //     throw new HttpException('입출금 내역이 존재 하지 않습니다.', HttpStatus.NOT_FOUND);
+  //   }
 
-    return { transaction };
-  }
+  //   transaction.amount = transaction.amount ?? 0;
 
-  /**
-   * Service - 입출금 내역 리스트 조회
-   * @param GetTransactionListInput
-   * @return GetTransactionListOutput
-   */
-  async getTransactionList(input?: GetTransactionListInput): Promise<GetTransactionListOutput> {
-    try {
-      let transactions;
+  //   return { transaction };
+  // }
 
-      if (!input) {
-        transactions = await this.transactionRepo.find({});
-      } else {
-        transactions = await this.transactionRepo.find({
-          where: { ...input },
-        });
-      }
+  // /**
+  //  * 입출금 리스트 조회
+  //  */
+  // async getTransactionList(input?: GetTransactionListInput): Promise<GetTransactionListOutput> {
+  //   const transactions = await this.prisma.transaction.findMany({
+  //     where: { ...input },
+  //   });
 
-      return { transactions };
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
+  //   return { transactions };
+  // }
 
   /**
-   * Service - 계좌 총액 조회
+   * 계좌 총액 조회
    */
   async getTotalAmount(): Promise<number> {
-    const result = await this.transactionRepo
-      .createQueryBuilder('transaction')
-      .select(
-        "SUM(CASE WHEN transaction.type = '입금' THEN transaction.amount WHEN transaction.type = '출금' THEN -transaction.amount ELSE 0 END)",
-        'total_balance'
-      )
-      .getRawOne();
+    const result = await this.prisma.$queryRawUnsafe<{ total_balance: number }>(`
+      SELECT SUM(
+        CASE
+          WHEN type = '입금' THEN amount
+          WHEN type = '출금' THEN -amount
+          ELSE 0
+        END
+      ) AS total_balance
+      FROM "Transaction"
+    `);
 
-    return result.total_balance;
+    return result?.[0]?.total_balance ?? 0;
   }
 }

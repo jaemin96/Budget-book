@@ -1,6 +1,6 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { BaseOutput } from 'src/common';
-import { Transaction } from '../entities';
+import { TransactionModel } from '../model';
 
 @InputType()
 export class GetTransactionInput {
@@ -10,6 +10,6 @@ export class GetTransactionInput {
 
 @ObjectType()
 export class GetTransactionOutput extends BaseOutput {
-  @Field(() => Transaction, { nullable: true })
-  transaction: Transaction;
+  @Field(() => TransactionModel, { nullable: true })
+  transaction: TransactionModel;
 }

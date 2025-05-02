@@ -1,9 +1,27 @@
-import { Field, InputType, ObjectType, OmitType } from '@nestjs/graphql';
+import { Field, InputType, Float, ObjectType } from '@nestjs/graphql';
 import { BaseOutput } from 'src/common';
-import { Transaction } from '../entities';
+import { TransactionType, TransactionCategory, TransactionWithdrawType } from '@prisma/client';
 
 @InputType()
-export class CreateTransactionInput extends OmitType(Transaction, ['id', 'createdAt', 'updatedAt', 'deletedAt']) {}
+export class CreateTransactionInput {
+  @Field(() => Float)
+  amount: number;
+
+  @Field(() => String, { nullable: true })
+  depositor?: string;
+
+  @Field(() => String)
+  description: string;
+
+  @Field(() => TransactionType)
+  type: TransactionType;
+
+  @Field(() => TransactionCategory, { nullable: true })
+  category?: TransactionCategory;
+
+  @Field(() => TransactionWithdrawType, { nullable: true })
+  withdrawType?: TransactionWithdrawType;
+}
 
 @ObjectType()
 export class CreateTransactionOutput extends BaseOutput {
