@@ -14,7 +14,7 @@
 | `build`    | 빌드 시스템 변경                             |
 | `revert`   | 이전 커밋 되돌리기                           |
 
-### 💡 모노레포에 따른 커밋 컨벤션 구축
+## 💡 모노레포에 따른 커밋 컨벤션 구축
 
 ```tsx
     [CLIENT OR SERVER OR ROOT] <tag>(<[optional scope]>): <description>
@@ -34,7 +34,7 @@
 >   - fixes : 특정 이슈 수정작업
 >   - refs : 특정 이슈번호 참조
 
-#### 최종 예시
+### 최종 예시
 
 ```bash
 [CLIENT] feat(auth): add feature - sign
