@@ -7,6 +7,9 @@ export default tseslint.config(
   {
     ignores: ["**/dist/**", "**/node_modules/**"],
   },
+  {
+    extends: ["prettier"],
+  },
 
   // Server (bbserver) 설정
   {
