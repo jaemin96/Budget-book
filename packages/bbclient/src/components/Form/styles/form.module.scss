@@ -1,0 +1,17 @@
+.form {
+  border: 1px solid #adadad;
+
+  &-item {
+    &-vertical {
+      color: red;
+    }
+    &-horizontal {
+      color: darkcyan;
+    }
+  }
+
+  &-label {
+  }
+  &-control {
+  }
+}

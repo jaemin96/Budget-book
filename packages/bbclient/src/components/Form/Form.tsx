@@ -1,6 +1,7 @@
 import React, { forwardRef } from "react";
 import FormItem from "./FormItem";
 import { FormItemProps } from "./types/formTypes";
+import styles from "./styles/form.module.scss";
 
 type FormProps = React.FormHTMLAttributes<HTMLFormElement>;
 
@@ -14,7 +15,7 @@ interface FormComponent
 const BaseForm = forwardRef<HTMLFormElement, FormProps>(
   ({ children, ...props }, ref) => {
     return (
-      <form ref={ref} {...props}>
+      <form className={styles.form} ref={ref} {...props}>
         {children}
       </form>
     );
