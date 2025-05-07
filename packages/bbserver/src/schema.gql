@@ -58,9 +58,9 @@ type TransactionModel {
   depositor: String
   description: String!
   id: Float!
+  paymentType: TransactionPaymentType
   type: TransactionType!
   updatedAt: DateTime!
-  withdrawType: TransactionPaymentType
 }
 
 enum TransactionPaymentType {

@@ -22,7 +22,7 @@ export class TransactionModel {
   category?: TransactionCategory;
 
   @Field(() => TransactionPaymentType, { nullable: true })
-  withdrawType?: TransactionPaymentType;
+  paymentType?: TransactionPaymentType;
 
   @Field(() => Date)
   createdAt: Date;
