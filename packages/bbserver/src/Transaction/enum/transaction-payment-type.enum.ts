@@ -1,0 +1,18 @@
+import { registerEnumType } from '@nestjs/graphql';
+
+export enum TransactionPaymentType {
+  CREDIT_CARD = '신용카드',
+  CHECK_CARD = '체크카드',
+  KAKAO_PAY = '카카오페이',
+  APPLE_PAY = '애플페이',
+  NAVER_PAY = '네이버페이',
+  TOSS = '토스',
+  BANK_TRANSFER = '계좌이체',
+  CASH = '현금',
+  POINT = '포인트',
+  GIFT_CARD = '상품권',
+  VIRTUAL_ACCOUNT = '가상계좌',
+  CRYPTO = '암호화폐',
+  ETC = '기타',
+}
+registerEnumType(TransactionPaymentType, { name: 'TransactionPaymentType' });

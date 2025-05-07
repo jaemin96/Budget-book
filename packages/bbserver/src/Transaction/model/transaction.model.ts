@@ -1,5 +1,5 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { TransactionCategory, TransactionType, TransactionWithdrawType } from '@prisma/client';
+import { TransactionCategory, TransactionType, TransactionPaymentType } from '@prisma/client';
 
 @ObjectType()
 export class TransactionModel {
@@ -21,8 +21,8 @@ export class TransactionModel {
   @Field(() => TransactionCategory, { nullable: true })
   category?: TransactionCategory;
 
-  @Field(() => TransactionWithdrawType, { nullable: true })
-  withdrawType?: TransactionWithdrawType;
+  @Field(() => TransactionPaymentType, { nullable: true })
+  withdrawType?: TransactionPaymentType;
 
   @Field(() => Date)
   createdAt: Date;
@@ -33,4 +33,4 @@ export class TransactionModel {
 
 registerEnumType(TransactionType, { name: 'TransactionType' });
 registerEnumType(TransactionCategory, { name: 'TransactionCategory' });
-registerEnumType(TransactionWithdrawType, { name: 'TransactionWithdrawType' });
+registerEnumType(TransactionPaymentType, { name: 'TransactionPaymentType' });

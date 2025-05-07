@@ -7,8 +7,8 @@ input CreateTransactionInput {
   category: TransactionCategory
   depositor: String
   description: String!
+  paymentType: TransactionPaymentType
   type: TransactionType!
-  withdrawType: TransactionWithdrawType
 }
 
 type CreateTransactionOutput {
@@ -35,10 +35,20 @@ type Query {
 }
 
 enum TransactionCategory {
+  DRINK
+  DUES
+  EMERGENCY_FUND
   ETC
   FOOD
+  INSURANCE
+  INVESTMENT
+  PHONE
+  PRESENT
+  SALARY
+  SAVINGS
+  SHOPPING
+  SUBSCRIBE
   TRANSPORT
-  UTILITIES
 }
 
 type TransactionModel {
@@ -50,16 +60,26 @@ type TransactionModel {
   id: Float!
   type: TransactionType!
   updatedAt: DateTime!
-  withdrawType: TransactionWithdrawType
+  withdrawType: TransactionPaymentType
+}
+
+enum TransactionPaymentType {
+  APPLE_PAY
+  BANK_TRANSFER
+  CASH
+  CHECK_CARD
+  CREDIT_CARD
+  CRYPTO
+  ETC
+  GIFT_CARD
+  KAKAO_PAY
+  NAVER_PAY
+  POINT
+  TOSS
+  VIRTUAL_ACCOUNT
 }
 
 enum TransactionType {
   EXPENSE
   INCOME
-}
-
-enum TransactionWithdrawType {
-  CARD
-  CASH
-  TRANSFER
 }

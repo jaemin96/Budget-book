@@ -1,6 +1,6 @@
 import { Field, InputType, Float, ObjectType } from '@nestjs/graphql';
 import { BaseOutput } from 'src/common';
-import { TransactionType, TransactionCategory, TransactionWithdrawType } from '@prisma/client';
+import { TransactionType, TransactionCategory, TransactionPaymentType } from '@prisma/client';
 
 @InputType()
 export class CreateTransactionInput {
@@ -19,8 +19,8 @@ export class CreateTransactionInput {
   @Field(() => TransactionCategory, { nullable: true })
   category?: TransactionCategory;
 
-  @Field(() => TransactionWithdrawType, { nullable: true })
-  withdrawType?: TransactionWithdrawType;
+  @Field(() => TransactionPaymentType, { nullable: true })
+  paymentType?: TransactionPaymentType;
 }
 
 @ObjectType()
