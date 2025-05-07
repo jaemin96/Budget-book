@@ -8,39 +8,52 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// ==============================
-// 📌 Transaction - 입출금 기록
-// ==============================
+model Transaction {
+  id          Int                     @id @default(autoincrement())
+  amount      Float
+  depositor   String?
+  description String
+  type        TransactionType
+  category    TransactionCategory?    @default(ETC)
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+  paymentType TransactionPaymentType?
+}
+
 enum TransactionType {
-  INCOME   // 예: 입금
-  EXPENSE  // 예: 출금
+  INCOME
+  EXPENSE
 }
 
 enum TransactionCategory {
+  SALARY
+  INSURANCE
+  DRINK
   FOOD
+  SHOPPING
   TRANSPORT
-  UTILITIES
+  SUBSCRIBE
+  PHONE
+  DUES
+  PRESENT
+  SAVINGS
+  INVESTMENT
+  EMERGENCY_FUND
   ETC
 }
 
-enum TransactionWithdrawType {
-  CARD
+enum TransactionPaymentType {
+  CREDIT_CARD
+  CHECK_CARD
+  KAKAO_PAY
+  APPLE_PAY
+  NAVER_PAY
+  TOSS
+  BANK_TRANSFER
   CASH
-  TRANSFER
+  POINT
+  GIFT_CARD
+  VIRTUAL_ACCOUNT
+  CRYPTO
+  ETC
 }
-
-model Transaction {
-  id           Int                      @id @default(autoincrement())
-  amount       Float
-  depositor    String?
-  description  String
-  type         TransactionType
-  category     TransactionCategory?     @default(ETC)
-  withdrawType TransactionWithdrawType?
-  createdAt    DateTime                 @default(now())
-  updatedAt    DateTime                 @updatedAt
-}
-
-// ==============================
-// 📌 
-// ==============================
