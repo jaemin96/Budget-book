@@ -1,5 +1,3 @@
-import { registerEnumType } from '@nestjs/graphql';
-
 export enum TransactionCategory {
   SALARY = '급여',
   INSURANCE = '보험',
@@ -16,4 +14,3 @@ export enum TransactionCategory {
   EMERGENCY_FUND = '비상금',
   ETC = '기타',
 }
-registerEnumType(TransactionCategory, { name: 'TransactionCategory' });

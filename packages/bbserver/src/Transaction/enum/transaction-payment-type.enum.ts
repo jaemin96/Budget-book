@@ -1,5 +1,3 @@
-import { registerEnumType } from '@nestjs/graphql';
-
 export enum TransactionPaymentType {
   CREDIT_CARD = '신용카드',
   CHECK_CARD = '체크카드',
@@ -15,4 +13,3 @@ export enum TransactionPaymentType {
   CRYPTO = '암호화폐',
   ETC = '기타',
 }
-registerEnumType(TransactionPaymentType, { name: 'TransactionPaymentType' });
