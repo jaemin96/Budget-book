@@ -26,12 +26,33 @@ type ErrorOutput {
   message: String
 }
 
+input GetTransactionInput {
+  id: Float!
+}
+
+input GetTransactionListInput {
+  category: TransactionCategory
+  type: TransactionType
+}
+
+type GetTransactionListOutput {
+  message: ErrorOutput
+  transactions: [TransactionModel!]!
+}
+
+type GetTransactionOutput {
+  message: ErrorOutput
+  transaction: TransactionModel
+}
+
 type Mutation {
   createTransaction(input: CreateTransactionInput!): CreateTransactionOutput!
 }
 
 type Query {
   getTotalAmount: Float!
+  getTransaction(input: GetTransactionInput!): GetTransactionOutput!
+  getTransactionList(input: GetTransactionListInput): GetTransactionListOutput!
 }
 
 enum TransactionCategory {

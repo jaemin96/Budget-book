@@ -10,7 +10,7 @@ export class TransactionModel {
   amount: number | null;
 
   @Field(() => String, { nullable: true })
-  depositor?: string;
+  depositor?: string | null;
 
   @Field(() => String)
   description: string;
@@ -19,10 +19,10 @@ export class TransactionModel {
   type: TransactionType;
 
   @Field(() => TransactionCategory, { nullable: true })
-  category?: TransactionCategory;
+  category?: TransactionCategory | null;
 
   @Field(() => TransactionPaymentType, { nullable: true })
-  paymentType?: TransactionPaymentType;
+  paymentType?: TransactionPaymentType | null;
 
   @Field(() => Date)
   createdAt: Date;

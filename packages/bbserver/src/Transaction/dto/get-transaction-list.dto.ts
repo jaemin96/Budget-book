@@ -1,7 +1,7 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { BaseOutput } from 'src/common';
-import { TransactionCategory, TransactionType } from '../enum';
 import { TransactionModel } from '../model';
+import { TransactionCategory, TransactionType } from '@prisma/client';
 
 @InputType()
 export class GetTransactionListInput {
@@ -14,6 +14,6 @@ export class GetTransactionListInput {
 
 @ObjectType()
 export class GetTransactionListOutput extends BaseOutput {
-  @Field(() => TransactionModel, { nullable: true })
+  @Field(() => [TransactionModel])
   transactions: TransactionModel[];
 }

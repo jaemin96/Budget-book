@@ -8,6 +8,7 @@ import {
   GetTransactionListOutput,
   GetTransactionOutput,
 } from './dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class TransactionService {
@@ -24,33 +25,44 @@ export class TransactionService {
     return { id: transaction.id };
   }
 
-  // /**
-  //  * 입출금 단건 조회
-  //  */
-  // async getTransaction(input: GetTransactionInput): Promise<GetTransactionOutput> {
-  //   const transaction = await this.prisma.transaction.findUnique({
-  //     where: { id: input.id },
-  //   });
+  /**
+   * 입출금 단건 조회
+   */
+  async getTransaction(input: GetTransactionInput): Promise<GetTransactionOutput> {
+    const transaction = await this.prisma.transaction.findUnique({
+      where: { id: input.id },
+    });
 
-  //   if (!transaction) {
-  //     throw new HttpException('입출금 내역이 존재 하지 않습니다.', HttpStatus.NOT_FOUND);
-  //   }
+    if (!transaction) {
+      throw new HttpException('입출금 내역이 존재 하지 않습니다.', HttpStatus.NOT_FOUND);
+    }
 
-  //   transaction.amount = transaction.amount ?? 0;
+    transaction.amount = transaction.amount ?? 0;
 
-  //   return { transaction };
-  // }
+    return { transaction };
+  }
 
-  // /**
-  //  * 입출금 리스트 조회
-  //  */
-  // async getTransactionList(input?: GetTransactionListInput): Promise<GetTransactionListOutput> {
-  //   const transactions = await this.prisma.transaction.findMany({
-  //     where: { ...input },
-  //   });
+  /**
+   * 입출금 리스트 조회
+   */
+  async getTransactionList(input?: GetTransactionListInput): Promise<GetTransactionListOutput> {
+    const where: Prisma.TransactionWhereInput = {
+      type: input?.type ?? undefined,
+      category: input?.category ?? undefined,
+    };
 
-  //   return { transactions };
-  // }
+    const transactions = await this.prisma.transaction.findMany({
+      where,
+    });
+
+    console.log(transactions);
+
+    if (!transactions || transactions.length === 0) {
+      return { transactions: [] };
+    }
+
+    return { transactions };
+  }
 
   /**
    * 계좌 총액 조회
