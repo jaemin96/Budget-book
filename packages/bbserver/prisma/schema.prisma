@@ -8,6 +8,21 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model Account {
+  id                   Int      @id @default(autoincrement())
+  bankName             String
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  deletedAt            DateTime? // nullable
+
+  totalBalance         Decimal  @default(0.0)
+  availableBalance     Decimal  @default(0.0)
+  savingBalance        Decimal  @default(0.0)
+  fixedDepositBalance  Decimal  @default(0.0)
+  investmentBalance    Decimal  @default(0.0)
+  holdBalance          Decimal  @default(0.0)
+}
+
 model Transaction {
   id          Int                     @id @default(autoincrement())
   amount      Float
