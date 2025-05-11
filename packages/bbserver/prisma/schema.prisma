@@ -10,7 +10,7 @@ datasource db {
 
 model Account {
   id                   Int      @id @default(autoincrement())
-  bankName             String
+  bankName             String   @unique
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
   deletedAt            DateTime? // nullable
