@@ -29,7 +29,7 @@ export class AccountService {
     //   type: input?.type ?? undefined,
     };
 
-    const accounts = await this.prisma.transaction.findMany();
+    const accounts = await this.prisma.account.findMany();
 
     console.log(accounts);
 
