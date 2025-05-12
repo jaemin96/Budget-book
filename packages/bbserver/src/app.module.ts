@@ -6,6 +6,7 @@ import * as dotenv from 'dotenv';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TransactionModule } from './Transaction/transaction.module';
 import { PrismaService } from './Prisma/prisma.service';
+import { AccountModule } from './Account/account.module';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ dotenv.config();
       sortSchema: true,
     }),
     TransactionModule,
+    AccountModule,
   ],
   providers: [PrismaService],
 })
