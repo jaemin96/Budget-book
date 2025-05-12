@@ -23,6 +23,22 @@ const CreateTransaction: React.FC<CreateTransactionProps> = (props) => {
           <input name="description" />
         </Form.Item>
 
+        <Form.Item label="depositor">
+          <input name="depositor" />
+        </Form.Item>
+
+        <Form.Item label="Type" name="type">
+          <label>
+            <input type="radio" name="type" value="option1" /> Option 1
+          </label>
+          <label>
+            <input type="radio" name="type" value="option2" /> Option 2
+          </label>
+          <label>
+            <input type="radio" name="type" value="option3" /> Option 3
+          </label>
+        </Form.Item>
+
         <button type="submit">Submit</button>
       </Form>
     </>
