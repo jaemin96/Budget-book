@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "v22"
+  },
+  "packageManager": "pnpm@10.5.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint packages/** --ext .ts,.tsx,.js,.jsx",
