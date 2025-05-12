@@ -1,0 +1,16 @@
+export enum TransactionCategory {
+  SALARY = '급여',
+  INSURANCE = '보험',
+  DRINK = '음료',
+  FOOD = '식비',
+  SHOPPING = '쇼핑',
+  TRANSPORT = '교통비',
+  SUBSCRIBE = '구독료',
+  PHONE = '통신비',
+  DUES = '회비',
+  PRESENT = '선물',
+  SAVINGS = '저금',
+  INVESTMENT = '재테크',
+  EMERGENCY_FUND = '비상금',
+  ETC = '기타',
+}

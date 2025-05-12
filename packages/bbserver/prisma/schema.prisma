@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Account {
+  id                   Int      @id @default(autoincrement())
+  bankName             String   @unique
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  deletedAt            DateTime? // nullable
+
+  totalBalance         Decimal  @default(0.0)
+  availableBalance     Decimal  @default(0.0)
+  savingBalance        Decimal  @default(0.0)
+  fixedDepositBalance  Decimal  @default(0.0)
+  investmentBalance    Decimal  @default(0.0)
+  holdBalance          Decimal  @default(0.0)
+}
+
+model Transaction {
+  id          Int                     @id @default(autoincrement())
+  amount      Float
+  depositor   String?
+  description String
+  type        TransactionType
+  category    TransactionCategory?    @default(ETC)
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+  paymentType TransactionPaymentType?
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum TransactionCategory {
+  SALARY
+  INSURANCE
+  DRINK
+  FOOD
+  SHOPPING
+  TRANSPORT
+  SUBSCRIBE
+  PHONE
+  DUES
+  PRESENT
+  SAVINGS
+  INVESTMENT
+  EMERGENCY_FUND
+  ETC
+}
+
+enum TransactionPaymentType {
+  CREDIT_CARD
+  CHECK_CARD
+  KAKAO_PAY
+  APPLE_PAY
+  NAVER_PAY
+  TOSS
+  BANK_TRANSFER
+  CASH
+  POINT
+  GIFT_CARD
+  VIRTUAL_ACCOUNT
+  CRYPTO
+  ETC
+}

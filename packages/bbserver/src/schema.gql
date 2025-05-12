@@ -1,0 +1,180 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AccountModel {
+  """실제 입출금 가능한 금액"""
+  availableBalance: Float!
+
+  """은행명"""
+  bankName: String!
+  createdAt: DateTime!
+  deletedAt: DateTime
+
+  """예금에 묶여 있는 금액"""
+  fixedDepositBalance: Float!
+
+  """출금 예약 및 결제 대기 중인 금액"""
+  holdBalance: Float!
+  id: Float!
+
+  """투자 금액 (예: CMA, 펀드 등)"""
+  investmentBalance: Float!
+
+  """적금에 묶여 있는 금액"""
+  savingBalance: Float!
+
+  """계좌 총 금액 (자산)"""
+  totalBalance: Float!
+  updatedAt: DateTime!
+}
+
+input CreateAccountInput {
+  """실제 입출금 가능한 금액"""
+  availableBalance: Float = 0
+  bankName: String!
+
+  """예금에 묶여 있는 금액"""
+  fixedDepositBalance: Float = 0
+
+  """출금 예약 및 결제 대기 중인 금액"""
+  holdBalance: Float = 0
+
+  """투자 금액 (예: CMA, 펀드 등)"""
+  investmentBalance: Float = 0
+
+  """적금에 묶여 있는 금액"""
+  savingBalance: Float = 0
+
+  """계좌 총 금액 (자산)"""
+  totalBalance: Float = 0
+}
+
+type CreateAccountOutput {
+  id: Float
+  message: ErrorOutput
+}
+
+input CreateTransactionInput {
+  amount: Float!
+  category: TransactionCategory
+  depositor: String
+  description: String!
+  paymentType: TransactionPaymentType
+  type: TransactionType!
+}
+
+type CreateTransactionOutput {
+  id: Float
+  message: ErrorOutput
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type ErrorOutput {
+  code: String
+  message: String
+}
+
+input GetAccountInput {
+  bankName: String!
+}
+
+input GetAccountListInput {
+  totalBalance: Float
+}
+
+type GetAccountListOutput {
+  accounts: [AccountModel!]!
+  message: ErrorOutput
+}
+
+type GetAccountOutput {
+  account: AccountModel
+  message: ErrorOutput
+}
+
+input GetTransactionInput {
+  id: Float!
+}
+
+input GetTransactionListInput {
+  category: TransactionCategory
+  type: TransactionType
+}
+
+type GetTransactionListOutput {
+  message: ErrorOutput
+  transactions: [TransactionModel!]!
+}
+
+type GetTransactionOutput {
+  message: ErrorOutput
+  transaction: TransactionModel
+}
+
+type Mutation {
+  createAccount(input: CreateAccountInput!): CreateAccountOutput!
+  createTransaction(input: CreateTransactionInput!): CreateTransactionOutput!
+}
+
+type Query {
+  getAccount(input: GetAccountInput!): GetAccountOutput!
+  getAccountList(input: GetAccountListInput): GetAccountListOutput!
+  getTotalAmount: Float!
+  getTransaction(input: GetTransactionInput!): GetTransactionOutput!
+  getTransactionList(input: GetTransactionListInput): GetTransactionListOutput!
+}
+
+enum TransactionCategory {
+  DRINK
+  DUES
+  EMERGENCY_FUND
+  ETC
+  FOOD
+  INSURANCE
+  INVESTMENT
+  PHONE
+  PRESENT
+  SALARY
+  SAVINGS
+  SHOPPING
+  SUBSCRIBE
+  TRANSPORT
+}
+
+type TransactionModel {
+  amount: Float
+  category: TransactionCategory
+  createdAt: DateTime!
+  depositor: String
+  description: String!
+  id: Float!
+  paymentType: TransactionPaymentType
+  type: TransactionType!
+  updatedAt: DateTime!
+}
+
+enum TransactionPaymentType {
+  APPLE_PAY
+  BANK_TRANSFER
+  CASH
+  CHECK_CARD
+  CREDIT_CARD
+  CRYPTO
+  ETC
+  GIFT_CARD
+  KAKAO_PAY
+  NAVER_PAY
+  POINT
+  TOSS
+  VIRTUAL_ACCOUNT
+}
+
+enum TransactionType {
+  EXPENSE
+  INCOME
+}
