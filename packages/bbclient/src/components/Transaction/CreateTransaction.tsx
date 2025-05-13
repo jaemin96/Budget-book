@@ -1,5 +1,8 @@
 "use client";
+
 import { Form, useForm } from "../Form";
+import styles from "./styles/transaction.module.scss";
+import classNames from "classnames";
 
 type CreateTransactionProps = {};
 
@@ -13,7 +16,7 @@ const CreateTransaction: React.FC<CreateTransactionProps> = (props) => {
   };
 
   return (
-    <>
+    <div className={classNames(styles["create-transaction-form-wrapper"])}>
       <Form ref={formRef} onSubmit={handleSubmit}>
         <Form.Item label="Amount">
           <input type="number" name="amount" />
@@ -41,7 +44,7 @@ const CreateTransaction: React.FC<CreateTransactionProps> = (props) => {
 
         <button type="submit">Submit</button>
       </Form>
-    </>
+    </div>
   );
 };
 
