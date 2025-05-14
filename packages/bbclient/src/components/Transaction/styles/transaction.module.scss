@@ -1,8 +1,25 @@
 @use "../../../style/abstracts" as *;
 
-.create-transaction-form-wrapper {
+.transaction {
+}
+
+.transaction-form-wrapper {
   background: $budget-card-gray;
   border: 1px solid $budget-card-border;
   border-radius: 20px;
-  padding: 1.2rem;
+  padding: 0.95rem;
+}
+
+/* 모바일 전용 스타일 */
+@media (max-width: 768px) {
+  .transaction-submit-button {
+    width: 100% !important;
+    max-width: 100%;
+    padding: 0.35rem 0 !important;
+    text-align: center;
+
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-color: $budget-dark-gray !important;
+    color: $budget-carrot !important;
+  }
 }
