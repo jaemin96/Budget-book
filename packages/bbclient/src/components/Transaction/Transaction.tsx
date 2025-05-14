@@ -5,6 +5,8 @@ import classNames from "classnames";
 import styles from "./styles/transaction.module.scss";
 import { useQuery } from "@apollo/client";
 import { GET_TRANSACTION_LIST } from "@/graphql/queries/getTransactionList";
+import { Card, Button } from "@/components";
+import Link from "next/link";
 
 interface TransactionProps {}
 
@@ -26,12 +28,58 @@ const Transaction: React.FC<TransactionProps> = (props) => {
     console.log({ transactions });
   }, [transactions]);
 
+  const columns = [
+    "ID",
+    "Amount",
+    "Depositor",
+    "Description",
+    "Type",
+    "Category",
+    "PaymentType",
+  ];
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error!</p>;
 
   return (
     <>
-      <div className={classNames(styles.transaction)}>hello</div>
+      <Card.Header
+        title="Transactions"
+        buttons={
+          <>
+            <Button>
+              <Link href="/transaction/create">+</Link>
+            </Button>
+            <Button>2</Button>
+          </>
+        }
+      />
+      <Card.Body>
+        <div className={classNames(styles.transaction)}>
+          <table>
+            <thead>
+              <tr>
+                {columns.map((col) => (
+                  <th key={col}>{col}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {transactions?.map((row) => (
+                <tr key={row.id}>
+                  <td>{row.id}</td>
+                  <td>{row.amount}</td>
+                  <td>{row.depositor}</td>
+                  <td>{row.description}</td>
+                  <td>{row.type}</td>
+                  <td>{row.category}</td>
+                  <td>{row.paymentType}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card.Body>
     </>
   );
 };
