@@ -1,19 +1,4 @@
-$budget-carrot: #ff9208;
-$budget-yellow: #ffd36e;
-$budget-light-gray: #c0c6cc;
-$budget-gray: #aab0b6;
-$budget-dark-gray: #8e959c;
-$budget-text: #1a1a1a;
-$budget-black: #121212;
-$budget-white: #f8f9fa;
-
-// 버튼 포인트	#FF9208	CTA 버튼 등 강조 요소
-// 강조 색 (서브)	#FFD36E	강조 배경/아이콘 등
-// 서브 배경	#C0C6CC	카드, 컨테이너 배경
-// 서브 텍스트	#8E959C	보조 설명 등
-// 텍스트 기본	#1A1A1A	메인 텍스트
-// 다크 배경	#121212	다크모드 배경 또는 대비 강조용
-// 배경 (라이트)	#F8F9FA	깔끔한 화이트 배경
+@use "../../style/abstracts" as *;
 
 .layout {
   min-height: 100vh;

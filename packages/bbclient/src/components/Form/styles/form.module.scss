@@ -1,7 +1,9 @@
+@use "../../../style/abstracts" as *;
+
 .form {
   &-item {
     &-vertical {
-      color: #fff;
+      color: $budget-white;
     }
     &-horizontal {
       color: darkcyan;

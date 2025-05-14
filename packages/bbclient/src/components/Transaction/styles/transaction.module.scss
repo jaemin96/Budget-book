@@ -1,14 +1,8 @@
-$budget-carrot: #ff9208;
-$budget-yellow: #ffd36e;
-$budget-light-gray: #c0c6cc;
-$budget-gray: #aab0b6;
-$budget-dark-gray: #8e959c;
-$budget-text: #1a1a1a;
-$budget-black: #121212;
-$budget-white: #f8f9fa;
+@use "../../../style/abstracts" as *;
 
 .create-transaction-form-wrapper {
-  background: #2f3338;
-  border-radius: 28px;
+  background: $budget-card-gray;
+  border: 1px solid $budget-card-border;
+  border-radius: 20px;
   padding: 1.2rem;
 }
