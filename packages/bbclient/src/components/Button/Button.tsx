@@ -12,20 +12,25 @@ interface ButtonProps extends BaseProps<HTMLButtonElement> {
 export const Button = ({
   style,
   onClick,
+  className,
   buttonMode = "default",
-  size = "medium",
+  size = "small",
   type = "submit",
   ...props
 }: ButtonProps) => {
   return (
     <button
-      className={classNames(styles.button, {
-        // buttonModes
-        [styles[`button--${buttonMode}`]]: true,
+      className={classNames(
+        styles.button,
+        {
+          // buttonModes
+          [styles[`button--${buttonMode}`]]: true,
 
-        // sizes
-        [styles[`button--${size}`]]: true,
-      })}
+          // sizes
+          [styles[`button--${size}`]]: true,
+        },
+        className
+      )}
       type={type}
       style={style}
       onClick={onClick}

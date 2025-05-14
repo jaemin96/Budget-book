@@ -1,19 +1,98 @@
 @use "../../../style/abstracts" as *;
+@use "sass:color";
 
 .button {
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+
   // button modes
-  &--primary {
-  }
-  &--secondary {
-  }
   &--default {
+    background-color: $budget-white;
+    border: 1px solid transparent;
+    color: $budget-text;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: $budget-dark-gray;
+      color: $budget-carrot;
+    }
+  }
+
+  &--primary {
+    background-color: $budget-carrot;
+    border: 1px solid $budget-carrot;
+    color: white;
+
+    &:hover {
+      background-color: color.adjust($budget-carrot, $lightness: -5%);
+      border-color: color.adjust($budget-carrot, $lightness: -5%);
+    }
+  }
+
+  &--outline {
+    background-color: transparent;
+    border: 1px solid $budget-carrot;
+    color: $budget-carrot;
+
+    &:hover {
+      background-color: rgba(255, 146, 8, 0.08);
+    }
+  }
+
+  &--ghost {
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: $budget-dark-gray;
+
+    &:hover {
+      color: $budget-carrot;
+      background-color: rgba(255, 146, 8, 0.05);
+    }
+  }
+
+  &--secondary {
+    background-color: $budget-yellow;
+    border: 1px solid $budget-yellow;
+    color: #1a1a1a;
+
+    &:hover {
+      background-color: color.adjust($budget-yellow, $lightness: -5%);
+    }
+  }
+
+  &--danger {
+    background-color: $budget-danger;
+    border: 1px solid $budget-danger;
+    color: white;
+
+    &:hover {
+      background-color: color.adjust($budget-danger, $lightness: -5%);
+    }
   }
 
   // button sizes
-  &--medium {
-  }
   &--small {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.85rem;
   }
+
+  &--medium {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+
   &--large {
+    padding: 0.75rem 1.25rem;
+    font-size: 1.125rem;
+  }
+}
+
+/* 모바일 전용 스타일 */
+@media (max-width: 768px) {
+  .button {
+    padding: 0;
   }
 }
