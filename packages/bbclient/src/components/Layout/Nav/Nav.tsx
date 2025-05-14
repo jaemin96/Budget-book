@@ -1,6 +1,8 @@
+"use client";
+
 import { BaseProps } from "@/common/types";
 import classNames from "classnames";
-import styles from "./styles/nav.module.scss";
+import styles from "../styles/nav.module.scss";
 
 export interface NavProps extends BaseProps<HTMLElement> {}
 

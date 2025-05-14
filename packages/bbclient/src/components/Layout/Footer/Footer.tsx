@@ -1,6 +1,8 @@
+"use client";
+
 import { BaseProps } from "@/common/types";
 import classNames from "classnames";
-import styles from "./styles/footer.module.scss";
+import styles from "../styles/footer.module.scss";
 
 export interface FooterProps extends BaseProps<HTMLElement> {}
 

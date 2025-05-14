@@ -1,6 +1,8 @@
+"use client";
+
 import { BaseProps } from "@/common/types";
 import classNames from "classnames";
-import styles from "./styles/sidebar.module.scss";
+import styles from "../styles/sidebar.module.scss";
 
 export interface SidebarProps extends BaseProps<HTMLElement> {}
 
