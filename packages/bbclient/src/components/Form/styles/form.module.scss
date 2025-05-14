@@ -2,10 +2,17 @@
 
 .form {
   &-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    justify-content: space-between;
+
     &-vertical {
       color: $budget-white;
     }
+
     &-horizontal {
+      flex-direction: row;
       color: darkcyan;
     }
   }
@@ -13,5 +20,10 @@
   &-label {
   }
   &-control {
+    min-width: 15rem;
+
+    input[type="text"] {
+      width: 100%;
+    }
   }
 }
