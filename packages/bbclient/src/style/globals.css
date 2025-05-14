@@ -16,6 +16,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html,
+body,
+#__next {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* 좌우 스크롤 방지 */
+}
+
 a {
   text-decoration: none;
   color: inherit;
