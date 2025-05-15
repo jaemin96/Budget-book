@@ -7,6 +7,7 @@ import { useQuery } from "@apollo/client";
 import { GET_TRANSACTION_LIST } from "@/graphql/queries/getTransactionList";
 import { Card, Button } from "@/components";
 import Link from "next/link";
+import { ArrowLeftRight } from "lucide-react";
 
 interface TransactionProps {}
 
@@ -30,12 +31,12 @@ const Transaction: React.FC<TransactionProps> = (props) => {
 
   const columns = [
     "ID",
-    "Amount",
-    "Depositor",
-    "Description",
     "Type",
+    "Amount",
+    // "Depositor",
     "Category",
-    "PaymentType",
+    // "Description",
+    // "PaymentType",
   ];
 
   if (loading) return <p>Loading...</p>;
@@ -44,6 +45,7 @@ const Transaction: React.FC<TransactionProps> = (props) => {
   return (
     <>
       <Card.Header
+        icon={ArrowLeftRight}
         title="Transactions"
         buttons={
           <>
@@ -68,12 +70,12 @@ const Transaction: React.FC<TransactionProps> = (props) => {
               {transactions?.map((row) => (
                 <tr key={row.id}>
                   <td>{row.id}</td>
-                  <td>{row.amount}</td>
-                  <td>{row.depositor}</td>
-                  <td>{row.description}</td>
                   <td>{row.type}</td>
+                  <td>{row.amount}</td>
+                  {/* <td>{row.depositor}</td> */}
                   <td>{row.category}</td>
-                  <td>{row.paymentType}</td>
+                  {/* <td>{row.description}</td> */}
+                  {/* <td>{row.paymentType}</td> */}
                 </tr>
               ))}
             </tbody>
