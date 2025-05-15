@@ -8,11 +8,57 @@
   color: $budget-white;
   .header {
     .titleWrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      .icon {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+      .title {
+        font-size: 1.25rem;
+        font-weight: 800;
+      }
     }
     .buttonWrapper {
     }
   }
 
   .main {
+  }
+}
+
+/* 모바일 전용 스타일 */
+@media (max-width: 768px) {
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    .header {
+      .titleWrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        .icon {
+          width: 1.6rem;
+          height: 1.6rem;
+        }
+        .title {
+          font-size: 1.6rem;
+          font-weight: 800;
+        }
+      }
+      .buttonWrapper {
+        display: flex;
+        gap: 0.4rem;
+        margin-top: 0.5rem;
+        button {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          text-align: center;
+        }
+      }
+    }
   }
 }
