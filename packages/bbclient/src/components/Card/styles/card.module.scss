@@ -9,6 +9,7 @@
   .header {
     display: flex;
     width: 100%;
+    margin-bottom: 3rem;
     &--vertical {
     }
     &--horizontal {
@@ -21,11 +22,12 @@
       align-items: center;
       gap: 0.2rem;
       .icon {
-        width: 1.25rem;
-        height: 1.25rem;
+        width: 1.4rem;
+        height: 1.4rem;
+        margin-bottom: 4px;
       }
       .title {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
         font-weight: 800;
       }
     }
@@ -44,6 +46,7 @@
     flex-direction: column;
     gap: 2rem;
     .header {
+      margin-bottom: 1.25rem;
       .titleWrapper {
         display: flex;
         align-items: center;
