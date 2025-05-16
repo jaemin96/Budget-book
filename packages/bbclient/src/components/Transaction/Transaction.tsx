@@ -42,9 +42,9 @@ const Transaction: React.FC<TransactionProps> = (props) => {
 
   if (loading)
     return (
-      <p>
+      <div>
         <Spinner /> Loading...
-      </p>
+      </div>
     );
   if (error) return <p>Error!</p>;
 

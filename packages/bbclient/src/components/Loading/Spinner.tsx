@@ -1,3 +1,5 @@
+"use client";
+
 import { LoaderCircle } from "lucide-react";
 import classNames from "classnames";
 import styles from "./styles/loading.module.scss";
@@ -8,7 +10,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = () => {
   return (
     <>
       <div className={classNames(styles.spinner)}>
-        <LoaderCircle classNames={classNames(styles.icon)} strokeWidth={3} />
+        <LoaderCircle strokeWidth={3} />
       </div>
     </>
   );
