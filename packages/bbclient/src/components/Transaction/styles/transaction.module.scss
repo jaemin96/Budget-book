@@ -1,5 +1,11 @@
 @use "../../../style/abstracts" as *;
 
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .transaction {
 }
 

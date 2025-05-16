@@ -5,9 +5,9 @@ import classNames from "classnames";
 import styles from "./styles/transaction.module.scss";
 import { useQuery } from "@apollo/client";
 import { GET_TRANSACTION_LIST } from "@/graphql/queries/getTransactionList";
-import { Card, Button } from "@/components";
+import { Card, Button, Table } from "@/components";
 import Link from "next/link";
-import { ArrowLeftRight } from "lucide-react";
+import { Octagon, Plus } from "lucide-react";
 
 interface TransactionProps {}
 
@@ -30,13 +30,13 @@ const Transaction: React.FC<TransactionProps> = (props) => {
   }, [transactions]);
 
   const columns = [
-    "ID",
-    "Type",
-    "Amount",
-    // "Depositor",
-    "Category",
-    // "Description",
-    // "PaymentType",
+    { label: "ID", dataIndex: "id" },
+    { label: "Type", dataIndex: "type" },
+    { label: "Amount", dataIndex: "amount" },
+    // { label: "Depositor", dataIndex: "depositor" },
+    { label: "Category", dataIndex: "category" },
+    // { label: "Description", dataIndex: "description" },
+    // { label: "Payment Type", dataIndex: "paymentType" },
   ];
 
   if (loading) return <p>Loading...</p>;
@@ -45,41 +45,21 @@ const Transaction: React.FC<TransactionProps> = (props) => {
   return (
     <>
       <Card.Header
-        icon={ArrowLeftRight}
+        icon={Octagon}
         title="Transactions"
         buttons={
           <>
             <Button>
-              <Link href="/transaction/create">+</Link>
+              <Link className={styles.link} href="/transaction/create">
+                <Plus />
+              </Link>
             </Button>
-            <Button>2</Button>
           </>
         }
       />
       <Card.Body>
         <div className={classNames(styles.transaction)}>
-          <table>
-            <thead>
-              <tr>
-                {columns.map((col) => (
-                  <th key={col}>{col}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {transactions?.map((row) => (
-                <tr key={row.id}>
-                  <td>{row.id}</td>
-                  <td>{row.type}</td>
-                  <td>{row.amount}</td>
-                  {/* <td>{row.depositor}</td> */}
-                  <td>{row.category}</td>
-                  {/* <td>{row.description}</td> */}
-                  {/* <td>{row.paymentType}</td> */}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <Table columns={columns} data={transactions} />
         </div>
       </Card.Body>
     </>
