@@ -8,6 +8,7 @@ import { GET_TRANSACTION_LIST } from "@/graphql/queries/getTransactionList";
 import { Card, Button, Table } from "@/components";
 import Link from "next/link";
 import { Octagon, Plus } from "lucide-react";
+import { Spinner } from "@/components";
 
 interface TransactionProps {}
 
@@ -39,7 +40,12 @@ const Transaction: React.FC<TransactionProps> = (props) => {
     // { label: "Payment Type", dataIndex: "paymentType" },
   ];
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <p>
+        <Spinner /> Loading...
+      </p>
+    );
   if (error) return <p>Error!</p>;
 
   return (
