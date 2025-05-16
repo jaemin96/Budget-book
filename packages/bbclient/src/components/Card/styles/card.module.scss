@@ -7,6 +7,15 @@
   padding: 0.95rem;
   color: $budget-white;
   .header {
+    display: flex;
+    width: 100%;
+    &--vertical {
+    }
+    &--horizontal {
+      align-items: center;
+      justify-content: space-between;
+    }
+
     .titleWrapper {
       display: flex;
       align-items: center;
@@ -40,8 +49,8 @@
         align-items: center;
         gap: 0.5rem;
         .icon {
-          width: 1.6rem;
-          height: 1.6rem;
+          width: 2rem;
+          height: 2rem;
         }
         .title {
           font-size: 1.6rem;
@@ -50,8 +59,7 @@
       }
       .buttonWrapper {
         display: flex;
-        gap: 0.4rem;
-        margin-top: 0.5rem;
+        gap: 0.5rem;
         button {
           width: 32px;
           height: 32px;
