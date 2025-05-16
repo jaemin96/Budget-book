@@ -1,0 +1,32 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  &__head {
+  }
+
+  &__headRow {
+    border-bottom: 1px solid #ddd;
+  }
+
+  &__headCell {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+
+  &__body {
+  }
+
+  &__bodyRow {
+    border-bottom: 1px solid #eee;
+
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
+
+  &__bodyCell {
+    padding: 12px;
+  }
+}
