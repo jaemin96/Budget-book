@@ -1,6 +1,10 @@
+@use "../../../style/abstracts" as *;
+@use "sass:color";
+
 .table {
   width: 100%;
   border-collapse: collapse;
+  transition: all 0.2s ease;
 
   &__head {
   }
@@ -22,7 +26,9 @@
     border-bottom: 1px solid #eee;
 
     &:hover {
-      background-color: #f5f5f5;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: $budget-dark-gray;
+      color: $budget-carrot;
     }
   }
 
