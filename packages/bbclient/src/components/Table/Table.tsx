@@ -5,6 +5,7 @@ import classNames from "classnames";
 interface Column {
   label: string;
   dataIndex: string;
+  render?: (value: any, record: Record<string, any>) => React.ReactNode;
 }
 
 interface TableProps extends BaseProps {
@@ -39,7 +40,9 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                   key={col.dataIndex}
                   className={classNames(styles.table__bodyCell)}
                 >
-                  {row[col.dataIndex]}
+                  {col.render
+                    ? col.render(row[col.dataIndex], row)
+                    : row[col.dataIndex]}
                 </td>
               ))}
             </tr>
