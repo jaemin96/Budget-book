@@ -9,6 +9,12 @@ import { Card, Button, Table } from "@/components";
 import Link from "next/link";
 import { Octagon, Plus } from "lucide-react";
 import { Spinner } from "@/components";
+import {
+  TransactionCategory,
+  TransactionCategoryLabels,
+  TransactionType,
+  TransactionTypeLabels,
+} from "../../constants/enum/transaction.enum";
 
 interface TransactionProps {}
 
@@ -32,10 +38,22 @@ const Transaction: React.FC<TransactionProps> = (props) => {
 
   const columns = [
     { label: "ID", dataIndex: "id" },
-    { label: "Type", dataIndex: "type" },
-    { label: "Amount", dataIndex: "amount" },
+    {
+      label: `Type`,
+      dataIndex: "type",
+      render: (value: TransactionType) => TransactionTypeLabels[value],
+    },
+    {
+      label: "Amount",
+      dataIndex: "amount",
+      render: (amount: number) => amount.toLocaleString() + "원",
+    },
     // { label: "Depositor", dataIndex: "depositor" },
-    { label: "Category", dataIndex: "category" },
+    {
+      label: "Category",
+      dataIndex: "category",
+      render: (value: TransactionCategory) => TransactionCategoryLabels[value],
+    },
     // { label: "Description", dataIndex: "description" },
     // { label: "Payment Type", dataIndex: "paymentType" },
   ];
