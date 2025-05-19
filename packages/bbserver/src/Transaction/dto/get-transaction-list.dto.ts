@@ -1,10 +1,11 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { BaseOutput } from 'src/common';
-import { TransactionModel } from '../model';
 import { TransactionCategory, TransactionType } from '@prisma/client';
+import { BasePaginationInput } from 'src/common';
+import { TransactionModel } from '../model';
+import { BasePaginationOutput } from 'src/common/dto/base.dto';
 
 @InputType()
-export class GetTransactionListInput {
+export class GetTransactionListInput extends BasePaginationInput {
   @Field(() => TransactionType, { nullable: true })
   type?: TransactionType;
 
@@ -13,7 +14,7 @@ export class GetTransactionListInput {
 }
 
 @ObjectType()
-export class GetTransactionListOutput extends BaseOutput {
+export class GetTransactionListOutput extends BasePaginationOutput {
   @Field(() => [TransactionModel])
   transactions: TransactionModel[];
 }

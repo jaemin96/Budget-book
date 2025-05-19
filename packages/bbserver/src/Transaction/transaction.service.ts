@@ -46,6 +46,9 @@ export class TransactionService {
    * 입출금 리스트 조회
    */
   async getTransactionList(input?: GetTransactionListInput): Promise<GetTransactionListOutput> {
+    const page = input?.page ?? 1;
+    const size = input?.size ?? 10;
+
     const where: Prisma.TransactionWhereInput = {
       type: input?.type ?? undefined,
       category: input?.category ?? undefined,
@@ -53,15 +56,20 @@ export class TransactionService {
 
     const transactions = await this.prisma.transaction.findMany({
       where,
+      orderBy: {
+        [input?.sortBy || 'createdAt']: input?.order?.toLowerCase() === 'asc' ? 'asc' : 'desc',
+      },
+      skip: (page - 1) * size,
+      take: size,
     });
-
-    console.log(transactions);
 
     if (!transactions || transactions.length === 0) {
       return { transactions: [] };
     }
 
-    return { transactions };
+    const totalCount = await this.prisma.transaction.count({ where });
+
+    return { transactions, totalCount, totalPages: Math.ceil(totalCount / size) };
   }
 
   /**
