@@ -103,11 +103,17 @@ input GetTransactionInput {
 
 input GetTransactionListInput {
   category: TransactionCategory
+  order: String
+  page: Float = 1
+  size: Float = 10
+  sortBy: String
   type: TransactionType
 }
 
 type GetTransactionListOutput {
   message: ErrorOutput
+  totalCount: Float
+  totalPages: Float
   transactions: [TransactionModel!]!
 }
 
