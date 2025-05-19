@@ -20,6 +20,8 @@ interface TransactionProps {}
 
 const Transaction: React.FC<TransactionProps> = (props) => {
   const [transactions, setTransactions] = useState<any>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(0);
   const { data, loading, error, refetch } = useQuery(GET_TRANSACTION_LIST, {
     variables: {
       input: {},
@@ -28,13 +30,17 @@ const Transaction: React.FC<TransactionProps> = (props) => {
 
   useEffect(() => {
     if (!data) return;
-    const { transactions } = data?.getTransactionList;
+    const { transactions, totalCount, totalPages } = data?.getTransactionList;
+    console.log({ totalCount, totalPages });
+
+    setTotal(totalCount);
+    setTotalPages(totalPages);
     setTransactions(transactions);
   }, [data]);
 
   useEffect(() => {
-    console.log({ transactions });
-  }, [transactions]);
+    console.log({ transactions, total, totalPages });
+  }, [transactions, total, totalPages]);
 
   const columns = [
     { label: "ID", dataIndex: "id" },
