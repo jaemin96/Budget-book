@@ -7,6 +7,8 @@ import {
   GetTransactionInput,
   GetTransactionListOutput,
   GetTransactionListInput,
+  UpdateTransactionOutput,
+  UpdateTransactionInput,
 } from './dto';
 
 @Resolver()
@@ -21,6 +23,16 @@ export class TransactionResolver {
   @Mutation(() => CreateTransactionOutput)
   async createTransaction(@Args('input') input: CreateTransactionInput): Promise<CreateTransactionOutput> {
     return this.transactionService.createTransaction(input);
+  }
+
+  /**
+   * Resolver - 입출금 내역 수정
+   * @param UpdateTransactionInput
+   * @return UpdateTransactionOutput
+   */
+  @Mutation(() => UpdateTransactionOutput)
+  async updateTransaction(@Args('input') input: UpdateTransactionInput): Promise<UpdateTransactionOutput> {
+    return this.transactionService.updateTransaction(input);
   }
 
   /**

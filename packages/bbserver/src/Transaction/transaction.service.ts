@@ -7,6 +7,8 @@ import {
   GetTransactionListInput,
   GetTransactionListOutput,
   GetTransactionOutput,
+  UpdateTransactionInput,
+  UpdateTransactionOutput,
 } from './dto';
 import { Prisma } from '@prisma/client';
 
@@ -20,6 +22,22 @@ export class TransactionService {
   async createTransaction(input: CreateTransactionInput): Promise<CreateTransactionOutput> {
     const transaction = await this.prisma.transaction.create({
       data: input,
+    });
+
+    return { id: transaction.id };
+  }
+
+  /**
+   * 입출금 항목 수정
+   */
+  async updateTransaction(input: UpdateTransactionInput): Promise<UpdateTransactionOutput> {
+    const transaction = await this.prisma.transaction.update({
+      where: {
+        id: input.id,
+      },
+      data: {
+        ...input,
+      },
     });
 
     return { id: transaction.id };
