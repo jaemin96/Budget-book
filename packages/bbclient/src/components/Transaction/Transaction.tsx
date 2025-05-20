@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import classNames from "classnames";
 import styles from "./styles/transaction.module.scss";
 import { useQuery } from "@apollo/client";
-import { GET_TRANSACTION_LIST } from "@/graphql/queries/getTransactionList";
+import { GET_TRANSACTION_LIST } from "@/graphql/queries/Transaction";
 import { Card, Button, Table } from "@/components";
 import Link from "next/link";
 import { Octagon, Plus } from "lucide-react";
