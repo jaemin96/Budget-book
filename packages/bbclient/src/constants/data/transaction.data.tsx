@@ -1,0 +1,32 @@
+export const CATEGORY_OPTIONS = [
+  { value: "SALARY", label: "급여" },
+  { value: "INSURANCE", label: "보험" },
+  { value: "DRINK", label: "음료" },
+  { value: "FOOD", label: "식비" },
+  { value: "SHOPPING", label: "쇼핑" },
+  { value: "TRANSPORT", label: "교통" },
+  { value: "SUBSCRIBE", label: "구독" },
+  { value: "PHONE", label: "통신" },
+  { value: "DUES", label: "회비" },
+  { value: "PRESENT", label: "선물" },
+  { value: "SAVINGS", label: "저축" },
+  { value: "INVESTMENT", label: "투자" },
+  { value: "EMERGENCY_FUND", label: "비상금" },
+  { value: "ETC", label: "기타" },
+];
+
+export const PAYMENT_OPTIONS = [
+  { value: "CREDIT_CARD", label: "신용카드" },
+  { value: "CHECK_CARD", label: "체크카드" },
+  { value: "KAKAO_PAY", label: "카카오페이" },
+  { value: "APPLE_PAY", label: "애플페이" },
+  { value: "NAVER_PAY", label: "네이버페이" },
+  { value: "TOSS", label: "토스" },
+  { value: "BANK_TRANSFER", label: "계좌이체" },
+  { value: "CASH", label: "현금" },
+  { value: "POINT", label: "포인트" },
+  { value: "GIFT_CARD", label: "상품권" },
+  { value: "VIRTUAL_ACCOUNT", label: "가상계좌" },
+  { value: "CRYPTO", label: "가상자산" },
+  { value: "ETC", label: "기타" },
+];
