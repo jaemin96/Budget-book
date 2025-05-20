@@ -6,8 +6,13 @@ import { Button } from "../Button";
 import classNames from "classnames";
 import { FormMode } from "@/common/types";
 import { CATEGORY_OPTIONS, PAYMENT_OPTIONS } from "@/constants/data";
-import { useMutation } from "@apollo/client";
-import { CREATE_TRANSACTION } from "@/graphql/mutations/Transaction";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+  CREATE_TRANSACTION,
+  UPDATE_TRANSACTION,
+} from "@/graphql/mutations/Transaction";
+import { useEffect, useState } from "react";
+import { GET_TRANSACTION } from "@/graphql/queries/Transaction";
 
 export interface TransactionFormProps {
   mode: FormMode;
@@ -20,48 +25,100 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 }) => {
   console.log({ mode, transactionId });
   const { formRef, getValues } = useForm<any>();
+  const [init, setInit] = useState<any>();
   const [createMutation] = useMutation(CREATE_TRANSACTION);
+  const [updateMutation] = useMutation(UPDATE_TRANSACTION);
+  const { data, refetch } = useQuery(GET_TRANSACTION, {
+    variables: {
+      input: {
+        id: transactionId,
+      },
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       const values = getValues();
-      const params = { ...values };
+      const params =
+        mode === "create" ? { ...values } : { ...values, id: transactionId };
 
-      const res = await createMutation({
-        variables: {
-          input: { ...params },
-        },
-      });
+      const res =
+        mode === "create"
+          ? await createMutation({
+              variables: {
+                input: { ...params },
+              },
+            })
+          : await updateMutation({
+              variables: {
+                input: { ...params },
+              },
+            });
+
       console.log({ values, res });
     } catch (err) {
       console.error({ err });
     }
   };
 
+  useEffect(() => {
+    if (!transactionId) return;
+
+    refetch({
+      input: {
+        id: +transactionId,
+      },
+    });
+  }, [transactionId]);
+
+  useEffect(() => {
+    if (!data) return;
+
+    const { transaction } = data?.getTransaction;
+    setInit(transaction);
+  }, [data]);
+
   return (
     <div className={classNames(styles["transaction-form-wrapper"])}>
       <Form ref={formRef} onSubmit={handleSubmit}>
         <Form.Item label="금액">
-          <input style={{ width: "100%" }} type="number" name="amount" />
+          <input
+            style={{ width: "100%" }}
+            type="number"
+            name="amount"
+            defaultValue={init && init.amount}
+          />
         </Form.Item>
 
         <Form.Item label="거래자">
-          <input name="depositor" />
+          <input name="depositor" defaultValue={init && init.depositor} />
         </Form.Item>
 
         <Form.Item label="거래 유형" name="type">
           <label>
-            <input type="radio" name="type" value="EXPENSE" /> 지출
+            <input
+              type="radio"
+              name="type"
+              value="EXPENSE"
+              checked={init && init.type === "EXPENSE"}
+            />
+            지출
           </label>
           <label>
-            <input type="radio" name="type" value="INCOME" /> 수익
+            <input
+              type="radio"
+              name="type"
+              value="INCOME"
+              checked={init && init.type === "INCOME"}
+            />
+            수익
           </label>
         </Form.Item>
 
         <Form.Item label="거래 분류" name="category">
-          <select name="category">
+          <select name="category" defaultValue={init && init.category}>
             {CATEGORY_OPTIONS.map(({ value, label }) => (
               <option key={value} value={value}>
                 {label}
@@ -71,7 +128,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         </Form.Item>
 
         <Form.Item label="거래 수단" name="paymentType">
-          <select name="paymentType">
+          <select name="paymentType" defaultValue={init && init.paymentType}>
             {PAYMENT_OPTIONS.map(({ value, label }) => (
               <option key={value} value={value}>
                 {label}
@@ -81,7 +138,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         </Form.Item>
 
         <Form.Item label="거래 설명" name="description">
-          <textarea name="description" />
+          <textarea
+            name="description"
+            defaultValue={init && init.description}
+          />
         </Form.Item>
 
         <div style={{ width: "100%", textAlign: "right" }}>
