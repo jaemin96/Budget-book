@@ -13,6 +13,7 @@ import {
 } from "@/graphql/mutations/Transaction";
 import { useEffect, useState } from "react";
 import { GET_TRANSACTION } from "@/graphql/queries/Transaction";
+import LoadingSpinner from "../Loading/Spinner";
 
 export interface TransactionFormProps {
   mode: FormMode;
@@ -26,8 +27,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const { formRef, getValues } = useForm<any>();
   const [init, setInit] = useState<any>();
   const [type, setType] = useState<any>();
-  const [createMutation] = useMutation(CREATE_TRANSACTION);
-  const [updateMutation] = useMutation(UPDATE_TRANSACTION);
+  const [createMutation, { loading: createLoading }] =
+    useMutation(CREATE_TRANSACTION);
+  const [updateMutation, { loading: updateLoading }] =
+    useMutation(UPDATE_TRANSACTION);
   const { data, refetch } = useQuery(GET_TRANSACTION, {
     variables: {
       input: {
@@ -165,9 +168,22 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         </Form.Item>
 
         <div style={{ width: "100%", textAlign: "right" }}>
-          <Button className={styles[`transaction-submit-button`]} type="submit">
-            Submit
-          </Button>
+          {createLoading || updateLoading ? (
+            <>
+              <div style={{ width: "100%", textAlign: "center" }}>
+                <LoadingSpinner />
+              </div>
+            </>
+          ) : (
+            <>
+              <Button
+                className={styles[`transaction-submit-button`]}
+                type="submit"
+              >
+                Submit
+              </Button>
+            </>
+          )}
         </div>
       </Form>
     </div>
