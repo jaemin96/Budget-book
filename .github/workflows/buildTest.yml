@@ -1,13 +1,12 @@
-name: 'build test before merge'
+name: "build test before merge"
 
 on:
   push:
     branches:
-      - main
+      - test
   pull_request:
     branches:
-      - main
-      - dev
+      - test
 
 jobs:
   test:
