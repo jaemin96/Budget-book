@@ -26,6 +26,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   console.log({ mode, transactionId });
   const { formRef, getValues } = useForm<any>();
   const [init, setInit] = useState<any>();
+  const [type, setType] = useState<any>();
   const [createMutation] = useMutation(CREATE_TRANSACTION);
   const [updateMutation] = useMutation(UPDATE_TRANSACTION);
   const { data, refetch } = useQuery(GET_TRANSACTION, {
@@ -42,7 +43,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     try {
       const values = getValues();
       const params =
-        mode === "create" ? { ...values } : { ...values, id: transactionId };
+        mode === "create"
+          ? { ...values }
+          : transactionId && { ...values, id: +transactionId };
 
       const res =
         mode === "create"
@@ -78,6 +81,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
     const { transaction } = data?.getTransaction;
     setInit(transaction);
+    setType(transaction?.type);
   }, [data]);
 
   return (
@@ -85,7 +89,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       <Form ref={formRef} onSubmit={handleSubmit}>
         <Form.Item label="금액">
           <input
-            style={{ width: "100%" }}
+            style={{ width: "100%", height: "2.75rem" }}
             type="number"
             name="amount"
             defaultValue={init && init.amount}
@@ -93,32 +97,46 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         </Form.Item>
 
         <Form.Item label="거래자">
-          <input name="depositor" defaultValue={init && init.depositor} />
+          <input
+            name="depositor"
+            type="text"
+            style={{
+              width: "100%",
+              height: "2.75rem",
+            }}
+            defaultValue={init && init.depositor}
+          />
         </Form.Item>
 
         <Form.Item label="거래 유형" name="type">
-          <label>
+          <label style={{ display: "flex", gap: "0.45rem" }}>
             <input
               type="radio"
               name="type"
               value="EXPENSE"
-              checked={init && init.type === "EXPENSE"}
+              checked={type === "EXPENSE"}
+              onChange={(e) => setType(e.target.value)}
             />
             지출
           </label>
-          <label>
+          <label style={{ display: "flex", gap: "0.45rem" }}>
             <input
               type="radio"
               name="type"
               value="INCOME"
-              checked={init && init.type === "INCOME"}
+              checked={type === "INCOME"}
+              onChange={(e) => setType(e.target.value)}
             />
             수익
           </label>
         </Form.Item>
 
         <Form.Item label="거래 분류" name="category">
-          <select name="category" defaultValue={init && init.category}>
+          <select
+            name="category"
+            defaultValue={init && init.category}
+            style={{ width: "100%", height: "2.75rem" }}
+          >
             {CATEGORY_OPTIONS.map(({ value, label }) => (
               <option key={value} value={value}>
                 {label}
@@ -128,7 +146,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         </Form.Item>
 
         <Form.Item label="거래 수단" name="paymentType">
-          <select name="paymentType" defaultValue={init && init.paymentType}>
+          <select
+            name="paymentType"
+            defaultValue={init && init.paymentType}
+            style={{ width: "100%", height: "2.75rem" }}
+          >
             {PAYMENT_OPTIONS.map(({ value, label }) => (
               <option key={value} value={value}>
                 {label}
@@ -140,6 +162,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         <Form.Item label="거래 설명" name="description">
           <textarea
             name="description"
+            style={{ width: "100%" }}
             defaultValue={init && init.description}
           />
         </Form.Item>
