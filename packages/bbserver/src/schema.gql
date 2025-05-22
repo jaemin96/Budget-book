@@ -125,6 +125,7 @@ type GetTransactionOutput {
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createTransaction(input: CreateTransactionInput!): CreateTransactionOutput!
+  updateTransaction(input: UpdateTransactionInput!): UpdateTransactionOutput!
 }
 
 type Query {
@@ -183,4 +184,19 @@ enum TransactionPaymentType {
 enum TransactionType {
   EXPENSE
   INCOME
+}
+
+input UpdateTransactionInput {
+  amount: Float
+  category: TransactionCategory
+  depositor: String
+  description: String
+  id: Float!
+  paymentType: TransactionPaymentType
+  type: TransactionType
+}
+
+type UpdateTransactionOutput {
+  id: Float
+  message: ErrorOutput
 }

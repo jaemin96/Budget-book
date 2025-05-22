@@ -27,3 +27,19 @@
     }
   }
 }
+
+/* 모바일 전용 스타일 */
+@media (max-width: 768px) {
+  .form {
+    &-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &-label {
+    }
+    &-control {
+      min-height: 2.75rem !important;
+    }
+  }
+}
