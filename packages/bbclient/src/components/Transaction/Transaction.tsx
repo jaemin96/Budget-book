@@ -31,7 +31,6 @@ const Transaction: React.FC<TransactionProps> = (props) => {
   useEffect(() => {
     if (!data) return;
     const { transactions, totalCount, totalPages } = data?.getTransactionList;
-    console.log({ totalCount, totalPages });
 
     setTotal(totalCount);
     setTotalPages(totalPages);

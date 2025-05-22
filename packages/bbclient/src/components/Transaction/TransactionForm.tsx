@@ -23,7 +23,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   mode,
   transactionId,
 }) => {
-  console.log({ mode, transactionId });
   const { formRef, getValues } = useForm<any>();
   const [init, setInit] = useState<any>();
   const [type, setType] = useState<any>();
@@ -59,8 +58,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                 input: { ...params },
               },
             });
-
-      console.log({ values, res });
     } catch (err) {
       console.error({ err });
     }
