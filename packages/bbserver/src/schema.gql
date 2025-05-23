@@ -17,9 +17,11 @@ type AccountModel {
   """출금 예약 및 결제 대기 중인 금액"""
   holdBalance: Float!
   id: Float!
+  incomingTransactions: [TransactionModel]
 
   """투자 금액 (예: CMA, 펀드 등)"""
   investmentBalance: Float!
+  outgoingTransactions: [TransactionModel]
 
   """적금에 묶여 있는 금액"""
   savingBalance: Float!
@@ -160,8 +162,12 @@ type TransactionModel {
   createdAt: DateTime!
   depositor: String
   description: String!
+  fromAccount: AccountModel
+  fromAccountId: Float
   id: Float!
   paymentType: TransactionPaymentType
+  toAccount: AccountModel
+  toAccountId: Float
   type: TransactionType!
   updatedAt: DateTime!
 }
@@ -185,6 +191,7 @@ enum TransactionPaymentType {
 enum TransactionType {
   EXPENSE
   INCOME
+  TRANSFER
 }
 
 input UpdateAccountInput {

@@ -1,5 +1,6 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { TransactionCategory, TransactionType, TransactionPaymentType } from '@prisma/client';
+import { AccountModel } from 'src/Account/model';
 
 @ObjectType()
 export class TransactionModel {
@@ -29,6 +30,18 @@ export class TransactionModel {
 
   @Field(() => Date)
   updatedAt: Date;
+
+  @Field(() => Number, { nullable: true })
+  fromAccountId?: number | null;
+
+  @Field(() => Number, { nullable: true })
+  toAccountId?: number | null;
+
+  @Field(() => AccountModel, { nullable: true })
+  fromAccount?: AccountModel | null;
+
+  @Field(() => AccountModel, { nullable: true })
+  toAccount?: AccountModel | null;
 }
 
 registerEnumType(TransactionType, { name: 'TransactionType' });
