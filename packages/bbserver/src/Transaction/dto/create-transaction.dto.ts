@@ -13,6 +13,18 @@ export class CreateTransactionInput {
   @Field(() => String)
   description: string;
 
+  @Field(() => Number, { nullable: true, description: '거래 발생 계좌' })
+  accountId?: number | null;
+
+  @Field(() => Number, { nullable: true, description: '보내는 계좌' })
+  fromAccountId?: number | null;
+
+  @Field(() => Number, { nullable: true, description: '받을 계좌' })
+  toAccountId?: number | null;
+
+  @Field(() => String, { nullable: true })
+  accountField?: 'availableBalance' | 'savingBalance' | 'fixedDepositBalance' | 'investmentBalance' | 'holdBalance';
+
   @Field(() => TransactionType)
   type: TransactionType;
 
