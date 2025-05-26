@@ -129,12 +129,58 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             />
             수익
           </label>
+          <label style={{ display: "flex", gap: "0.45rem" }}>
+            <input
+              type="radio"
+              name="type"
+              value="TRANSFER"
+              checked={type === "TRANSFER"}
+              onChange={(e) => setType(e.target.value)}
+            />
+            내 계좌 간 이체
+          </label>
         </Form.Item>
+
+        {type === "TRANSFER" ? (
+          <div className="myTransfer">
+            <Form.Item label="보낼 계좌" name="fromAccountId">
+              <select
+                name="fromAccountId"
+                value={init && init.fromAccountId}
+                style={{ width: "100%", height: "2.75rem" }}
+              />
+            </Form.Item>
+
+            <Form.Item label="받을 계좌" name="toAccountId">
+              <select
+                name="toAccountId"
+                value={init && init.toAccountId}
+                style={{ width: "100%", height: "2.75rem" }}
+              />
+            </Form.Item>
+          </div>
+        ) : type === "INCOME" ? (
+          <Form.Item label="수령 계좌" name="toAccountId">
+            <select
+              name="toAccountId"
+              value={init && init.toAccountId}
+              style={{ width: "100%", height: "2.75rem" }}
+            />
+          </Form.Item>
+        ) : (
+          <Form.Item label="사용 계좌" name="fromAccountId">
+            <select
+              name="fromAccountId"
+              value={init && init.fromAccountId}
+              style={{ width: "100%", height: "2.75rem" }}
+            />
+          </Form.Item>
+        )}
 
         <Form.Item label="거래 분류" name="category">
           <select
             name="category"
-            defaultValue={init && init.category}
+            value={init && init.category}
             style={{ width: "100%", height: "2.75rem" }}
           >
             {CATEGORY_OPTIONS.map(({ value, label }) => (
@@ -148,7 +194,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         <Form.Item label="거래 수단" name="paymentType">
           <select
             name="paymentType"
-            defaultValue={init && init.paymentType}
+            value={init && init.paymentType}
             style={{ width: "100%", height: "2.75rem" }}
           >
             {PAYMENT_OPTIONS.map(({ value, label }) => (
