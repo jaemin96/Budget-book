@@ -5,7 +5,12 @@ import styles from "./styles/transaction.module.scss";
 import { Button } from "../Button";
 import classNames from "classnames";
 import { FormMode } from "@/common/types";
-import { CATEGORY_OPTIONS, PAYMENT_OPTIONS } from "@/constants/data";
+import {
+  // ACCOUNT_FIELDS,
+  ACCOUNTS,
+  CATEGORY_OPTIONS,
+  PAYMENT_OPTIONS,
+} from "@/constants/data";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   CREATE_TRANSACTION,
@@ -148,7 +153,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                 name="fromAccountId"
                 value={init && init.fromAccountId}
                 style={{ width: "100%", height: "2.75rem" }}
-              />
+              >
+                {ACCOUNTS.map(({ value, label }) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
             </Form.Item>
 
             <Form.Item label="받을 계좌" name="toAccountId">
@@ -156,26 +167,58 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                 name="toAccountId"
                 value={init && init.toAccountId}
                 style={{ width: "100%", height: "2.75rem" }}
-              />
+              >
+                {ACCOUNTS.map(({ value, label }) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
             </Form.Item>
           </div>
         ) : type === "INCOME" ? (
-          <Form.Item label="수령 계좌" name="toAccountId">
+          <Form.Item label="수령 계좌" name="accountId">
             <select
-              name="toAccountId"
+              name="accountId"
               value={init && init.toAccountId}
               style={{ width: "100%", height: "2.75rem" }}
-            />
+            >
+              {ACCOUNTS.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
           </Form.Item>
         ) : (
-          <Form.Item label="사용 계좌" name="fromAccountId">
+          <Form.Item label="사용 계좌" name="accountId">
             <select
-              name="fromAccountId"
+              name="accountId"
               value={init && init.fromAccountId}
               style={{ width: "100%", height: "2.75rem" }}
-            />
+            >
+              {ACCOUNTS.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
           </Form.Item>
         )}
+
+        {/* <Form.Item label="계좌 항목" name="accountField">
+          <select
+            name="accountField"
+            value={init && init.category}
+            style={{ width: "100%", height: "2.75rem" }}
+          >
+            {ACCOUNT_FIELDS.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </Form.Item> */}
 
         <Form.Item label="거래 분류" name="category">
           <select
