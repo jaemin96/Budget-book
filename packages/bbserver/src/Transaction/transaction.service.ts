@@ -41,7 +41,9 @@ export class TransactionService {
      * transaction - 거래 관련 테이블명
      */
     const tx = await this.prisma.$transaction(async (prisma) => {
-      const transaction = await prisma.transaction.create({ data: input });
+      const transactionData = { ...input };
+      delete transactionData.accountId;
+      const transaction = await prisma.transaction.create({ data: transactionData });
 
       // 1️⃣ 계좌 간 이체 처리
       if (type === 'TRANSFER') {
