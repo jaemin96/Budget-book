@@ -3,8 +3,11 @@ import { BaseOutput } from 'src/common';
 
 @InputType()
 export class UpdateAccountInput {
-  @Field(() => String)
-  bankName: string;
+  @Field(() => Number)
+  id: number;
+
+  @Field(() => String, { description: '계좌 은행 명', nullable: true })
+  bankName?: string;
 
   @Field(() => Number, { description: '계좌 총 금액 (자산)', defaultValue: 0, nullable: true })
   totalBalance?: number;

@@ -6,6 +6,8 @@ import {
   GetAccountListInput,
   GetAccountListOutput,
   GetAccountOutput,
+  UpdateAccountInput,
+  UpdateAccountOutput,
 } from './dto';
 import { PrismaService } from '../Prisma/prisma.service';
 import { Prisma } from '@prisma/client';
@@ -20,6 +22,22 @@ export class AccountService {
   async createAccount(input: CreateAccountInput): Promise<CreateAccountOutput> {
     const account = await this.prisma.account.create({
       data: input,
+    });
+
+    return { id: account.id };
+  }
+
+  /**
+   * 계좌 수정
+   */
+  async updateAccount(input: UpdateAccountInput): Promise<UpdateAccountOutput> {
+    const account = await this.prisma.account.update({
+      where: {
+        id: input.id,
+      },
+      data: {
+        ...input,
+      },
     });
 
     return { id: account.id };

@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { TransactionModel } from 'src/Transaction/model';
 
 @ObjectType()
 export class AccountModel {
@@ -34,4 +35,10 @@ export class AccountModel {
 
   @Field(() => Number, { description: '출금 예약 및 결제 대기 중인 금액', defaultValue: 0 })
   holdBalance: number;
+
+  @Field(() => [TransactionModel], { nullable: 'itemsAndList' })
+  outgoingTransactions?: TransactionModel[];
+
+  @Field(() => [TransactionModel], { nullable: 'itemsAndList' })
+  incomingTransactions?: TransactionModel[];
 }
