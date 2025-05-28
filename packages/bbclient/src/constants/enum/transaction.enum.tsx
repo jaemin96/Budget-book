@@ -30,7 +30,7 @@ export type TransactionPaymentType =
   | "CRYPTO"
   | "ETC";
 
-export type TransactionType = "INCOME" | "EXPENSE";
+export type TransactionType = "INCOME" | "EXPENSE" | "TRANSFER";
 
 export const TransactionCategoryLabels: Record<TransactionCategory, string> = {
   SALARY: "급여",
@@ -71,4 +71,5 @@ export const TransactionPaymentTypeLabels: Record<
 export const TransactionTypeLabels: Record<TransactionType, string> = {
   INCOME: "입금",
   EXPENSE: "출금",
+  TRANSFER: "내 계좌 거래",
 };
