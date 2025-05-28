@@ -87,6 +87,7 @@ export class TransactionService {
         if (isCreditCard) {
           updateData['availableBalance'] = { increment: change }; // 사용 가능 금액 차감/증가
           updateData['holdBalance'] = { increment: -change }; // 이체 예약 금액 증가
+          delete updateData.totalBalance;
         } else {
           updateData['availableBalance'] = { increment: change };
         }
