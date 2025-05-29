@@ -19,6 +19,7 @@ import {
 import { useEffect, useState } from "react";
 import { GET_TRANSACTION } from "@/graphql/queries/Transaction";
 import LoadingSpinner from "../Loading/Spinner";
+import { Input } from "@/components";
 
 export interface TransactionFormProps {
   mode: FormMode;
@@ -93,12 +94,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     <div className={classNames(styles["transaction-form-wrapper"])}>
       <Form ref={formRef} onSubmit={handleSubmit}>
         <Form.Item label="금액">
-          <input
-            style={{ width: "100%", height: "2.75rem" }}
-            type="number"
-            name="amount"
-            defaultValue={init && init.amount}
-          />
+          <Input name="amount" type="number" value={init && init.amount} />
         </Form.Item>
 
         <Form.Item label="거래자">
