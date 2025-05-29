@@ -1,12 +1,15 @@
 @use "../../../style/abstracts" as *;
 
+// background-color: rgba(255, 255, 255, 0.05);
+// border-color: $budget-dark-gray;
+// color: $budget-carrot;
+
 .form {
   &-item {
     display: flex;
     flex-direction: column;
     margin-bottom: 1rem;
     justify-content: space-between;
-
     &-vertical {
       color: $budget-white;
     }
@@ -18,6 +21,17 @@
   }
 
   &-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid $budget-yellow;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: $budget-yellow;
+    text-align: center;
+    margin-bottom: 8px;
+    width: 25%;
+    max-height: 2.75rem !important;
   }
   &-control {
     min-width: 15rem;
