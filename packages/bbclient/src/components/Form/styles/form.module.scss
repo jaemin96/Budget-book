@@ -21,18 +21,23 @@
   }
 
   &-label {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid $budget-yellow;
-    border-radius: 20px;
-    background-color: rgba(255, 255, 255, 0.05);
-    color: $budget-yellow;
-    text-align: center;
-    margin-bottom: 8px;
-    width: 25%;
+    color: $budget-light-gray;
     max-height: 2.75rem !important;
   }
+  // 뱃지 느낌
+  // &-label {
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: center;
+  //   border: 1px solid rgba($budget-card-border, 0.2);
+  //   border-radius: 8px;
+  //   background-color: rgba(255, 255, 255, 0.05);
+  //   color: $budget-yellow;
+  //   text-align: center;
+  //   margin-bottom: 8px;
+  //   width: 25%;
+  //   max-height: 2.75rem !important;
+  // }
   &-control {
     min-width: 15rem;
 
