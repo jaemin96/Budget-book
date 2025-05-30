@@ -1,4 +1,6 @@
-import { createContext, useContext } from "react";
+"use client";
+
+import { createContext } from "react";
 import classNames from "classnames";
 import styles from "../fields/styles/radio.module.scss";
 

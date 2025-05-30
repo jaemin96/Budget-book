@@ -1,4 +1,6 @@
-import { useContext, useEffect } from "react";
+"use client";
+
+import { useContext } from "react";
 import { RadioGroupContext } from "./RadioGroup";
 import styles from "../fields/styles/radio.module.scss";
 import classNames from "classnames";
