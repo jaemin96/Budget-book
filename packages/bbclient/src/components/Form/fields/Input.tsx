@@ -24,6 +24,7 @@ const Input: React.FC<InputProps> = ({
         type={type}
         name={name}
         value={value}
+        spellCheck="false"
         {...props}
       />
     </>

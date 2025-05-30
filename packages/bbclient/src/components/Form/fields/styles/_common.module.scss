@@ -1,0 +1,22 @@
+@use "../../../../style/abstracts" as *;
+
+:root {
+  --input-padding: 0.85rem;
+}
+
+@mixin fieldBase {
+  color: $budget-yellow;
+  padding: var(--input-padding);
+  //   font-size: 14px;
+}
+
+@mixin autofillFix($bgColor, $textColor) {
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px $bgColor inset;
+    box-shadow: 0 0 0px 1000px $bgColor inset;
+    -webkit-text-fill-color: $textColor;
+    caret-color: $textColor;
+  }
+}

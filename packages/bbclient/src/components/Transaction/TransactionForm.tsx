@@ -1,10 +1,8 @@
 "use client";
 
-import { Form, useForm } from "../Form";
+import { useEffect, useState } from "react";
 import styles from "./styles/transaction.module.scss";
-import { Button } from "../Button";
 import classNames from "classnames";
-import { FormMode } from "@/common/types";
 import {
   // ACCOUNT_FIELDS,
   ACCOUNTS,
@@ -16,10 +14,10 @@ import {
   CREATE_TRANSACTION,
   UPDATE_TRANSACTION,
 } from "@/graphql/mutations/Transaction";
-import { useEffect, useState } from "react";
 import { GET_TRANSACTION } from "@/graphql/queries/Transaction";
-import LoadingSpinner from "../Loading/Spinner";
-import { Input } from "@/components";
+import LoadingSpinner from "@/components/Loading/Spinner";
+import { Form, useForm, Input, Button } from "@/components";
+import { FormMode } from "@/common/types";
 
 export interface TransactionFormProps {
   mode: FormMode;
@@ -98,15 +96,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         </Form.Item>
 
         <Form.Item label="거래자">
-          <input
-            name="depositor"
-            type="text"
-            style={{
-              width: "100%",
-              height: "2.75rem",
-            }}
-            defaultValue={init && init.depositor}
-          />
+          <Input name="depositor" type="text" value={init && init.depositor} />
         </Form.Item>
 
         <Form.Item label="거래 유형" name="type">

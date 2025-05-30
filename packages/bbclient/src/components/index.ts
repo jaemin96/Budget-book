@@ -5,4 +5,3 @@ export * from "./Layout";
 export * from "./Transaction";
 export * from "./Table";
 export * from "./Loading";
-export * from "./Input";
