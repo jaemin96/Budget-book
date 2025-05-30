@@ -1,0 +1,36 @@
+@use "../../../../style/abstracts" as *;
+
+.radioGroup {
+  color: $budget-light-gray;
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  input[type="radio"] {
+    display: none;
+  }
+
+  &__myRadio {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid #999;
+    margin-right: 8px;
+    transition: background-color 0.2s;
+
+    &--checked {
+      background-color: $budget-yellow;
+      border-color: $budget-carrot;
+    }
+  }
+
+  &__label {
+    &--checked {
+      color: $budget-yellow;
+      // border-bottom: 1px solid $budget-carrot;
+    }
+  }
+}

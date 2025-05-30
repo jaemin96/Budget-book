@@ -18,6 +18,7 @@ import { GET_TRANSACTION } from "@/graphql/queries/Transaction";
 import LoadingSpinner from "@/components/Loading/Spinner";
 import { Form, useForm, Input, Button } from "@/components";
 import { FormMode } from "@/common/types";
+import { RadioGroup, Radio } from "../Form/fields";
 
 export interface TransactionFormProps {
   mode: FormMode;
@@ -31,6 +32,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const { formRef, getValues } = useForm<any>();
   const [init, setInit] = useState<any>();
   const [type, setType] = useState<any>();
+  const [selected, setSelected] = useState();
+
   const [createMutation, { loading: createLoading }] =
     useMutation(CREATE_TRANSACTION);
   const [updateMutation, { loading: updateLoading }] =
@@ -100,39 +103,14 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         </Form.Item>
 
         <Form.Item label="거래 유형" name="type">
-          <label style={{ display: "flex", gap: "0.45rem" }}>
-            <input
-              type="radio"
-              name="type"
-              value="EXPENSE"
-              checked={type === "EXPENSE"}
-              onChange={(e) => setType(e.target.value)}
-            />
-            지출
-          </label>
-          <label style={{ display: "flex", gap: "0.45rem" }}>
-            <input
-              type="radio"
-              name="type"
-              value="INCOME"
-              checked={type === "INCOME"}
-              onChange={(e) => setType(e.target.value)}
-            />
-            수익
-          </label>
-          <label style={{ display: "flex", gap: "0.45rem" }}>
-            <input
-              type="radio"
-              name="type"
-              value="TRANSFER"
-              checked={type === "TRANSFER"}
-              onChange={(e) => setType(e.target.value)}
-            />
-            내 계좌 간 이체
-          </label>
+          <RadioGroup name="type" value={selected} onChange={setSelected}>
+            <Radio value="EXPENSE">지출</Radio>
+            <Radio value="INCOME">수익</Radio>
+            <Radio value="TRANSFER">내 계좌 간 거래</Radio>
+          </RadioGroup>
         </Form.Item>
 
-        {type === "TRANSFER" ? (
+        {selected === "TRANSFER" ? (
           <div className="myTransfer">
             <Form.Item label="보낼 계좌" name="fromAccountId">
               <select
@@ -162,7 +140,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               </select>
             </Form.Item>
           </div>
-        ) : type === "INCOME" ? (
+        ) : selected === "INCOME" ? (
           <Form.Item label="수령 계좌" name="accountId">
             <select
               name="accountId"
