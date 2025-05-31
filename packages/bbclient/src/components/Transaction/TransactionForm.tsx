@@ -113,31 +113,23 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         {selected === "TRANSFER" ? (
           <div className="myTransfer">
             <Form.Item label="보낼 계좌" name="fromAccountId">
-              <select
-                name="fromAccountId"
-                value={init && init.fromAccountId}
-                style={{ width: "100%", height: "2.75rem" }}
-              >
+              <Select name="fromAccountId" value={init?.fromAccountId}>
                 {ACCOUNTS.map(({ value, label }) => (
-                  <option key={value} value={value}>
+                  <Select.Option key={value} value={value}>
                     {label}
-                  </option>
+                  </Select.Option>
                 ))}
-              </select>
+              </Select>
             </Form.Item>
 
             <Form.Item label="받을 계좌" name="toAccountId">
-              <select
-                name="toAccountId"
-                value={init && init.toAccountId}
-                style={{ width: "100%", height: "2.75rem" }}
-              >
+              <Select name="toAccountId" value={init?.toAccountId}>
                 {ACCOUNTS.map(({ value, label }) => (
-                  <option key={value} value={value}>
+                  <Select.Option key={value} value={value}>
                     {label}
-                  </option>
+                  </Select.Option>
                 ))}
-              </select>
+              </Select>
             </Form.Item>
           </div>
         ) : selected === "INCOME" ? (
