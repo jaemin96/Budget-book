@@ -18,7 +18,7 @@ import { GET_TRANSACTION } from "@/graphql/queries/Transaction";
 import LoadingSpinner from "@/components/Loading/Spinner";
 import { Form, useForm, Input, Button } from "@/components";
 import { FormMode } from "@/common/types";
-import { RadioGroup, Radio } from "../Form/fields";
+import { RadioGroup, Radio, Select } from "../Form/fields";
 
 export interface TransactionFormProps {
   mode: FormMode;
@@ -142,31 +142,23 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           </div>
         ) : selected === "INCOME" ? (
           <Form.Item label="수령 계좌" name="accountId">
-            <select
-              name="accountId"
-              value={init && init.toAccountId}
-              style={{ width: "100%", height: "2.75rem" }}
-            >
+            <Select name="toAccountId" value={init?.toAccountId}>
               {ACCOUNTS.map(({ value, label }) => (
-                <option key={value} value={value}>
+                <Select.Option key={value} value={value}>
                   {label}
-                </option>
+                </Select.Option>
               ))}
-            </select>
+            </Select>
           </Form.Item>
         ) : (
           <Form.Item label="사용 계좌" name="accountId">
-            <select
-              name="accountId"
-              value={init && init.fromAccountId}
-              style={{ width: "100%", height: "2.75rem" }}
-            >
+            <Select name="accountId" value={init?.fromAccountId}>
               {ACCOUNTS.map(({ value, label }) => (
-                <option key={value} value={value}>
+                <Select.Option key={value} value={value}>
                   {label}
-                </option>
+                </Select.Option>
               ))}
-            </select>
+            </Select>
           </Form.Item>
         )}
 
@@ -185,31 +177,23 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         </Form.Item> */}
 
         <Form.Item label="거래 분류" name="category">
-          <select
-            name="category"
-            value={init && init.category}
-            style={{ width: "100%", height: "2.75rem" }}
-          >
+          <Select name="category" value={init?.category}>
             {CATEGORY_OPTIONS.map(({ value, label }) => (
-              <option key={value} value={value}>
+              <Select.Option key={value} value={value}>
                 {label}
-              </option>
+              </Select.Option>
             ))}
-          </select>
+          </Select>
         </Form.Item>
 
         <Form.Item label="거래 수단" name="paymentType">
-          <select
-            name="paymentType"
-            value={init && init.paymentType}
-            style={{ width: "100%", height: "2.75rem" }}
-          >
+          <Select name="paymentType" value={init?.paymentType}>
             {PAYMENT_OPTIONS.map(({ value, label }) => (
-              <option key={value} value={value}>
+              <Select.Option key={value} value={value}>
                 {label}
-              </option>
+              </Select.Option>
             ))}
-          </select>
+          </Select>
         </Form.Item>
 
         <Form.Item label="거래 설명" name="description">
