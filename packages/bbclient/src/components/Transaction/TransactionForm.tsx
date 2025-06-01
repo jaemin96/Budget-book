@@ -18,7 +18,7 @@ import { GET_TRANSACTION } from "@/graphql/queries/Transaction";
 import LoadingSpinner from "@/components/Loading/Spinner";
 import { Form, useForm, Input, Button } from "@/components";
 import { FormMode } from "@/common/types";
-import { RadioGroup, Radio, Select } from "../Form/fields";
+import { RadioGroup, Radio, Select, Textarea } from "../Form/fields";
 
 export interface TransactionFormProps {
   mode: FormMode;
@@ -189,11 +189,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         </Form.Item>
 
         <Form.Item label="거래 설명" name="description">
-          <textarea
-            name="description"
-            style={{ width: "100%" }}
-            defaultValue={init && init.description}
-          />
+          <Textarea name="description" value={init && init.description} />
         </Form.Item>
 
         <div style={{ width: "100%", textAlign: "right" }}>
