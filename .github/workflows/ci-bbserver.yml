@@ -49,3 +49,32 @@ jobs:
         with:
           path: packages/bbserver/node_modules
           key: ${{ runner.os }}-node-modules-bbserver-${{ hashFiles('packages/bbserver/pnpm-lock.yaml') }}
+
+  lint:
+    name: Lint (bbserver)
+    runs-on: ubuntu-latest
+    needs: install
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Restore node_modules cache for bbserver
+        uses: actions/cache@v3
+        with:
+          path: packages/bbserver/node_modules
+          key: ${{ runner.os }}-node-modules-bbserver-${{ hashFiles('packages/bbserver/pnpm-lock.yaml') }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - run: pnpm install --frozen-lockfile
+      - name: Lint bbserver
+        run: pnpm lint

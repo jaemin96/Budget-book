@@ -1,3 +1,4 @@
 ## Budget Book Server
 
-flow-test : install 1
+- [x] flow-test : install 1
+- [ ] flow-test : link 1
