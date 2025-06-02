@@ -4,10 +4,10 @@
   appearance: none;
   width: 100%;
   padding: 0.75rem 1rem;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: $budget-form-bg;
   border: 1px solid $budget-divider-gray;
   border-radius: 0.5rem;
-  color: $budget-yellow;
+  color: $budget-white;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s;
@@ -20,6 +20,8 @@
     outline: none;
     border-color: $budget-carrot;
     box-shadow: 0 0 0 2px rgba($budget-carrot, 0.3);
+    color: $budget-white;
+    background-color: $budget-form-select-focus;
   }
 
   &:disabled {

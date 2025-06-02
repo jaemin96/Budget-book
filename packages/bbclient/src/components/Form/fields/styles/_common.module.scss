@@ -1,7 +1,7 @@
 @use "../../../../style/abstracts" as *;
 
 @mixin fieldBase {
-  color: $budget-yellow;
+  color: $budget-white;
   padding: var(--input-padding);
   //   font-size: 14px;
 }

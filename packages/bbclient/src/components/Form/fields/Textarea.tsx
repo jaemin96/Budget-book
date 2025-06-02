@@ -21,6 +21,7 @@ const Textarea: React.FC<TextareaProps> = ({
         name={name}
         value={value}
         className={classNames(styles.textarea, className)}
+        spellCheck="false"
         {...props}
       />
     </>

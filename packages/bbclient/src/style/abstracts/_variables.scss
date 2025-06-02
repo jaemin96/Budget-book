@@ -12,6 +12,8 @@ $budget-light-gray: #c0c6cc; // 서브 배경 : 카드, 컨테이너 배경
 $budget-gray: #aab0b6; // 기본 그레이
 $budget-dark-gray: #8e959c; // 서브 텍스트	: 보조 설명 등 (라인, 아이콘, 디바이더)
 $budget-surface-gray: #2a2a2a; // 컴포넌트 배경
+$budget-form-select-focus: #343333; // 폼 입력요소 - select 포커싱 배경색
+$budget-form-bg: rgba(255, 255, 255, 0.05); // 폼 입력요소 배경색
 $budget-card-gray: rgba(255, 255, 255, 0.08); // 카드 배경용
 $budget-card-gray-hover: rgba(255, 255, 255, 0.1); // 카드 배경 hover
 $budget-card-border: rgba(255, 255, 255, 0.12); // 카드 테두리
