@@ -105,4 +105,5 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Build bbclient
-        run: pnpm run build
+        run: pnpm build
+        working-directory: packages/bbclient
