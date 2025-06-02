@@ -113,6 +113,16 @@ jobs:
           echo "DIRECT_URL=${{ secrets.DIRECT_URL }}" >> .env
         working-directory: packages/bbserver
 
+      # (temp) debug
+      - name: Check env values
+        run: |
+          echo "DATABASE_URL=${DATABASE_URL:0:10}..."
+          echo "DIRECT_URL=${DIRECT_URL:0:10}..."
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        working-directory: packages/bbserver
+
       - name: Generate Prisma client
         run: pnpm prisma generate
         env:
