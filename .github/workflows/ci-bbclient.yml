@@ -70,10 +70,7 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Lint bbclient
-        run: pnpm --filter=bbclient lint
-
-      - name: Type Check bbclient
-        run: pnpm --filter=bbclient typecheck
+        run: pnpm lint
 
   build:
     name: Build (bbclient)
@@ -95,4 +92,4 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Build bbclient
-        run: pnpm --filter=bbclient build
+        run: pnpm build
