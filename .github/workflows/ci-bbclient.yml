@@ -88,6 +88,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Restore node_modules cache for bbclient
+        uses: actions/cache@v3
+        with:
+          path: packages/bbclient/node_modules
+          key: ${{ runner.os }}-node-modules-bbclient-${{ hashFiles('packages/bbclient/pnpm-lock.yaml') }}
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -98,5 +104,6 @@ jobs:
         with:
           version: ${{ env.PNPM_VERSION }}
 
+      - run: pnpm install --frozen-lockfile
       - name: Build bbclient
         run: pnpm build
