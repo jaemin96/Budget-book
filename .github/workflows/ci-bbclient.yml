@@ -104,6 +104,7 @@ jobs:
         with:
           version: ${{ env.PNPM_VERSION }}
 
+      - run: pnpm install --frozen-lockfile
       - name: Build bbclient
         run: pnpm build
         working-directory: packages/bbclient
