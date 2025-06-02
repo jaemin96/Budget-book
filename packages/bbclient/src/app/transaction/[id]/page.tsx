@@ -1,11 +1,13 @@
 import { TransactionForm } from "@/components/Transaction";
 
 interface UpdateTransactionPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-const UpdateTransactionPage = ({ params }: UpdateTransactionPageProps) => {
-  const { id } = params;
+const UpdateTransactionPage = async ({
+  params,
+}: UpdateTransactionPageProps) => {
+  const { id } = await params;
   return (
     <>
       <TransactionForm mode="edit" transactionId={id} />

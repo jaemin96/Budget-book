@@ -1,3 +1,7 @@
+:root {
+  --input-padding: 0.85rem;
+}
+
 * {
   margin: 0;
   padding: 0;
