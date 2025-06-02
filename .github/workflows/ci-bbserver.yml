@@ -115,10 +115,16 @@ jobs:
 
       - name: Generate Prisma client
         run: pnpm prisma generate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
         working-directory: packages/bbserver
 
       - name: Migrate database (optional, if needed)
         run: pnpm prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
         working-directory: packages/bbserver
 
       # All pass - build
