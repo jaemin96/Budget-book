@@ -1,40 +1,89 @@
 name: bbclient CI
 
 on:
+  pull_request:
+    paths:
+      - "packages/bbclient/**"
+      - "pnpm-lock.yaml"
+    branches:
+      - main
+      - dev
   push:
     paths:
       - "packages/bbclient/**"
-      - "package.json"
       - "pnpm-lock.yaml"
     branches:
+      - main
+      - dev
       - test
-  pull_request:
-    branches:
-      - test
+
+env:
+  NODE_ENV: production
+  NODE_VERSION: 22
+  PNPM_VERSION: 10
 
 jobs:
-  build-test:
-    name: Test
+  install:
+    name: Install & Cache
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: packages/bbclient
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          version: 10
-          run_install: false
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
-      - name: Install dependencies
-        run: pnpm install -w
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
-      - name: Install dependencies
-        run: pnpm install
+      - name: Install dependencies (filtered)
+        run: pnpm install --filter=...bbclient...
 
-      - name: Lint
-        run: pnpm lint
+      - name: Cache Next.js build
+        uses: actions/cache@v3
+        with:
+          path: packages/bbclient/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}
 
-      - name: Build
-        run: pnpm build
+  lint:
+    name: Lint & Type Check (bbclient)
+    runs-on: ubuntu-latest
+    needs: install
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Lint bbclient
+        run: pnpm --filter=bbclient lint
+
+      - name: Type Check bbclient
+        run: pnpm --filter=bbclient typecheck
+
+  build:
+    name: Build (bbclient)
+    runs-on: ubuntu-latest
+    needs: [install, lint]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Build bbclient
+        run: pnpm --filter=bbclient build
