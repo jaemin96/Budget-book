@@ -1,3 +1,3 @@
-import { AccountModel } from './account.model';
+import { AccountModel } from "./account.model";
 
 export { AccountModel };

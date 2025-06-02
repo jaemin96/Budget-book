@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { join } from 'path';
-import * as dotenv from 'dotenv';
+import { Module } from "@nestjs/common";
+import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
+import { join } from "path";
+import * as dotenv from "dotenv";
 
-import { GraphQLModule } from '@nestjs/graphql';
-import { TransactionModule } from './Transaction/transaction.module';
-import { PrismaService } from './Prisma/prisma.service';
-import { AccountModule } from './Account/account.module';
+import { GraphQLModule } from "@nestjs/graphql";
+import { TransactionModule } from "./Transaction/transaction.module";
+import { PrismaService } from "./Prisma/prisma.service";
+import { AccountModule } from "./Account/account.module";
 
 dotenv.config();
 
@@ -15,7 +15,7 @@ dotenv.config();
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       playground: true,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      autoSchemaFile: join(process.cwd(), "src/schema.gql"),
       sortSchema: true,
     }),
     TransactionModule,

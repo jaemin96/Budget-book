@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
 export abstract class ErrorOutput {
@@ -27,7 +27,7 @@ export class BasePaginationInput {
   sortBy?: string;
 
   @Field(() => String, { nullable: true })
-  order?: 'ASC' | 'DESC';
+  order?: "ASC" | "DESC";
 }
 
 @ObjectType()

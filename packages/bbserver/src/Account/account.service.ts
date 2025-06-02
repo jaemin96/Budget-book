@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import {
   CreateAccountInput,
   CreateAccountOutput,
@@ -8,9 +8,9 @@ import {
   GetAccountOutput,
   UpdateAccountInput,
   UpdateAccountOutput,
-} from './dto';
-import { PrismaService } from '../Prisma/prisma.service';
-import { Prisma } from '@prisma/client';
+} from "./dto";
+import { PrismaService } from "../Prisma/prisma.service";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class AccountService {
@@ -52,7 +52,7 @@ export class AccountService {
     });
 
     if (!account) {
-      throw new HttpException('해당 계좌가 존재 하지 않습니다.', HttpStatus.NOT_FOUND);
+      throw new HttpException("해당 계좌가 존재 하지 않습니다.", HttpStatus.NOT_FOUND);
     }
 
     const sanitizedAccount = {

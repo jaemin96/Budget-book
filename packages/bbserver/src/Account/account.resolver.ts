@@ -1,5 +1,5 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { AccountService } from './account.service';
+import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { AccountService } from "./account.service";
 import {
   CreateAccountInput,
   CreateAccountOutput,
@@ -9,7 +9,7 @@ import {
   GetAccountOutput,
   UpdateAccountInput,
   UpdateAccountOutput,
-} from './dto';
+} from "./dto";
 
 @Resolver()
 export class AccountResolver {
@@ -21,7 +21,7 @@ export class AccountResolver {
    * @return CreateAccountOutput
    */
   @Mutation(() => CreateAccountOutput)
-  async createAccount(@Args('input') input: CreateAccountInput): Promise<CreateAccountOutput> {
+  async createAccount(@Args("input") input: CreateAccountInput): Promise<CreateAccountOutput> {
     return this.accountService.createAccount(input);
   }
 
@@ -31,7 +31,7 @@ export class AccountResolver {
    * @return UpdateAccountOutput
    */
   @Mutation(() => UpdateAccountOutput)
-  async updateAccount(@Args('input') input: UpdateAccountInput): Promise<UpdateAccountOutput> {
+  async updateAccount(@Args("input") input: UpdateAccountInput): Promise<UpdateAccountOutput> {
     return this.accountService.updateAccount(input);
   }
 
@@ -41,7 +41,7 @@ export class AccountResolver {
    * @return GetAccountOutput
    */
   @Query(() => GetAccountOutput)
-  async getAccount(@Args('input') input: GetAccountInput): Promise<GetAccountOutput> {
+  async getAccount(@Args("input") input: GetAccountInput): Promise<GetAccountOutput> {
     const { bankName } = input;
     return this.accountService.getAccount({ bankName });
   }
@@ -52,7 +52,7 @@ export class AccountResolver {
    * @return GetTransactionListOutput
    */
   @Query(() => GetAccountListOutput)
-  async getAccountList(@Args('input', { nullable: true }) input?: GetAccountListInput): Promise<GetAccountListOutput> {
+  async getAccountList(@Args("input", { nullable: true }) input?: GetAccountListInput): Promise<GetAccountListOutput> {
     return this.accountService.getAccountList();
   }
 }

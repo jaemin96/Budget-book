@@ -1,6 +1,6 @@
-import { Field, InputType, Float, ObjectType } from '@nestjs/graphql';
-import { BaseOutput } from 'src/common';
-import { TransactionType, TransactionCategory, TransactionPaymentType } from '@prisma/client';
+import { Field, InputType, Float, ObjectType } from "@nestjs/graphql";
+import { BaseOutput } from "src/common";
+import { TransactionType, TransactionCategory, TransactionPaymentType } from "@prisma/client";
 
 @InputType()
 export class UpdateTransactionInput {
