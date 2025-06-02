@@ -1,5 +1,5 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { PrismaService } from 'src/Prisma/prisma.service';
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
+import { PrismaService } from "src/Prisma/prisma.service";
 import {
   CreateTransactionInput,
   CreateTransactionOutput,
@@ -9,9 +9,9 @@ import {
   GetTransactionOutput,
   UpdateTransactionInput,
   UpdateTransactionOutput,
-} from './dto';
-import { Prisma } from '@prisma/client';
-import { TransactionModel } from './model';
+} from "./dto";
+import { Prisma } from "@prisma/client";
+import { TransactionModel } from "./model";
 
 @Injectable()
 export class TransactionService {
@@ -22,11 +22,11 @@ export class TransactionService {
    */
   async createTransaction(input: CreateTransactionInput): Promise<CreateTransactionOutput> {
     const validFields = [
-      'availableBalance',
-      'savingBalance',
-      'investmentBalance',
-      'fixedDepositBalance',
-      'holdBalance',
+      "availableBalance",
+      "savingBalance",
+      "investmentBalance",
+      "fixedDepositBalance",
+      "holdBalance",
     ];
 
     const { type, amount, accountField, fromAccountId, toAccountId, paymentType, accountId } = input;
@@ -46,7 +46,7 @@ export class TransactionService {
       const transaction = await prisma.transaction.create({ data: transactionData });
 
       // 1️⃣ 계좌 간 이체 처리
-      if (type === 'TRANSFER') {
+      if (type === "TRANSFER") {
         const updates: { accountId: number; change: number }[] = [];
 
         if (fromAccountId) updates.push({ accountId: fromAccountId, change: -amount });
@@ -64,7 +64,7 @@ export class TransactionService {
           //   updateData['availableBalance'] = { increment: change };
           // }
 
-          updateData['availableBalance'] = { increment: change };
+          updateData["availableBalance"] = { increment: change };
 
           await prisma.account.update({
             where: { id: accountId },
@@ -74,22 +74,22 @@ export class TransactionService {
       }
 
       // 2️⃣ 입금/출금 처리
-      else if (type === 'INCOME' || type === 'EXPENSE') {
-        if (!accountId) throw new Error('accountId is required.');
+      else if (type === "INCOME" || type === "EXPENSE") {
+        if (!accountId) throw new Error("accountId is required.");
 
-        const change = type === 'INCOME' ? amount : -amount;
-        const isCreditCard = paymentType === 'CREDIT_CARD'; // paymentType은 input에 포함되어야 함
+        const change = type === "INCOME" ? amount : -amount;
+        const isCreditCard = paymentType === "CREDIT_CARD"; // paymentType은 input에 포함되어야 함
 
         const updateData: Record<string, any> = {
           totalBalance: { increment: change },
         };
 
         if (isCreditCard) {
-          updateData['availableBalance'] = { increment: change }; // 사용 가능 금액 차감/증가
-          updateData['holdBalance'] = { increment: -change }; // 이체 예약 금액 증가
+          updateData["availableBalance"] = { increment: change }; // 사용 가능 금액 차감/증가
+          updateData["holdBalance"] = { increment: -change }; // 이체 예약 금액 증가
           delete updateData.totalBalance;
         } else {
-          updateData['availableBalance'] = { increment: change };
+          updateData["availableBalance"] = { increment: change };
         }
 
         if (accountField) {
@@ -133,7 +133,7 @@ export class TransactionService {
     });
 
     if (!transactionData) {
-      throw new HttpException('입출금 내역이 존재 하지 않습니다.', HttpStatus.NOT_FOUND);
+      throw new HttpException("입출금 내역이 존재 하지 않습니다.", HttpStatus.NOT_FOUND);
     }
 
     const transaction: TransactionModel = {
@@ -159,7 +159,7 @@ export class TransactionService {
     const transactions = await this.prisma.transaction.findMany({
       where,
       orderBy: {
-        [input?.sortBy || 'createdAt']: input?.order?.toLowerCase() === 'asc' ? 'asc' : 'desc',
+        [input?.sortBy || "createdAt"]: input?.order?.toLowerCase() === "asc" ? "asc" : "desc",
       },
       skip: (page - 1) * size,
       take: size,

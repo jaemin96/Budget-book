@@ -1,6 +1,6 @@
-import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { TransactionCategory, TransactionType, TransactionPaymentType } from '@prisma/client';
-import { AccountModel } from 'src/Account/model';
+import { Field, ObjectType, registerEnumType } from "@nestjs/graphql";
+import { TransactionCategory, TransactionType, TransactionPaymentType } from "@prisma/client";
+import { AccountModel } from "src/Account/model";
 
 @ObjectType()
 export class TransactionModel {
@@ -44,6 +44,6 @@ export class TransactionModel {
   toAccount?: AccountModel | null;
 }
 
-registerEnumType(TransactionType, { name: 'TransactionType' });
-registerEnumType(TransactionCategory, { name: 'TransactionCategory' });
-registerEnumType(TransactionPaymentType, { name: 'TransactionPaymentType' });
+registerEnumType(TransactionType, { name: "TransactionType" });
+registerEnumType(TransactionCategory, { name: "TransactionCategory" });
+registerEnumType(TransactionPaymentType, { name: "TransactionPaymentType" });

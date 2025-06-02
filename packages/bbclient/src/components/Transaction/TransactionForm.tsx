@@ -32,7 +32,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const { formRef, getValues } = useForm<any>();
   const [init, setInit] = useState<any>();
   const [type, setType] = useState<any>();
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState<any>();
 
   const [createMutation, { loading: createLoading }] =
     useMutation(CREATE_TRANSACTION);

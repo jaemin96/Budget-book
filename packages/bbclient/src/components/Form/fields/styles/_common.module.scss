@@ -1,9 +1,5 @@
 @use "../../../../style/abstracts" as *;
 
-:root {
-  --input-padding: 0.85rem;
-}
-
 @mixin fieldBase {
   color: $budget-yellow;
   padding: var(--input-padding);

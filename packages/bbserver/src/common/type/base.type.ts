@@ -1,4 +1,4 @@
-import { Field, Int } from '@nestjs/graphql';
+import { Field, Int } from "@nestjs/graphql";
 
 export abstract class BaseType {
   @Field(() => Int)
