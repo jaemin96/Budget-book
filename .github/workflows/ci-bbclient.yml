@@ -1,0 +1,37 @@
+name: bbclient CI
+
+on:
+  push:
+    paths:
+      - "packages/bbclient/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+    branches:
+      - test
+  pull_request:
+    branches:
+      - test
+
+jobs:
+  build-test:
+    name: Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/bbclient
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 10
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install -w
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build
+        run: pnpm build
