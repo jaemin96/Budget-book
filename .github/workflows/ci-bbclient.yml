@@ -44,11 +44,11 @@ jobs:
       - name: Install dependencies (filtered)
         run: pnpm install
 
-      - name: Cache Next.js build
+      - name: Cache node_modules for bbclient
         uses: actions/cache@v3
         with:
-          path: packages/bbclient/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: packages/bbclient/node_modules
+          key: ${{ runner.os }}-node-modules-bbclient-${{ hashFiles('packages/bbclient/pnpm-lock.yaml') }}
 
   lint:
     name: Lint & Type Check (bbclient)
@@ -75,6 +75,7 @@ jobs:
         with:
           version: ${{ env.PNPM_VERSION }}
 
+      - run: pnpm install --frozen-lockfile
       - name: Lint bbclient
         run: pnpm lint
 
