@@ -1,5 +1,6 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { AccountService } from "./account.service";
+import { GetAmountSummaryInput, GetAmountSummaryOutput } from './dto/get-amount-summary.dto';
 import {
   CreateAccountInput,
   CreateAccountOutput,
@@ -54,5 +55,15 @@ export class AccountResolver {
   @Query(() => GetAccountListOutput)
   async getAccountList(@Args("input", { nullable: true }) input?: GetAccountListInput): Promise<GetAccountListOutput> {
     return this.accountService.getAccountList();
+  }
+
+  /**
+   * Resolver - 자산 현황 조회
+   * @param GetAmountSummaryInput
+   * @return GetAmountSummaryOutput
+   */
+  @Query(() => GetAmountSummaryOutput)
+  async getAmountSummary(@Args("input", { nullable: true }) input?: GetAmountSummaryInput): Promise<GetAmountSummaryOutput> {
+    return this.accountService.getAmountSummary();
   }
 }

@@ -11,6 +11,7 @@ import {
 } from "./dto";
 import { PrismaService } from "../Prisma/prisma.service";
 import { Prisma } from "@prisma/client";
+import { GetAmountSummaryInput, GetAmountSummaryOutput } from './dto/get-amount-summary.dto';
 
 @Injectable()
 export class AccountService {
@@ -93,5 +94,33 @@ export class AccountService {
     }
 
     return { accounts: sanitizedAccounts };
+  }
+
+  /**
+   * 자산 현황 조회
+   */
+  async getAmountSummary(input?: GetAmountSummaryInput): Promise<GetAmountSummaryOutput> {
+    const accounts = await this.prisma.account.findMany();
+
+    let total = 0;
+    let available = 0;
+    let saving = 0;
+    let hold = 0;
+
+    accounts.map((account) => ({
+      // fixedDepositBalance: account.fixedDepositBalance.toNumber(),
+      // investmentBalance: account.investmentBalance.toNumber(),
+      total: total += account.totalBalance.toNumber(),
+      available: available += account.availableBalance.toNumber(),
+      saving: saving += account.savingBalance.toNumber(),
+      hold: hold += account.holdBalance.toNumber(),
+    }));
+    
+    return {
+      totalBalance: total,
+      availableBalance: available,
+      savingBalance: saving,
+      holdBalance: hold
+    }
   }
 }
