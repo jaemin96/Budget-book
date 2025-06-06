@@ -106,21 +106,25 @@ export class AccountService {
     let available = 0;
     let saving = 0;
     let hold = 0;
+    let fix = 0;
+    let invest = 0;
 
     accounts.map((account) => ({
-      // fixedDepositBalance: account.fixedDepositBalance.toNumber(),
-      // investmentBalance: account.investmentBalance.toNumber(),
       total: total += account.totalBalance.toNumber(),
       available: available += account.availableBalance.toNumber(),
       saving: saving += account.savingBalance.toNumber(),
       hold: hold += account.holdBalance.toNumber(),
+      fix: fix += account.fixedDepositBalance.toNumber(),
+      invest: invest += account.investmentBalance.toNumber(),
     }));
     
     return {
       totalBalance: total,
       availableBalance: available,
       savingBalance: saving,
-      holdBalance: hold
+      holdBalance: hold,
+      fixedDepositBalance: fix,
+      investmentBalance: invest,
     }
   }
 }
