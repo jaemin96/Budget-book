@@ -1,8 +1,23 @@
+"use client";
+
 import styles from "./styles/home.module.scss";
 import Link from "next/link";
 import { Button, Card } from "@/components";
+import { useQuery } from "@apollo/client";
+import { GET_AMOUNT_SUMMARY } from "../graphql/queries/Account";
+import { useEffect } from "react";
 
 export default function Home() {
+  const { data, loading, error, refetch } = useQuery(GET_AMOUNT_SUMMARY, {
+    variables: {
+      input: {},
+    },
+  });
+
+  useEffect(() => {
+    console.log({ data });
+  }, [data]);
+
   return (
     <div className={styles.container}>
       {/* 거래내역 페이지 이동 */}
