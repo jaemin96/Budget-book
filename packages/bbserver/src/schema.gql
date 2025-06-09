@@ -109,6 +109,32 @@ type GetAccountOutput {
   message: ErrorOutput
 }
 
+input GetAmountSummaryInput {
+  """더미 필드 (사용되지 않음)"""
+  _: Boolean
+}
+
+type GetAmountSummaryOutput {
+  """실제 입출금 가능한 금액"""
+  availableBalance: Float!
+
+  """예금에 묶여 있는 금액"""
+  fixedDepositBalance: Float!
+
+  """출금 예약 및 결제 대기 중인 금액"""
+  holdBalance: Float!
+
+  """투자 금액 (예: CMA, 펀드 등)"""
+  investmentBalance: Float!
+  message: ErrorOutput
+
+  """적금에 묶여 있는 금액"""
+  savingBalance: Float!
+
+  """계좌 총 금액 (자산)"""
+  totalBalance: Float!
+}
+
 input GetTransactionInput {
   id: Float!
 }
@@ -144,6 +170,7 @@ type Mutation {
 type Query {
   getAccount(input: GetAccountInput!): GetAccountOutput!
   getAccountList(input: GetAccountListInput): GetAccountListOutput!
+  getAmountSummary(input: GetAmountSummaryInput): GetAmountSummaryOutput!
   getTotalAmount: Float!
   getTransaction(input: GetTransactionInput!): GetTransactionOutput!
   getTransactionList(input: GetTransactionListInput): GetTransactionListOutput!

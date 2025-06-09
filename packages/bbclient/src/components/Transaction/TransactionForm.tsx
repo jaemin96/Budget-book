@@ -134,7 +134,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           </div>
         ) : selected === "INCOME" ? (
           <Form.Item label="수령 계좌" name="accountId">
-            <Select name="toAccountId" value={init?.toAccountId}>
+            <Select name="accountId" value={init?.toAccountId}>
               {ACCOUNTS.map(({ value, label }) => (
                 <Select.Option key={value} value={value}>
                   {label}
