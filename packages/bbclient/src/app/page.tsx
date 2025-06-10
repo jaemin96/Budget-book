@@ -34,28 +34,40 @@ export default function Home() {
       {/* 총 금액 */}
       <section>
         <Card>
-          <span>{`Total amount ${summary?.totalBalance}`}</span>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h3>{`Total amount`}</h3>
+            <span>{`${summary?.totalBalance.toLocaleString()}`}</span>
+          </div>
         </Card>
       </section>
 
       {/* 저축 금액 */}
       <section>
         <Card>
-          <span>{`Saving amount ${summary?.savingBalance}`}</span>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h3>{`Saving amount`}</h3>
+            <span>{`${summary?.savingBalance.toLocaleString()}`}</span>
+          </div>
         </Card>
       </section>
 
       {/* 바로 출금 가능 금액 */}
       <section>
         <Card>
-          <span>{`Available amount ${summary?.availableBalance}`}</span>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h3>{`Available amount`}</h3>
+            <span>{`${summary?.availableBalance.toLocaleString()}`}</span>
+          </div>
         </Card>
       </section>
 
       {/* 출금 예정 금액  */}
       <section>
         <Card>
-          <span>{`Holding amount ${summary?.holdBalance}`}</span>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h3>{`Holding amount`}</h3>
+            <span>{`${summary?.holdBalance.toLocaleString()}`}</span>
+          </div>
         </Card>
       </section>
     </div>
