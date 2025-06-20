@@ -177,6 +177,7 @@ type Query {
 }
 
 enum TransactionCategory {
+  CREDIT_CARD_PAYMENT
   DRINK
   DUES
   EMERGENCY_FUND
@@ -184,8 +185,10 @@ enum TransactionCategory {
   FOOD
   INSURANCE
   INVESTMENT
+  LOAN_REPAYMENT
   PHONE
   PRESENT
+  RECHARGE
   SALARY
   SAVINGS
   SHOPPING

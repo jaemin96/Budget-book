@@ -29,7 +29,7 @@ export class TransactionService {
       "holdBalance",
     ];
 
-    const { type, amount, accountField, fromAccountId, toAccountId, paymentType, accountId } = input;
+    const { type, amount, accountField, fromAccountId, toAccountId, paymentType, accountId, category } = input;
 
     if (accountField && !validFields.includes(accountField)) {
       throw new Error(`Invalid account field: ${accountField}`);
@@ -78,7 +78,7 @@ export class TransactionService {
         if (!accountId) throw new Error("accountId is required.");
 
         const change = type === "INCOME" ? amount : -amount;
-        const isCreditCard = paymentType === "CREDIT_CARD"; // paymentType은 input에 포함되어야 함
+        const isCreditCard = paymentType === "CREDIT_CARD";
 
         const updateData: Record<string, any> = {
           totalBalance: { increment: change },
@@ -89,7 +89,12 @@ export class TransactionService {
           updateData["holdBalance"] = { increment: -change }; // 이체 예약 금액 증가
           delete updateData.totalBalance;
         } else {
-          updateData["availableBalance"] = { increment: change };
+          // 2️⃣-1️⃣신용카드 대금 결제인 경우
+          if (category === "CREDIT_CARD_PAYMENT") {
+            updateData["holdBalance"] = { increment: change };
+          } else {
+            updateData["availableBalance"] = { increment: change };
+          }
         }
 
         if (accountField) {
