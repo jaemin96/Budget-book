@@ -13,6 +13,9 @@ export type TransactionCategory =
   | "SAVINGS"
   | "INVESTMENT"
   | "EMERGENCY_FUND"
+  | "CREDIT_CARD_PAYMENT"
+  | "RECHARGE"
+  | "LOAN_REPAYMENT"
   | "ETC";
 
 export type TransactionPaymentType =
@@ -37,6 +40,7 @@ export const TransactionCategoryLabels: Record<TransactionCategory, string> = {
   INSURANCE: "보험",
   DRINK: "음료",
   FOOD: "식비",
+  CREDIT_CARD_PAYMENT: "카드대금",
   SHOPPING: "쇼핑",
   TRANSPORT: "교통비",
   SUBSCRIBE: "구독료",
@@ -46,6 +50,8 @@ export const TransactionCategoryLabels: Record<TransactionCategory, string> = {
   SAVINGS: "저금",
   INVESTMENT: "재테크",
   EMERGENCY_FUND: "비상금",
+  RECHARGE: "충전",
+  LOAN_REPAYMENT: "상환",
   ETC: "기타",
 };
 
