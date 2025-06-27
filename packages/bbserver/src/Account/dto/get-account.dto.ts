@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
-import { BaseOutput } from "src/common";
+import { BaseOutput } from "../../../src/common";
 import { AccountModel } from "../model";
 
 @InputType()
