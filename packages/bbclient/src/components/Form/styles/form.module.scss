@@ -1,17 +1,63 @@
-.form {
-  border: 1px solid #adadad;
+@use "../../../style/abstracts" as *;
 
+// background-color: rgba(255, 255, 255, 0.05);
+// border-color: $budget-dark-gray;
+// color: $budget-carrot;
+
+.form {
   &-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    justify-content: space-between;
     &-vertical {
-      color: red;
+      color: $budget-white;
     }
+
     &-horizontal {
-      color: darkcyan;
+      flex-direction: row;
     }
   }
 
   &-label {
+    color: $budget-light-gray;
+    max-height: 2.75rem !important;
   }
+  // 뱃지 느낌
+  // &-label {
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: center;
+  //   border: 1px solid rgba($budget-card-border, 0.2);
+  //   border-radius: 8px;
+  //   background-color: rgba(255, 255, 255, 0.05);
+  //   color: $budget-yellow;
+  //   text-align: center;
+  //   margin-bottom: 8px;
+  //   width: 25%;
+  //   max-height: 2.75rem !important;
+  // }
   &-control {
+    min-width: 15rem;
+
+    input[type="text"] {
+      width: 100%;
+    }
+  }
+}
+
+/* 모바일 전용 스타일 */
+@media (max-width: 768px) {
+  .form {
+    &-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &-label {
+    }
+    &-control {
+      min-height: 2.75rem !important;
+    }
   }
 }

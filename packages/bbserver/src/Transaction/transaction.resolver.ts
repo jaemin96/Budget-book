@@ -1,5 +1,5 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { TransactionService } from './transaction.service';
+import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { TransactionService } from "./transaction.service";
 import {
   CreateTransactionOutput,
   CreateTransactionInput,
@@ -7,7 +7,9 @@ import {
   GetTransactionInput,
   GetTransactionListOutput,
   GetTransactionListInput,
-} from './dto';
+  UpdateTransactionOutput,
+  UpdateTransactionInput,
+} from "./dto";
 
 @Resolver()
 export class TransactionResolver {
@@ -19,8 +21,18 @@ export class TransactionResolver {
    * @return CreateTransactionOutput
    */
   @Mutation(() => CreateTransactionOutput)
-  async createTransaction(@Args('input') input: CreateTransactionInput): Promise<CreateTransactionOutput> {
+  async createTransaction(@Args("input") input: CreateTransactionInput): Promise<CreateTransactionOutput> {
     return this.transactionService.createTransaction(input);
+  }
+
+  /**
+   * Resolver - 입출금 내역 수정
+   * @param UpdateTransactionInput
+   * @return UpdateTransactionOutput
+   */
+  @Mutation(() => UpdateTransactionOutput)
+  async updateTransaction(@Args("input") input: UpdateTransactionInput): Promise<UpdateTransactionOutput> {
+    return this.transactionService.updateTransaction(input);
   }
 
   /**
@@ -29,7 +41,7 @@ export class TransactionResolver {
    * @return GetTransactionOutput
    */
   @Query(() => GetTransactionOutput)
-  async getTransaction(@Args('input') input: GetTransactionInput): Promise<GetTransactionOutput> {
+  async getTransaction(@Args("input") input: GetTransactionInput): Promise<GetTransactionOutput> {
     const { id } = input;
     return this.transactionService.getTransaction({ id });
   }
@@ -41,7 +53,7 @@ export class TransactionResolver {
    */
   @Query(() => GetTransactionListOutput)
   async getTransactionList(
-    @Args('input', { nullable: true }) input?: GetTransactionListInput,
+    @Args("input", { nullable: true }) input?: GetTransactionListInput,
   ): Promise<GetTransactionListOutput> {
     return this.transactionService.getTransactionList({ ...input });
   }

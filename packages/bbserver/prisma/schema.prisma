@@ -21,11 +21,14 @@ model Account {
   fixedDepositBalance  Decimal  @default(0.0)
   investmentBalance    Decimal  @default(0.0)
   holdBalance          Decimal  @default(0.0)
+
+  transactionsFrom     Transaction[] @relation("FromAccount")
+  transactionsTo       Transaction[] @relation("ToAccount")
 }
 
 model Transaction {
   id          Int                     @id @default(autoincrement())
-  amount      Float
+  amount      Decimal
   depositor   String?
   description String
   type        TransactionType
@@ -33,27 +36,38 @@ model Transaction {
   createdAt   DateTime                @default(now())
   updatedAt   DateTime                @updatedAt
   paymentType TransactionPaymentType?
+
+  // 계좌 간 이체용 참조
+  fromAccountId Int?
+  toAccountId   Int?
+
+  fromAccount   Account? @relation("FromAccount", fields: [fromAccountId], references: [id])
+  toAccount     Account? @relation("ToAccount", fields: [toAccountId], references: [id])
 }
 
 enum TransactionType {
   INCOME
   EXPENSE
+  TRANSFER
 }
 
 enum TransactionCategory {
-  SALARY
-  INSURANCE
-  DRINK
   FOOD
+  DRINK
+  RECHARGE
+  CREDIT_CARD_PAYMENT
+  SALARY
+  SAVINGS
+  EMERGENCY_FUND
+  INVESTMENT
   SHOPPING
+  INSURANCE
   TRANSPORT
   SUBSCRIBE
   PHONE
   DUES
   PRESENT
-  SAVINGS
-  INVESTMENT
-  EMERGENCY_FUND
+  LOAN_REPAYMENT
   ETC
 }
 

@@ -1,0 +1,13 @@
+@use "../../../../style/abstracts" as *;
+@use "./common.module.scss" as *;
+
+.textarea {
+  @include fieldBase;
+  max-width: 100%;
+  width: 100%;
+  min-height: 7.5rem !important;
+
+  background-color: $budget-form-bg;
+  border: 1px solid $budget-divider-gray;
+  border-radius: 8px;
+}

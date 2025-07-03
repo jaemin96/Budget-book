@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef } from "react";
 
 export const useForm = <T extends Record<string, any>>() => {
@@ -7,13 +9,9 @@ export const useForm = <T extends Record<string, any>>() => {
     if (!formRef.current) throw new Error("Form ref not found");
 
     const formData = new FormData(formRef.current);
-    console.log({ formData });
-
     const data: Partial<T> = {};
 
     formData.forEach((value, key) => {
-      console.log({ value, key });
-
       const str = value.toString();
 
       if (!isNaN(Number(str)) && str.trim() !== "") {

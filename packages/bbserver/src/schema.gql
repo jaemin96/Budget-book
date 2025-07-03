@@ -17,9 +17,11 @@ type AccountModel {
   """출금 예약 및 결제 대기 중인 금액"""
   holdBalance: Float!
   id: Float!
+  incomingTransactions: [TransactionModel]
 
   """투자 금액 (예: CMA, 펀드 등)"""
   investmentBalance: Float!
+  outgoingTransactions: [TransactionModel]
 
   """적금에 묶여 있는 금액"""
   savingBalance: Float!
@@ -56,11 +58,21 @@ type CreateAccountOutput {
 }
 
 input CreateTransactionInput {
+  accountField: String
+
+  """거래 발생 계좌"""
+  accountId: Float
   amount: Float!
   category: TransactionCategory
   depositor: String
   description: String!
+
+  """보내는 계좌"""
+  fromAccountId: Float
   paymentType: TransactionPaymentType
+
+  """받을 계좌"""
+  toAccountId: Float
   type: TransactionType!
 }
 
@@ -97,17 +109,49 @@ type GetAccountOutput {
   message: ErrorOutput
 }
 
+input GetAmountSummaryInput {
+  """더미 필드 (사용되지 않음)"""
+  _: Boolean
+}
+
+type GetAmountSummaryOutput {
+  """실제 입출금 가능한 금액"""
+  availableBalance: Float!
+
+  """예금에 묶여 있는 금액"""
+  fixedDepositBalance: Float!
+
+  """출금 예약 및 결제 대기 중인 금액"""
+  holdBalance: Float!
+
+  """투자 금액 (예: CMA, 펀드 등)"""
+  investmentBalance: Float!
+  message: ErrorOutput
+
+  """적금에 묶여 있는 금액"""
+  savingBalance: Float!
+
+  """계좌 총 금액 (자산)"""
+  totalBalance: Float!
+}
+
 input GetTransactionInput {
   id: Float!
 }
 
 input GetTransactionListInput {
   category: TransactionCategory
+  order: String
+  page: Float = 1
+  size: Float = 10
+  sortBy: String
   type: TransactionType
 }
 
 type GetTransactionListOutput {
   message: ErrorOutput
+  totalCount: Float
+  totalPages: Float
   transactions: [TransactionModel!]!
 }
 
@@ -119,17 +163,21 @@ type GetTransactionOutput {
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createTransaction(input: CreateTransactionInput!): CreateTransactionOutput!
+  updateAccount(input: UpdateAccountInput!): UpdateAccountOutput!
+  updateTransaction(input: UpdateTransactionInput!): UpdateTransactionOutput!
 }
 
 type Query {
   getAccount(input: GetAccountInput!): GetAccountOutput!
   getAccountList(input: GetAccountListInput): GetAccountListOutput!
+  getAmountSummary(input: GetAmountSummaryInput): GetAmountSummaryOutput!
   getTotalAmount: Float!
   getTransaction(input: GetTransactionInput!): GetTransactionOutput!
   getTransactionList(input: GetTransactionListInput): GetTransactionListOutput!
 }
 
 enum TransactionCategory {
+  CREDIT_CARD_PAYMENT
   DRINK
   DUES
   EMERGENCY_FUND
@@ -137,8 +185,10 @@ enum TransactionCategory {
   FOOD
   INSURANCE
   INVESTMENT
+  LOAN_REPAYMENT
   PHONE
   PRESENT
+  RECHARGE
   SALARY
   SAVINGS
   SHOPPING
@@ -152,8 +202,12 @@ type TransactionModel {
   createdAt: DateTime!
   depositor: String
   description: String!
+  fromAccount: AccountModel
+  fromAccountId: Float
   id: Float!
   paymentType: TransactionPaymentType
+  toAccount: AccountModel
+  toAccountId: Float
   type: TransactionType!
   updatedAt: DateTime!
 }
@@ -177,4 +231,49 @@ enum TransactionPaymentType {
 enum TransactionType {
   EXPENSE
   INCOME
+  TRANSFER
+}
+
+input UpdateAccountInput {
+  """실제 입출금 가능한 금액"""
+  availableBalance: Float = 0
+
+  """계좌 은행 명"""
+  bankName: String
+
+  """예금에 묶여 있는 금액"""
+  fixedDepositBalance: Float = 0
+
+  """출금 예약 및 결제 대기 중인 금액"""
+  holdBalance: Float = 0
+  id: Float!
+
+  """투자 금액 (예: CMA, 펀드 등)"""
+  investmentBalance: Float = 0
+
+  """적금에 묶여 있는 금액"""
+  savingBalance: Float = 0
+
+  """계좌 총 금액 (자산)"""
+  totalBalance: Float = 0
+}
+
+type UpdateAccountOutput {
+  id: Float
+  message: ErrorOutput
+}
+
+input UpdateTransactionInput {
+  amount: Float
+  category: TransactionCategory
+  depositor: String
+  description: String
+  id: Float!
+  paymentType: TransactionPaymentType
+  type: TransactionType
+}
+
+type UpdateTransactionOutput {
+  id: Float
+  message: ErrorOutput
 }

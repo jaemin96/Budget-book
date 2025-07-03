@@ -1,3 +1,5 @@
+"use client";
+
 import React, { forwardRef } from "react";
 import FormItem from "./FormItem";
 import { FormItemProps } from "./types/formTypes";

@@ -1,0 +1,76 @@
+@use "../../../style/abstracts" as *;
+
+.card {
+  background: $budget-card-gray;
+  border: 1px solid $budget-card-border;
+  border-radius: 20px;
+  padding: 0.95rem;
+  color: $budget-white;
+  .header {
+    display: flex;
+    width: 100%;
+    margin-bottom: 3rem;
+    &--vertical {
+    }
+    &--horizontal {
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .titleWrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      .icon {
+        width: 1.875rem;
+        height: 1.875rem;
+      }
+      .title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-top: -2px;
+      }
+    }
+    .buttonWrapper {
+    }
+  }
+
+  .main {
+  }
+}
+
+/* 모바일 전용 스타일 */
+@media (max-width: 768px) {
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    .header {
+      margin-bottom: 1.25rem;
+      .titleWrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        .icon {
+          width: 2rem;
+          height: 2rem;
+        }
+        .title {
+          font-size: 1.6rem;
+          font-weight: 800;
+          margin-top: 0;
+        }
+      }
+      .buttonWrapper {
+        display: flex;
+        gap: 0.5rem;
+        button {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
