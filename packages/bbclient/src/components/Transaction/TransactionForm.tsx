@@ -70,6 +70,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                 input: { ...params },
               },
             });
+
+      if (res && res?.data?.createTransaction?.id) {
+        formRef?.current?.reset();
+      }
     } catch (err) {
       console.error({ err });
     }
