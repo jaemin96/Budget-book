@@ -29,6 +29,10 @@ const Transaction: React.FC<TransactionProps> = (props) => {
   });
 
   useEffect(() => {
+    refetch();
+  }, []);
+
+  useEffect(() => {
     if (!data) return;
     const { transactions, totalCount, totalPages } = data?.getTransactionList;
 
