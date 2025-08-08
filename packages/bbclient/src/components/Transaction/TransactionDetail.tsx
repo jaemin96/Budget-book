@@ -8,15 +8,27 @@ import { GET_TRANSACTION } from "@/graphql/queries/Transaction";
 import { useQuery } from "@apollo/client";
 import styles from "./styles/transaction.module.scss";
 import { useEffect, useState } from "react";
-import { TransactionTypeLabels } from "@/constants/enum";
+import {
+  TransactionTypeLabels,
+  TransactionPaymentTypeLabels,
+  TransactionCategoryLabels,
+} from "@/constants/enum";
+import { Transaction } from "@/model/transaction.model";
+import { AccountBank } from "@/model/account.model";
 
 interface TransactionDetailProps {
   transactionId: number;
 }
+
+const convertDate = (date: Date) => {
+  const newDate = new Date(date);
+  return newDate.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
+};
+
 export const TransactionDetail = ({
   transactionId,
 }: TransactionDetailProps) => {
-  const [tr, setTr] = useState<any>();
+  const [tr, setTr] = useState<Transaction>();
   const { data, loading, error, refetch } = useQuery(GET_TRANSACTION, {
     variables: {
       input: {
@@ -46,7 +58,6 @@ export const TransactionDetail = ({
           </>
         }
       />
-      {/* TODO: tr state에 명확한 타입 매핑작업 진행해야함. any으로 처리 시 데이터 매핑 불가 */}
       <Card.Body>
         <div className={classNames(styles["transaction-summary-wrapper"])}>
           <div className={styles["transaction-header"]}>
@@ -58,12 +69,42 @@ export const TransactionDetail = ({
               <Spinner />
             ) : (
               <>
-                <TransactionItem label="💳 결제 수단" value={tr.paymentType} />
-                <TransactionItem label="📅 날짜" value={tr.createdAt} />
-                <TransactionItem label="💰 금액" value={tr.amount} highlight />
-                <TransactionItem label="📂 타입" value={tr.type} />
-                <TransactionItem label="📝 카테고리" value={tr.category} />
-                <TransactionItem label="🔁 거래 흐름" value={tr.depositor} />
+                <TransactionItem
+                  label="💳 결제수단"
+                  value={TransactionPaymentTypeLabels[tr.paymentType]}
+                />
+                <TransactionItem
+                  label="📅 날짜"
+                  value={convertDate(tr.createdAt)}
+                />
+                <TransactionItem
+                  label="💰 금액"
+                  value={`${tr.amount.toLocaleString()}원`}
+                  highlight
+                />
+                <TransactionItem
+                  label="📂 타입"
+                  value={TransactionTypeLabels[tr.type]}
+                />
+                {(tr.fromAccountId || tr.toAccountId) && (
+                  <TransactionItem
+                    label="💳 거래계좌"
+                    value={
+                      tr.fromAccountId && tr.toAccountId
+                        ? `${AccountBank[tr.fromAccountId]} ➡ ${
+                            AccountBank[tr.toAccountId]
+                          }`
+                        : tr.fromAccountId
+                        ? `${AccountBank[tr.fromAccountId]}`
+                        : "계좌 정보 없음"
+                    }
+                  />
+                )}
+                <TransactionItem
+                  label="📝 카테고리"
+                  value={TransactionCategoryLabels[tr.category]}
+                />
+                <TransactionItem label="🔁 거래흐름" value={tr.depositor} />
                 <TransactionItem label="🗒️ 설명" value={tr.description} />
               </>
             )}
