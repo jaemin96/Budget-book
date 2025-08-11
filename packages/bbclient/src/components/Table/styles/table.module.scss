@@ -6,9 +6,6 @@
   border-collapse: collapse;
   transition: all 0.2s ease;
 
-  &__head {
-  }
-
   &__headRow {
     border-bottom: 1px solid #ddd;
   }
@@ -17,9 +14,6 @@
     padding: 12px;
     text-align: left;
     font-weight: 600;
-  }
-
-  &__body {
   }
 
   &__bodyRow {

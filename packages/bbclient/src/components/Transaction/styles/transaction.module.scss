@@ -13,6 +13,10 @@
 }
 
 .transaction-form-wrapper {
+  background: $budget-card-gray;
+  border: 1px solid $budget-card-border;
+  border-radius: 20px;
+  padding: 0.95rem;
   &-header {
     display: flex;
     justify-content: space-between;
@@ -29,10 +33,6 @@
       }
     }
   }
-  background: $budget-card-gray;
-  border: 1px solid $budget-card-border;
-  border-radius: 20px;
-  padding: 0.95rem;
 }
 
 .transaction-summary-wrapper {
@@ -45,6 +45,8 @@
   }
 
   .transaction-content {
+    margin-bottom: 2rem;
+
     .items {
       display: flex;
       align-items: center; // 기본 가로 정렬
@@ -73,7 +75,6 @@
         }
       }
     }
-    margin-bottom: 2rem;
   }
 
   .transaction-footer {
