@@ -58,4 +58,11 @@
       min-height: 2.75rem !important;
     }
   }
+
+  .form-detail {
+    &-item {
+      display: flex;
+      flex-direction: row;
+    }
+  }
 }

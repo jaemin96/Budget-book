@@ -37,11 +37,26 @@
 
 .transaction-summary-wrapper {
   .transaction-header {
+    display: flex;
+    justify-content: space-between;
     font-weight: bold;
     font-size: 1.1rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #ddd;
     margin-bottom: 2rem;
+
+    &-btn-wrapper {
+      display: flex;
+      gap: 0.3rem;
+      margin-right: 0.25rem;
+
+      .common-btn {
+        width: 3rem;
+        height: 1.75rem;
+        text-align: center;
+        font-size: 0.9rem;
+      }
+    }
   }
 
   .transaction-content {
@@ -135,6 +150,26 @@
           font-size: 1.5rem;
           font-weight: 800;
           margin-top: -2px;
+        }
+      }
+    }
+  }
+
+  .transaction-summary-wrapper {
+    .transaction-content {
+      // 상세정보 수정모드일 때만 적용되도록
+      .detail-edit-wrapper {
+        .detail {
+          .items {
+            justify-content: space-between;
+          }
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+
+          select {
+            padding: 13.6px;
+          }
         }
       }
     }
