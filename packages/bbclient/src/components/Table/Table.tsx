@@ -1,6 +1,9 @@
+"use client";
+
 import { BaseProps } from "@/common/types";
 import styles from "./styles/table.module.scss";
 import classNames from "classnames";
+import { useRouter } from "next/navigation";
 
 interface Column {
   label: string;
@@ -14,6 +17,7 @@ interface TableProps extends BaseProps {
 }
 
 const Table: React.FC<TableProps> = ({ columns, data }) => {
+  const router = useRouter();
   return (
     <>
       <table className={classNames(styles.table)}>
@@ -34,6 +38,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
             <tr
               key={row.id ?? rowIndex}
               className={classNames(styles.table__bodyRow)}
+              onClick={() => router.push(`/transaction/detail/${row?.id}`)}
             >
               {columns.map((col) => (
                 <td

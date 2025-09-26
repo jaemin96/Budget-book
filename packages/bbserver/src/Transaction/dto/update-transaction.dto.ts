@@ -24,6 +24,15 @@ export class UpdateTransactionInput {
 
   @Field(() => TransactionPaymentType, { nullable: true })
   paymentType?: TransactionPaymentType;
+
+  @Field(() => Number, { nullable: true, description: "거래 발생 계좌" })
+  accountId?: number | null;
+
+  @Field(() => Number, { nullable: true, description: "보내는 계좌" })
+  fromAccountId?: number | null;
+
+  @Field(() => Number, { nullable: true, description: "받을 계좌" })
+  toAccountId?: number | null;
 }
 
 @ObjectType()

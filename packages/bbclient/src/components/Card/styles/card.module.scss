@@ -10,8 +10,7 @@
     display: flex;
     width: 100%;
     margin-bottom: 3rem;
-    &--vertical {
-    }
+
     &--horizontal {
       align-items: center;
       justify-content: space-between;
@@ -31,11 +30,6 @@
         margin-top: -2px;
       }
     }
-    .buttonWrapper {
-    }
-  }
-
-  .main {
   }
 }
 

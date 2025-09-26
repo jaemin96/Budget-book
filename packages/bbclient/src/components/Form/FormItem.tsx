@@ -10,13 +10,14 @@ const FormItem = ({
   children,
   direction = "horizontal",
   style,
-}: FormItemProps) => {
+  className,
+}: FormItemProps & { className?: string }) => {
   const directionClass = styles[`form-item-${direction}`];
 
   return (
     <div
       style={style}
-      className={classNames(styles["form-item"], directionClass)}
+      className={classNames(styles["form-item"], directionClass, className)}
     >
       {label && <label className={styles["form-label"]}>{label}</label>}
       <div className={styles["form-control"]}>{children}</div>

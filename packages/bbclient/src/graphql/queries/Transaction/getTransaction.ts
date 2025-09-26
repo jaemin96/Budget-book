@@ -17,6 +17,8 @@ export const GET_TRANSACTION = gql`
         depositor
         description
         paymentType
+        fromAccountId
+        toAccountId
       }
     }
   }
