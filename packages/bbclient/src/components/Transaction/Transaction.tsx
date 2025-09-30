@@ -10,11 +10,13 @@ import Link from "next/link";
 import { Octagon, Plus } from "lucide-react";
 import { Spinner } from "@/components";
 import {
-  TransactionCategory,
   TransactionCategoryLabels,
-  TransactionType,
   TransactionTypeLabels,
 } from "../../constants/enum/transaction.enum";
+import {
+  TransactionCategory,
+  TransactionType,
+} from "@/model/transaction.model";
 
 interface TransactionProps {}
 
@@ -27,6 +29,10 @@ const Transaction: React.FC<TransactionProps> = (props) => {
       input: {},
     },
   });
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   useEffect(() => {
     if (!data) return;

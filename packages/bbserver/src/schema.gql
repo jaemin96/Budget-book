@@ -264,12 +264,22 @@ type UpdateAccountOutput {
 }
 
 input UpdateTransactionInput {
+  """거래 발생 계좌"""
+  accountId: Float
+
   amount: Float
   category: TransactionCategory
   depositor: String
   description: String
+
+  """보내는 계좌"""
+  fromAccountId: Float
   id: Float!
   paymentType: TransactionPaymentType
+
+  """받을 계좌"""
+  toAccountId: Float
+
   type: TransactionType
 }
 

@@ -43,6 +43,12 @@ export class TransactionService {
     const tx = await this.prisma.$transaction(async (prisma) => {
       const transactionData = { ...input };
       delete transactionData.accountId;
+
+      if ((type === "INCOME" || type === "EXPENSE") && !transactionData.fromAccountId && accountId) {
+        transactionData.fromAccountId = accountId;
+      }
+
+
       const transaction = await prisma.transaction.create({ data: transactionData });
 
       // 1️⃣ 계좌 간 이체 처리
@@ -135,6 +141,7 @@ export class TransactionService {
   async getTransaction(input: GetTransactionInput): Promise<GetTransactionOutput> {
     const transactionData = await this.prisma.transaction.findUnique({
       where: { id: input.id },
+      include: { fromAccount: true, toAccount: true },
     });
 
     if (!transactionData) {
@@ -144,6 +151,28 @@ export class TransactionService {
     const transaction: TransactionModel = {
       ...transactionData,
       amount: Number(transactionData.amount),
+      fromAccount: transactionData.fromAccount
+        ? {
+            ...transactionData.fromAccount,
+            availableBalance: transactionData.fromAccount.availableBalance.toNumber(),
+            savingBalance: transactionData.fromAccount.savingBalance.toNumber(),
+            investmentBalance: transactionData.fromAccount.investmentBalance.toNumber(),
+            fixedDepositBalance: transactionData.fromAccount.fixedDepositBalance.toNumber(),
+            holdBalance: transactionData.fromAccount.holdBalance.toNumber(),
+            totalBalance: transactionData.fromAccount.totalBalance.toNumber(),
+          }
+        : null,
+      toAccount: transactionData.toAccount
+        ? {
+            ...transactionData.toAccount,
+            availableBalance: transactionData.toAccount.availableBalance.toNumber(),
+            savingBalance: transactionData.toAccount.savingBalance.toNumber(),
+            investmentBalance: transactionData.toAccount.investmentBalance.toNumber(),
+            fixedDepositBalance: transactionData.toAccount.fixedDepositBalance.toNumber(),
+            holdBalance: transactionData.toAccount.holdBalance.toNumber(),
+            totalBalance: transactionData.toAccount.totalBalance.toNumber(),
+          }
+        : null,
     };
 
     return { transaction };

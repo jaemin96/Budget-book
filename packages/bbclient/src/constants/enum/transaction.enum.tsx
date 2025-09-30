@@ -1,39 +1,9 @@
-// 타입 정의
-export type TransactionCategory =
-  | "SALARY"
-  | "INSURANCE"
-  | "DRINK"
-  | "FOOD"
-  | "SHOPPING"
-  | "TRANSPORT"
-  | "SUBSCRIBE"
-  | "PHONE"
-  | "DUES"
-  | "PRESENT"
-  | "SAVINGS"
-  | "INVESTMENT"
-  | "EMERGENCY_FUND"
-  | "CREDIT_CARD_PAYMENT"
-  | "RECHARGE"
-  | "LOAN_REPAYMENT"
-  | "ETC";
+import {
+  TransactionCategory,
+  TransactionPaymentType,
+  TransactionType,
+} from "@/model/transaction.model";
 
-export type TransactionPaymentType =
-  | "CREDIT_CARD"
-  | "CHECK_CARD"
-  | "KAKAO_PAY"
-  | "APPLE_PAY"
-  | "NAVER_PAY"
-  | "TOSS"
-  | "BANK_TRANSFER"
-  | "CASH"
-  | "POINT"
-  | "GIFT_CARD"
-  | "VIRTUAL_ACCOUNT"
-  | "CRYPTO"
-  | "ETC";
-
-export type TransactionType = "INCOME" | "EXPENSE" | "TRANSFER";
 
 export const TransactionCategoryLabels: Record<TransactionCategory, string> = {
   SALARY: "급여",

@@ -6,9 +6,6 @@
   border-collapse: collapse;
   transition: all 0.2s ease;
 
-  &__head {
-  }
-
   &__headRow {
     border-bottom: 1px solid #ddd;
   }
@@ -19,11 +16,9 @@
     font-weight: 600;
   }
 
-  &__body {
-  }
-
   &__bodyRow {
     border-bottom: 1px solid #eee;
+    cursor: pointer;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.05);
