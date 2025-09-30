@@ -19,6 +19,7 @@ export const GET_TRANSACTION = gql`
         paymentType
         fromAccountId
         toAccountId
+
       }
     }
   }

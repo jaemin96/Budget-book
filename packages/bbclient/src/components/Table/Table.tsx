@@ -5,6 +5,7 @@ import styles from "./styles/table.module.scss";
 import classNames from "classnames";
 import { useRouter } from "next/navigation";
 
+
 interface Column {
   label: string;
   dataIndex: string;
@@ -18,6 +19,7 @@ interface TableProps extends BaseProps {
 
 const Table: React.FC<TableProps> = ({ columns, data }) => {
   const router = useRouter();
+
   return (
     <>
       <table className={classNames(styles.table)}>

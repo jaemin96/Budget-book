@@ -4,6 +4,7 @@ import {
   TransactionType,
 } from "@/model/transaction.model";
 
+
 export const TransactionCategoryLabels: Record<TransactionCategory, string> = {
   SALARY: "급여",
   INSURANCE: "보험",
