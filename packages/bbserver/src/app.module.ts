@@ -10,6 +10,8 @@ import { AccountModule } from "./Account/account.module";
 import { readFileSync } from "fs";
 import { AccountResolver } from "./Account/account.resolver";
 import { TransactionResolver } from "./Transaction/transaction.resolver";
+import { UserModule } from "./User/user.module";
+import { UserResolver } from "./User/user.resolver";
 
 dotenv.config();
 
@@ -28,7 +30,8 @@ const isProd = process.env.NODE_ENV === "production";
     }),
     TransactionModule,
     AccountModule,
+    UserModule,
   ],
-  providers: [PrismaService, AccountResolver, TransactionResolver],
+  providers: [PrismaService, AccountResolver, TransactionResolver, UserResolver],
 })
 export class AppModule {}

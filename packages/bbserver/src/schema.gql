@@ -183,6 +183,31 @@ type GetTransactionOutput {
   transaction: TransactionModel
 }
 
+input GetUserInput {
+  uuid: String!
+}
+
+input GetUserListInput {
+  order: String
+  page: Float = 1
+  role: UserRole
+  size: Float = 10
+  sortBy: String
+  status: UserStatus
+}
+
+type GetUserListOutput {
+  message: ErrorOutput
+  totalCount: Float
+  totalPages: Float
+  users: [UserModel!]
+}
+
+type GetUserOutput {
+  message: ErrorOutput
+  user: UserModel
+}
+
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createTransaction(input: CreateTransactionInput!): CreateTransactionOutput!
@@ -198,6 +223,8 @@ type Query {
   getTotalAmount: Float!
   getTransaction(input: GetTransactionInput!): GetTransactionOutput!
   getTransactionList(input: GetTransactionListInput): GetTransactionListOutput!
+  getUser(input: GetUserInput!): GetUserOutput!
+  getUserList(input: GetUserListInput): GetUserListOutput!
 }
 
 enum TransactionCategory {
@@ -290,7 +317,6 @@ type UpdateAccountOutput {
 input UpdateTransactionInput {
   """거래 발생 계좌"""
   accountId: Float
-
   amount: Float
   category: TransactionCategory
   depositor: String
@@ -303,7 +329,6 @@ input UpdateTransactionInput {
 
   """받을 계좌"""
   toAccountId: Float
-
   type: TransactionType
 }
 
