@@ -290,6 +290,7 @@ type UpdateAccountOutput {
 input UpdateTransactionInput {
   """거래 발생 계좌"""
   accountId: Float
+
   amount: Float
   category: TransactionCategory
   depositor: String
@@ -302,6 +303,7 @@ input UpdateTransactionInput {
 
   """받을 계좌"""
   toAccountId: Float
+
   type: TransactionType
 }
 

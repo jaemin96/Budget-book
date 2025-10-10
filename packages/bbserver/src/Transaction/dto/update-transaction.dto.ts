@@ -33,6 +33,7 @@ export class UpdateTransactionInput {
 
   @Field(() => Number, { nullable: true, description: "받을 계좌" })
   toAccountId?: number | null;
+
 }
 
 @ObjectType()

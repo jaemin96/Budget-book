@@ -48,6 +48,7 @@ export class TransactionService {
         transactionData.fromAccountId = accountId;
       }
 
+
       const transaction = await prisma.transaction.create({ data: transactionData });
 
       // 1️⃣ 계좌 간 이체 처리

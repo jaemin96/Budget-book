@@ -12,6 +12,7 @@ const FormItem = ({
   style,
   className,
 }: FormItemProps & { className?: string }) => {
+
   const directionClass = styles[`form-item-${direction}`];
 
   return (
