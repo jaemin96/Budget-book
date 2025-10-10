@@ -81,6 +81,29 @@ type CreateTransactionOutput {
   message: ErrorOutput
 }
 
+input CreateUserInput {
+  """사용자 프로필 이미지"""
+  avatarUrl: String
+  email: String!
+  name: String!
+  password: String!
+
+  """사용자 전화번호"""
+  phone: String
+
+  """사용자 권한"""
+  role: UserRole! = USER
+
+  """사용자 활성화 여부"""
+  status: UserStatus! = ACTIVE
+}
+
+type CreateUserOutput {
+  id: Float
+  message: ErrorOutput
+  uuid: String
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -163,6 +186,7 @@ type GetTransactionOutput {
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createTransaction(input: CreateTransactionInput!): CreateTransactionOutput!
+  createUser(input: CreateUserInput!): CreateUserOutput!
   updateAccount(input: UpdateAccountInput!): UpdateAccountOutput!
   updateTransaction(input: UpdateTransactionInput!): UpdateTransactionOutput!
 }
@@ -284,4 +308,29 @@ input UpdateTransactionInput {
 type UpdateTransactionOutput {
   id: Float
   message: ErrorOutput
+}
+
+type UserModel {
+  avatarUrl: String
+  createdAt: DateTime!
+  email: String!
+  id: Float!
+  name: String!
+  password: String!
+  phone: String
+  role: UserRole!
+  status: UserStatus!
+  updatedAt: DateTime!
+  uuid: String!
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+  INACTIVE
 }
