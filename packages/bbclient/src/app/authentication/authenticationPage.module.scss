@@ -7,11 +7,9 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: $budget-white;
-
+  background-color: $budget-card-gray;
   .formContainer {
     margin-bottom: 10rem;
-    max-width: 100%;
   }
 
   @media (min-width: 768px) {
@@ -20,10 +18,11 @@
 }
 
 .formContainer {
-  padding: 4rem;
+  padding: 3rem;
   padding-top: 1rem;
   margin: 0 auto;
-  width: 700px;
+  max-width: 700px;
+  min-width: 500px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,24 +30,25 @@
   .header {
     text-align: center;
     margin-bottom: 1.5rem;
+    letter-spacing: 2px;
 
     h1 {
       font-size: 1.5rem;
-      font-weight: 600;
+      font-weight: 800;
       color: $budget-carrot;
       margin-bottom: 1.5rem;
     }
 
     p {
       font-size: 0.9rem;
-      color: #666;
+      color: $budget-gray;
     }
   }
 
   .terms {
     text-align: center;
     font-size: 0.85rem;
-    color: #777;
+    color: $budget-dark-gray;
     margin-top: 1rem;
 
     a {
@@ -92,12 +92,12 @@
 
 .leftPanel {
   display: flex;
-  color: $budget-text;
   padding: 2.5rem;
   height: 100%;
   flex-direction: column;
   justify-content: center;
-  background-color: $warning-300;
+  color: $budget-black;
+  background-color: $budget-carrot;
 
   .overlay {
     position: absolute;
@@ -111,14 +111,20 @@
     z-index: 1;
 
     blockquote {
-      p {
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
+      margin: 0;
+
+      .mainText {
+        font-size: 1.75rem; // 약간 큼 (28px 정도)
+        font-weight: 600;
+        line-height: 1.4;
+        margin-bottom: 0.75rem;
+        color: $budget-text;
       }
 
-      footer {
-        font-size: 0.9rem;
-        opacity: 0.8;
+      .subText {
+        font-size: 0.95rem;
+        font-weight: 400;
+        color: rgba(0, 0, 0, 0.6); // 약간 흐린 회색
       }
     }
   }
@@ -128,5 +134,5 @@
   display: flex;
   height: 100%;
   max-width: 700px;
-  background-color: $budget-white;
+  background-color: $budget-card-gray;
 }

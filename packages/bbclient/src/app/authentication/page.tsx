@@ -1,8 +1,10 @@
 "use client";
 
 import styles from "./authenticationPage.module.scss";
-import Link from "next/link";
 import { UserAuthForm } from "./components/UserAuthForm";
+
+const MAIN_DESCRIPTION = "Simple money tracking, easier budgeting";
+const SUB_DESCRIPTION = "© 2025 by Jaemin Kim";
 
 const LoginForm: React.FC = () => {
   return (
@@ -34,8 +36,8 @@ export default function AuthenticationPage() {
         <div className={styles.leftPanel}>
           <div className={styles.quote}>
             <blockquote>
-              <p>“Main description”</p>
-              <footer>jaemin kim</footer>
+              <p className={styles.mainText}>{MAIN_DESCRIPTION}</p>
+              <span className={styles.subText}>{SUB_DESCRIPTION}</span>
             </blockquote>
           </div>
         </div>
@@ -47,27 +49,3 @@ export default function AuthenticationPage() {
     </>
   );
 }
-
-// return (
-//   <div className="flex flex-col gap-2 p-4">
-//     <input
-//       placeholder="email"
-//       value={email}
-//       onChange={(e) => setEmail(e.target.value)}
-//       className="border p-2"
-//     />
-//     <input
-//       placeholder="password"
-//       type="password"
-//       value={password}
-//       onChange={(e) => setPassword(e.target.value)}
-//       className="border p-2"
-//     />
-//     <button
-//       onClick={handleLogin}
-//       className="bg-blue-500 text-white p-2 rounded"
-//     >
-//       로그인
-//     </button>
-//   </div>
-// );

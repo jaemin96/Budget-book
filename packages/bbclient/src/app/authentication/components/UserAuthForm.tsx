@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import styles from "./userAuthForm.module.scss";
+import inputStyles from "../../../components/Form/fields/styles/input.module.scss";
 
 export function UserAuthForm() {
   const [email, setEmail] = useState("");
@@ -15,6 +16,7 @@ export function UserAuthForm() {
       <input
         type="email"
         placeholder="you@example.com"
+        className={inputStyles.input}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
