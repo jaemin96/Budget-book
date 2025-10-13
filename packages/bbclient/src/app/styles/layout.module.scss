@@ -1,7 +1,6 @@
 @use "../../style/abstracts" as *;
 
 .layout {
-  min-height: 100vh;
-  padding: 0.75rem;
   background: $budget-black;
+  margin: 0;
 }

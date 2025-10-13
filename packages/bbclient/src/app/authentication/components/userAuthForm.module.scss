@@ -1,0 +1,31 @@
+@use "../../../style/abstracts" as *;
+@use "sass:color";
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  input {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+
+  button {
+    background: $budget-carrot;
+    color: white;
+    text-align: center;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: $budget-yellow;
+    }
+  }
+}

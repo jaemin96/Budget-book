@@ -1,0 +1,132 @@
+@use "../../style/abstracts" as *;
+@use "sass:color";
+
+.mobileContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: $budget-white;
+
+  .formContainer {
+    margin-bottom: 10rem;
+    max-width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.formContainer {
+  padding: 4rem;
+  padding-top: 1rem;
+  margin: 0 auto;
+  width: 700px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: $budget-carrot;
+      margin-bottom: 1.5rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: #666;
+    }
+  }
+
+  .terms {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #777;
+    margin-top: 1rem;
+
+    a {
+      text-decoration: underline;
+      color: $budget-carrot;
+
+      &:hover {
+        color: #0056c1;
+      }
+    }
+  }
+}
+
+.logo {
+  position: relative;
+  z-index: 1;
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+
+  .icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 0.5rem;
+  }
+}
+
+.pageContainer {
+  position: relative;
+  display: none;
+
+  @media (min-width: 768px) {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.leftPanel {
+  display: flex;
+  color: $budget-text;
+  padding: 2.5rem;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  background-color: $warning-300;
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+  }
+
+  .quote {
+    position: relative;
+    z-index: 1;
+
+    blockquote {
+      p {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      footer {
+        font-size: 0.9rem;
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+.rightPanel {
+  display: flex;
+  height: 100%;
+  max-width: 700px;
+  background-color: $budget-white;
+}
