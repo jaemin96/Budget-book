@@ -13,7 +13,7 @@
     font-size: 1rem;
   }
 
-  button {
+  button[type="submit"] {
     background: $budget-carrot;
     color: white;
     text-align: center;
