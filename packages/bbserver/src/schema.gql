@@ -31,6 +31,11 @@ type AccountModel {
   updatedAt: DateTime!
 }
 
+type AuthOutput {
+  accessToken: String!
+  user: UserModel!
+}
+
 input CreateAccountInput {
   """실제 입출금 가능한 금액"""
   availableBalance: Float = 0
@@ -212,6 +217,7 @@ type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createTransaction(input: CreateTransactionInput!): CreateTransactionOutput!
   createUser(input: CreateUserInput!): CreateUserOutput!
+  login(email: String!, password: String!): AuthOutput!
   updateAccount(input: UpdateAccountInput!): UpdateAccountOutput!
   updateTransaction(input: UpdateTransactionInput!): UpdateTransactionOutput!
 }

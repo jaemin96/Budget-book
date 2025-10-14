@@ -19,10 +19,10 @@ export class UserModel {
   name: string;
 
   @Field(() => String, { nullable: true })
-  phone?: string;
+  phone?: string | null;
 
   @Field(() => String, { nullable: true })
-  avatarUrl?: string;
+  avatarUrl?: string | null;
 
   @Field(() => UserRole)
   role: UserRole;

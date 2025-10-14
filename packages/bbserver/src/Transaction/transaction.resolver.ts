@@ -10,6 +10,8 @@ import {
   UpdateTransactionOutput,
   UpdateTransactionInput,
 } from "./dto";
+import { UseGuards } from "@nestjs/common";
+import { GqlAuthGuard } from "../Auth/gql-auth.guard";
 
 @Resolver()
 export class TransactionResolver {
@@ -21,6 +23,7 @@ export class TransactionResolver {
    * @return CreateTransactionOutput
    */
   @Mutation(() => CreateTransactionOutput)
+  @UseGuards(GqlAuthGuard)
   async createTransaction(@Args("input") input: CreateTransactionInput): Promise<CreateTransactionOutput> {
     return this.transactionService.createTransaction(input);
   }
@@ -31,6 +34,7 @@ export class TransactionResolver {
    * @return UpdateTransactionOutput
    */
   @Mutation(() => UpdateTransactionOutput)
+  @UseGuards(GqlAuthGuard)
   async updateTransaction(@Args("input") input: UpdateTransactionInput): Promise<UpdateTransactionOutput> {
     return this.transactionService.updateTransaction(input);
   }
@@ -41,6 +45,7 @@ export class TransactionResolver {
    * @return GetTransactionOutput
    */
   @Query(() => GetTransactionOutput)
+  @UseGuards(GqlAuthGuard)
   async getTransaction(@Args("input") input: GetTransactionInput): Promise<GetTransactionOutput> {
     const { id } = input;
     return this.transactionService.getTransaction({ id });
@@ -52,6 +57,7 @@ export class TransactionResolver {
    * @return GetTransactionListOutput
    */
   @Query(() => GetTransactionListOutput)
+  @UseGuards(GqlAuthGuard)
   async getTransactionList(
     @Args("input", { nullable: true }) input?: GetTransactionListInput,
   ): Promise<GetTransactionListOutput> {
@@ -62,6 +68,7 @@ export class TransactionResolver {
    * Resolver - 계좌 총액 조회
    */
   @Query(() => Number)
+  @UseGuards(GqlAuthGuard)
   async getTotalAmount(): Promise<number> {
     return this.transactionService.getTotalAmount();
   }

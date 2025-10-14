@@ -12,6 +12,8 @@ import { AccountResolver } from "./Account/account.resolver";
 import { TransactionResolver } from "./Transaction/transaction.resolver";
 import { UserModule } from "./User/user.module";
 import { UserResolver } from "./User/user.resolver";
+import { AuthModule } from "./Auth/auth.module";
+import { AuthResolver } from "./Auth/auth.resolver";
 
 dotenv.config();
 
@@ -31,7 +33,8 @@ const isProd = process.env.NODE_ENV === "production";
     TransactionModule,
     AccountModule,
     UserModule,
+    AuthModule,
   ],
-  providers: [PrismaService, AccountResolver, TransactionResolver, UserResolver],
+  providers: [PrismaService, AccountResolver, TransactionResolver, UserResolver, AuthResolver],
 })
 export class AppModule {}
