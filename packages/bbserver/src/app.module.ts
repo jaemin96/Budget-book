@@ -29,6 +29,7 @@ const isProd = process.env.NODE_ENV === "production";
       // typeDefs: schema, // 배포할떄만 on
       autoSchemaFile: isProd ? false : join(process.cwd(), "src/schema.gql"),
       sortSchema: true,
+      introspection: true,
     }),
     TransactionModule,
     AccountModule,
