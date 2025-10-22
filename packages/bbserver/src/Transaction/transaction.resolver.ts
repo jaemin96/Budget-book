@@ -10,11 +10,14 @@ import {
   UpdateTransactionOutput,
   UpdateTransactionInput,
 } from "./dto";
-import { UseGuards } from "@nestjs/common";
+import { Logger, UseGuards } from "@nestjs/common";
 import { GqlAuthGuard } from "../Auth/gql-auth.guard";
+import { CurrentUser } from "../common/decorators/current-user.decorator";
 
 @Resolver()
 export class TransactionResolver {
+  private readonly logger = new Logger(TransactionResolver.name);
+
   constructor(private readonly transactionService: TransactionService) {}
 
   /**
@@ -59,9 +62,14 @@ export class TransactionResolver {
   @Query(() => GetTransactionListOutput)
   @UseGuards(GqlAuthGuard)
   async getTransactionList(
+    @CurrentUser() user: any,
     @Args("input", { nullable: true }) input?: GetTransactionListInput,
   ): Promise<GetTransactionListOutput> {
-    return this.transactionService.getTransactionList({ ...input });
+    this.logger.debug(`👤 Current user: ${JSON.stringify(user, null, 2)}`);
+
+    const result = await this.transactionService.getTransactionList({ ...input });
+    this.logger.debug(`📊 Result: ${JSON.stringify(result, null, 2)}`);
+    return result;
   }
 
   /**
