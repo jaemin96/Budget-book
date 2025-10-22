@@ -8,6 +8,7 @@ import { LOGIN } from "@/graphql/mutations/Auth";
 import { Eye, EyeOff } from "lucide-react";
 import { Spinner } from "@/components";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export function UserAuthForm() {
   const router = useRouter();
@@ -28,7 +29,14 @@ export function UserAuthForm() {
         },
       });
 
-      localStorage.setItem("token", result.data.login.accessToken);
+      const token = result.data.login.accessToken;
+
+      Cookies.set("token", token, {
+        expires: 7,
+        secure: true,
+        sameSite: "strict",
+      });
+
       router.replace("/");
     } catch (err) {
       console.error("Login error:", err);

@@ -30,9 +30,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Protected>
-          <div className={classNames(styles.layout)}>
+          <main className={classNames(styles.layout)}>
             <Providers>{children}</Providers>
-          </div>
+          </main>
         </Protected>
       </body>
     </html>

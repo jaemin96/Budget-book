@@ -39,7 +39,7 @@ export default function Home() {
           </div>
         </>
       ) : (
-        <>
+        <div className={styles.balances}>
           {/* 총 금액 */}
           <section>
             <Card>
@@ -79,7 +79,7 @@ export default function Home() {
               </div>
             </Card>
           </section>
-        </>
+        </div>
       )}
     </div>
   );
