@@ -89,11 +89,6 @@ const Transaction: React.FC<TransactionProps> = (props) => {
                 <Plus />
               </Link>
             </Button>
-            <Button>
-              <Link className={styles.link} href="/transaction/create">
-                <Plus />
-              </Link>
-            </Button>
           </>
         }
       />
