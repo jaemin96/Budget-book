@@ -10,8 +10,8 @@ import {
   UpdateTransactionInput,
   UpdateTransactionOutput,
 } from "./dto";
-import { Prisma } from "@prisma/client";
 import { TransactionModel } from "./model";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class TransactionService {
@@ -20,7 +20,7 @@ export class TransactionService {
   /**
    * 입출금 항목 추가
    */
-  async createTransaction(input: CreateTransactionInput): Promise<CreateTransactionOutput> {
+  async createTransaction(userId: number, input: CreateTransactionInput): Promise<CreateTransactionOutput> {
     const validFields = [
       "availableBalance",
       "savingBalance",
@@ -48,8 +48,12 @@ export class TransactionService {
         transactionData.fromAccountId = accountId;
       }
 
-
-      const transaction = await prisma.transaction.create({ data: transactionData });
+      const transaction = await prisma.transaction.create({
+        data: {
+          userId,
+          ...transactionData,
+        },
+      });
 
       // 1️⃣ 계좌 간 이체 처리
       if (type === "TRANSFER") {
@@ -181,11 +185,12 @@ export class TransactionService {
   /**
    * 입출금 리스트 조회
    */
-  async getTransactionList(input?: GetTransactionListInput): Promise<GetTransactionListOutput> {
+  async getTransactionList(userId: number, input?: GetTransactionListInput): Promise<GetTransactionListOutput> {
     const page = input?.page ?? 1;
     const size = input?.size ?? 10;
 
     const where: Prisma.TransactionWhereInput = {
+      userId: userId,
       type: input?.type ?? undefined,
       category: input?.category ?? undefined,
     };

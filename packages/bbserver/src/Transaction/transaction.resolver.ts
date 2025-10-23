@@ -12,7 +12,7 @@ import {
 } from "./dto";
 import { Logger, UseGuards } from "@nestjs/common";
 import { GqlAuthGuard } from "../Auth/gql-auth.guard";
-import { CurrentUser } from "../common/decorators/current-user.decorator";
+import { CurrentUser, UserPayload } from "../common/decorators/current-user.decorator";
 
 @Resolver()
 export class TransactionResolver {
@@ -27,8 +27,11 @@ export class TransactionResolver {
    */
   @Mutation(() => CreateTransactionOutput)
   @UseGuards(GqlAuthGuard)
-  async createTransaction(@Args("input") input: CreateTransactionInput): Promise<CreateTransactionOutput> {
-    return this.transactionService.createTransaction(input);
+  async createTransaction(
+    @CurrentUser() user: UserPayload,
+    @Args("input") input: CreateTransactionInput,
+  ): Promise<CreateTransactionOutput> {
+    return this.transactionService.createTransaction(user.userId, input);
   }
 
   /**
@@ -62,13 +65,15 @@ export class TransactionResolver {
   @Query(() => GetTransactionListOutput)
   @UseGuards(GqlAuthGuard)
   async getTransactionList(
-    @CurrentUser() user: any,
+    @CurrentUser() user: UserPayload,
     @Args("input", { nullable: true }) input?: GetTransactionListInput,
   ): Promise<GetTransactionListOutput> {
     this.logger.debug(`👤 Current user: ${JSON.stringify(user, null, 2)}`);
+    this.logger.debug(`👤 Current user2: ${user.userId}`);
+    this.logger.debug(`👤 Current user id type: ${typeof user.userId}`);
 
-    const result = await this.transactionService.getTransactionList({ ...input });
-    this.logger.debug(`📊 Result: ${JSON.stringify(result, null, 2)}`);
+    const result = await this.transactionService.getTransactionList(user.userId, input);
+    // this.logger.debug(`📊 Result: ${JSON.stringify(result, null, 2)}`);
     return result;
   }
 

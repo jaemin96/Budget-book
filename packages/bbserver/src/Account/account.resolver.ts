@@ -13,6 +13,7 @@ import {
 } from "./dto";
 import { UseGuards } from "@nestjs/common";
 import { GqlAuthGuard } from "../Auth/gql-auth.guard";
+import { CurrentUser, UserPayload } from "../common/decorators/current-user.decorator";
 
 @Resolver()
 export class AccountResolver {
@@ -25,8 +26,11 @@ export class AccountResolver {
    */
   @Mutation(() => CreateAccountOutput)
   @UseGuards(GqlAuthGuard)
-  async createAccount(@Args("input") input: CreateAccountInput): Promise<CreateAccountOutput> {
-    return this.accountService.createAccount(input);
+  async createAccount(
+    @CurrentUser() user: UserPayload,
+    @Args("input") input: CreateAccountInput,
+  ): Promise<CreateAccountOutput> {
+    return this.accountService.createAccount(user.userId, input);
   }
 
   /**
@@ -71,8 +75,9 @@ export class AccountResolver {
   @Query(() => GetAmountSummaryOutput)
   @UseGuards(GqlAuthGuard)
   async getAmountSummary(
+    @CurrentUser() user: UserPayload,
     @Args("input", { nullable: true }) input?: GetAmountSummaryInput,
   ): Promise<GetAmountSummaryOutput> {
-    return this.accountService.getAmountSummary();
+    return this.accountService.getAmountSummary(user.userId, input);
   }
 }
