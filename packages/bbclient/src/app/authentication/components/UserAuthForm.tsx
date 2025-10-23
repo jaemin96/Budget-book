@@ -33,11 +33,14 @@ export function UserAuthForm() {
 
       Cookies.set("token", token, {
         expires: 7,
-        secure: true,
-        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
       });
 
-      router.replace("/");
+      if (token) {
+        await new Promise((r) => setTimeout(r, 100));
+        router.replace("/");
+      }
     } catch (err) {
       console.error("Login error:", err);
     }
