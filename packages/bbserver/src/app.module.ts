@@ -30,6 +30,7 @@ const isProd = process.env.NODE_ENV === "production";
       autoSchemaFile: isProd ? false : join(process.cwd(), "src/schema.gql"),
       sortSchema: true,
       introspection: true,
+      context: ({ req }) => ({ req }),
     }),
     TransactionModule,
     AccountModule,
