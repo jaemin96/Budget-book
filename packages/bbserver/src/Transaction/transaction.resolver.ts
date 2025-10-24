@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { Args, Info, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { TransactionService } from "./transaction.service";
 import {
   CreateTransactionOutput,
@@ -10,6 +10,10 @@ import {
   UpdateTransactionOutput,
   UpdateTransactionInput,
 } from "./dto";
+import { UseGuards } from "@nestjs/common";
+import { GqlAuthGuard } from "../Auth/gql-auth.guard";
+import { CurrentUser, UserPayload } from "../common/decorators/current-user.decorator";
+import { GraphQLResolveInfo } from "graphql";
 
 @Resolver()
 export class TransactionResolver {
@@ -21,8 +25,12 @@ export class TransactionResolver {
    * @return CreateTransactionOutput
    */
   @Mutation(() => CreateTransactionOutput)
-  async createTransaction(@Args("input") input: CreateTransactionInput): Promise<CreateTransactionOutput> {
-    return this.transactionService.createTransaction(input);
+  @UseGuards(GqlAuthGuard)
+  async createTransaction(
+    @CurrentUser() user: UserPayload,
+    @Args("input") input: CreateTransactionInput,
+  ): Promise<CreateTransactionOutput> {
+    return this.transactionService.createTransaction(user.userId, input);
   }
 
   /**
@@ -31,8 +39,12 @@ export class TransactionResolver {
    * @return UpdateTransactionOutput
    */
   @Mutation(() => UpdateTransactionOutput)
-  async updateTransaction(@Args("input") input: UpdateTransactionInput): Promise<UpdateTransactionOutput> {
-    return this.transactionService.updateTransaction(input);
+  @UseGuards(GqlAuthGuard)
+  async updateTransaction(
+    @CurrentUser() user: UserPayload,
+    @Args("input") input: UpdateTransactionInput,
+  ): Promise<UpdateTransactionOutput> {
+    return this.transactionService.updateTransaction(user.userId, input);
   }
 
   /**
@@ -41,9 +53,13 @@ export class TransactionResolver {
    * @return GetTransactionOutput
    */
   @Query(() => GetTransactionOutput)
-  async getTransaction(@Args("input") input: GetTransactionInput): Promise<GetTransactionOutput> {
+  @UseGuards(GqlAuthGuard)
+  async getTransaction(
+    @CurrentUser() user: UserPayload,
+    @Args("input") input: GetTransactionInput,
+  ): Promise<GetTransactionOutput> {
     const { id } = input;
-    return this.transactionService.getTransaction({ id });
+    return this.transactionService.getTransaction(user.userId, input);
   }
 
   /**
@@ -52,17 +68,21 @@ export class TransactionResolver {
    * @return GetTransactionListOutput
    */
   @Query(() => GetTransactionListOutput)
+  @UseGuards(GqlAuthGuard)
   async getTransactionList(
+    @Info() info: GraphQLResolveInfo,
+    @CurrentUser() user: UserPayload,
     @Args("input", { nullable: true }) input?: GetTransactionListInput,
   ): Promise<GetTransactionListOutput> {
-    return this.transactionService.getTransactionList({ ...input });
+    return this.transactionService.getTransactionList(user.userId, input);
   }
 
   /**
    * Resolver - 계좌 총액 조회
    */
   @Query(() => Number)
-  async getTotalAmount(): Promise<number> {
-    return this.transactionService.getTotalAmount();
+  @UseGuards(GqlAuthGuard)
+  async getTotalAmount(@CurrentUser() user: UserPayload): Promise<number> {
+    return this.transactionService.getTotalAmount(user.userId);
   }
 }

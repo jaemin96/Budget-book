@@ -9,40 +9,65 @@ datasource db {
 }
 
 model Account {
-  id                   Int      @id @default(autoincrement())
-  bankName             String   @unique
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-  deletedAt            DateTime? // nullable
+  id                  Int           @id @default(autoincrement())
+  userId              Int
+  user                User          @relation(fields: [userId], references: [id])
 
-  totalBalance         Decimal  @default(0.0)
-  availableBalance     Decimal  @default(0.0)
-  savingBalance        Decimal  @default(0.0)
-  fixedDepositBalance  Decimal  @default(0.0)
-  investmentBalance    Decimal  @default(0.0)
-  holdBalance          Decimal  @default(0.0)
+  bankName            String        
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  deletedAt           DateTime?
 
-  transactionsFrom     Transaction[] @relation("FromAccount")
-  transactionsTo       Transaction[] @relation("ToAccount")
+  totalBalance        Decimal       @default(0.0)
+  availableBalance    Decimal       @default(0.0)
+  savingBalance       Decimal       @default(0.0)
+  fixedDepositBalance Decimal       @default(0.0)
+  investmentBalance   Decimal       @default(0.0)
+  holdBalance         Decimal       @default(0.0)
+
+  transactionsFrom    Transaction[] @relation("FromAccount")
+  transactionsTo      Transaction[] @relation("ToAccount")
+
+  @@unique([userId, bankName])
 }
 
-model Transaction {
-  id          Int                     @id @default(autoincrement())
-  amount      Decimal
-  depositor   String?
-  description String
-  type        TransactionType
-  category    TransactionCategory?    @default(ETC)
-  createdAt   DateTime                @default(now())
-  updatedAt   DateTime                @updatedAt
-  paymentType TransactionPaymentType?
 
-  // 계좌 간 이체용 참조
+
+model Transaction {
+  id            Int                     @id @default(autoincrement())
+  userId        Int
+  user          User                    @relation(fields: [userId], references: [id])
+
+  amount        Decimal
+  depositor     String?
+  description   String
+  type          TransactionType
+  category      TransactionCategory?    @default(ETC)
+  createdAt     DateTime                @default(now())
+  updatedAt     DateTime                @updatedAt
+  paymentType   TransactionPaymentType?
+  
   fromAccountId Int?
   toAccountId   Int?
+  fromAccount   Account?                @relation("FromAccount", fields: [fromAccountId], references: [id])
+  toAccount     Account?                @relation("ToAccount", fields: [toAccountId], references: [id])
+}
 
-  fromAccount   Account? @relation("FromAccount", fields: [fromAccountId], references: [id])
-  toAccount     Account? @relation("ToAccount", fields: [toAccountId], references: [id])
+model User {
+  id        Int        @id @default(autoincrement())
+  uuid      String     @unique @default(uuid())
+  email     String     @unique
+  password  String
+  name      String
+  phone     String?
+  avatarUrl String?
+  role      UserRole   @default(USER)
+  status    UserStatus @default(ACTIVE)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  accounts      Account[]
+  transactions  Transaction[]
 }
 
 enum TransactionType {
@@ -52,23 +77,23 @@ enum TransactionType {
 }
 
 enum TransactionCategory {
-  FOOD
-  DRINK
-  RECHARGE
-  CREDIT_CARD_PAYMENT
   SALARY
-  SAVINGS
-  EMERGENCY_FUND
-  INVESTMENT
-  SHOPPING
   INSURANCE
+  DRINK
+  FOOD
+  SHOPPING
   TRANSPORT
   SUBSCRIBE
   PHONE
   DUES
   PRESENT
-  LOAN_REPAYMENT
+  SAVINGS
+  INVESTMENT
+  EMERGENCY_FUND
   ETC
+  RECHARGE
+  CREDIT_CARD_PAYMENT
+  LOAN_REPAYMENT
 }
 
 enum TransactionPaymentType {
@@ -85,4 +110,15 @@ enum TransactionPaymentType {
   VIRTUAL_ACCOUNT
   CRYPTO
   ETC
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  BLOCKED
 }

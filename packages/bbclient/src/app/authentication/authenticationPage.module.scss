@@ -1,0 +1,139 @@
+@use "../../style/abstracts" as *;
+@use "sass:color";
+
+.mobileContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 0;
+  background-color: $budget-card-gray;
+  .formContainer {
+    margin-bottom: 10rem;
+  }
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.formContainer {
+  padding: 3rem;
+  padding-top: 1rem;
+  margin: 0 auto;
+  max-width: 700px;
+  min-width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    letter-spacing: 2px;
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: $budget-carrot;
+      margin-bottom: 1.5rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: $budget-gray;
+    }
+  }
+
+  .terms {
+    text-align: center;
+    font-size: 0.85rem;
+    color: $budget-dark-gray;
+    margin-top: 1rem;
+
+    a {
+      text-decoration: underline;
+      color: $budget-carrot;
+
+      &:hover {
+        color: #0056c1;
+      }
+    }
+  }
+}
+
+.logo {
+  position: relative;
+  z-index: 1;
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+
+  .icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 0.5rem;
+  }
+}
+
+.pageContainer {
+  position: relative;
+  display: none;
+
+  @media (min-width: 768px) {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.leftPanel {
+  display: flex;
+  padding: 2.5rem;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  color: $budget-black;
+  background-color: $budget-carrot;
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+  }
+
+  .quote {
+    position: relative;
+    z-index: 1;
+
+    blockquote {
+      margin: 0;
+
+      .mainText {
+        font-size: 1.75rem; // 약간 큼 (28px 정도)
+        font-weight: 600;
+        line-height: 1.4;
+        margin-bottom: 0.75rem;
+        color: $budget-text;
+      }
+
+      .subText {
+        font-size: 0.95rem;
+        font-weight: 400;
+        color: rgba(0, 0, 0, 0.6); // 약간 흐린 회색
+      }
+    }
+  }
+}
+
+.rightPanel {
+  display: flex;
+  height: 100%;
+  max-width: 700px;
+  background-color: $budget-card-gray;
+}

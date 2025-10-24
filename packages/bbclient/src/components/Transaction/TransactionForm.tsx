@@ -21,6 +21,7 @@ import { FormMode } from "@/common/types";
 import { RadioGroup, Radio, Select, Textarea } from "../Form/fields";
 import Link from "next/link";
 import { ArrowLeftIcon, Octagon } from "lucide-react";
+import { useAccounts } from "./hooks/useAccounts";
 
 export interface TransactionFormProps {
   mode: FormMode;
@@ -35,6 +36,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const [init, setInit] = useState<any>();
   const [type, setType] = useState<any>();
   const [selected, setSelected] = useState<any>();
+  const { accounts, loading, error } = useAccounts();
 
   const [createMutation, { loading: createLoading }] =
     useMutation(CREATE_TRANSACTION);

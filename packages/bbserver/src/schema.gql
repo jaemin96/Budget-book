@@ -31,6 +31,11 @@ type AccountModel {
   updatedAt: DateTime!
 }
 
+type AuthOutput {
+  accessToken: String!
+  user: UserModel!
+}
+
 input CreateAccountInput {
   """실제 입출금 가능한 금액"""
   availableBalance: Float = 0
@@ -79,6 +84,29 @@ input CreateTransactionInput {
 type CreateTransactionOutput {
   id: Float
   message: ErrorOutput
+}
+
+input CreateUserInput {
+  """사용자 프로필 이미지"""
+  avatarUrl: String
+  email: String!
+  name: String!
+  password: String!
+
+  """사용자 전화번호"""
+  phone: String
+
+  """사용자 권한"""
+  role: UserRole! = USER
+
+  """사용자 활성화 여부"""
+  status: UserStatus! = ACTIVE
+}
+
+type CreateUserOutput {
+  id: Float
+  message: ErrorOutput
+  uuid: String
 }
 
 """
@@ -160,9 +188,36 @@ type GetTransactionOutput {
   transaction: TransactionModel
 }
 
+input GetUserInput {
+  uuid: String!
+}
+
+input GetUserListInput {
+  order: String
+  page: Float = 1
+  role: UserRole
+  size: Float = 10
+  sortBy: String
+  status: UserStatus
+}
+
+type GetUserListOutput {
+  message: ErrorOutput
+  totalCount: Float
+  totalPages: Float
+  users: [UserModel!]
+}
+
+type GetUserOutput {
+  message: ErrorOutput
+  user: UserModel
+}
+
 type Mutation {
   createAccount(input: CreateAccountInput!): CreateAccountOutput!
   createTransaction(input: CreateTransactionInput!): CreateTransactionOutput!
+  createUser(input: CreateUserInput!): CreateUserOutput!
+  login(email: String!, password: String!): AuthOutput!
   updateAccount(input: UpdateAccountInput!): UpdateAccountOutput!
   updateTransaction(input: UpdateTransactionInput!): UpdateTransactionOutput!
 }
@@ -174,6 +229,8 @@ type Query {
   getTotalAmount: Float!
   getTransaction(input: GetTransactionInput!): GetTransactionOutput!
   getTransactionList(input: GetTransactionListInput): GetTransactionListOutput!
+  getUser(input: GetUserInput!): GetUserOutput!
+  getUserList(input: GetUserListInput): GetUserListOutput!
 }
 
 enum TransactionCategory {
@@ -266,7 +323,6 @@ type UpdateAccountOutput {
 input UpdateTransactionInput {
   """거래 발생 계좌"""
   accountId: Float
-
   amount: Float
   category: TransactionCategory
   depositor: String
@@ -279,11 +335,35 @@ input UpdateTransactionInput {
 
   """받을 계좌"""
   toAccountId: Float
-
   type: TransactionType
 }
 
 type UpdateTransactionOutput {
   id: Float
   message: ErrorOutput
+}
+
+type UserModel {
+  avatarUrl: String
+  createdAt: DateTime!
+  email: String!
+  id: Float!
+  name: String!
+  password: String!
+  phone: String
+  role: UserRole!
+  status: UserStatus!
+  updatedAt: DateTime!
+  uuid: String!
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+  INACTIVE
 }

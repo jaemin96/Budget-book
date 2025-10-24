@@ -4,6 +4,7 @@ import "../style/globals.css";
 import styles from "./styles/layout.module.scss";
 import { Providers } from "@/app/providers";
 import classNames from "classnames";
+import Protected from "./protected";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,9 +29,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <div className={classNames(styles.layout)}>
-          <Providers>{children}</Providers>
-        </div>
+        <Protected>
+          <main className={classNames(styles.layout)}>
+            <Providers>{children}</Providers>
+          </main>
+        </Protected>
       </body>
     </html>
   );
