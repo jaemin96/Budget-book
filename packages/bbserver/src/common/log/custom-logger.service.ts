@@ -33,33 +33,43 @@ export class CustomLogger extends ConsoleLogger {
     });
   }
 
-  private writeToFile(level: string, message: string, context?: string) {
-    const formattedMessage = context ? `[${context}] ${message}` : message;
-    this.fileLogger.log(level, formattedMessage);
+  private format(message: string, serviceName?: string, userId?: string) {
+    const userTag = userId ? `👤[${userId}]` : "";
+    const serviceTag = serviceName ? `🚀[${serviceName}]` : "";
+    return `${serviceTag} ${userTag} ${message}`;
   }
 
-  log(message: string, context?: string) {
-    super.log(message, context);
-    this.writeToFile("info", message, context);
+  private writeToFile(level: string, message: string, serviceName: string = "", userId: string = "") {
+    this.fileLogger.log(level, this.format(message, serviceName, userId));
   }
 
-  error(message: string, stack?: string, context?: string) {
-    super.error(message, stack, context);
-    this.writeToFile("error", `${message} ${stack ?? ""}`, context);
+  log(message: string, serviceName: string, userId?: string) {
+    const formatted = this.format(message, serviceName, userId);
+    super.log(formatted);
+    this.writeToFile("info", message, serviceName, userId);
   }
 
-  warn(message: string, context?: string) {
-    super.warn(message, context);
-    this.writeToFile("warn", message, context);
+  error(message: string, stack?: string, serviceName?: string, userId?: string) {
+    const formatted = this.format(message, serviceName, userId);
+    super.error(formatted, stack);
+    this.writeToFile("error", `${message} ${stack ?? ""}`, serviceName, userId);
   }
 
-  debug(message: string, context?: string) {
-    super.debug(message, context);
-    this.writeToFile("debug", message, context);
+  warn(message: string, serviceName?: string, userId?: string) {
+    const formatted = this.format(message, serviceName, userId);
+    super.warn(formatted);
+    this.writeToFile("warn", message, serviceName, userId);
   }
 
-  verbose(message: string, context?: string) {
-    super.verbose(message, context);
-    this.writeToFile("verbose", message, context);
+  debug(message: string, serviceName?: string, userId?: string) {
+    const formatted = this.format(message, serviceName, userId);
+    super.debug(formatted);
+    this.writeToFile("debug", message, serviceName, userId);
+  }
+
+  verbose(message: string, serviceName?: string, userId?: string) {
+    const formatted = this.format(message, serviceName, userId);
+    super.verbose(formatted);
+    this.writeToFile("verbose", message, serviceName, userId);
   }
 }

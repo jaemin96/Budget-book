@@ -20,8 +20,11 @@ async function bootstrap() {
     credentials: true,
   });
 
-  await app.listen(process.env.PORT ?? 4000, "0.0.0.0");
-  logger.log(`🚀 Server running on http://localhost:${process.env.PORT ?? 4000}`);
+  const port = process.env.PORT ?? 4000;
+  await app.listen(port, "0.0.0.0");
+
+  logger.log(`Server running on http://localhost:${port}`, "RUN");
+  logger.log(`🧩 GraphQL playground available at http://localhost:${port}/graphql`, "INFO");
 }
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 bootstrap();
