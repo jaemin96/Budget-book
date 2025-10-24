@@ -5,7 +5,6 @@ import styles from "./styles/table.module.scss";
 import classNames from "classnames";
 import { useRouter } from "next/navigation";
 
-
 interface Column {
   label: string;
   dataIndex: string;

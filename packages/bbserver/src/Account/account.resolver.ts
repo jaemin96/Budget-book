@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { AccountService } from "./account.service";
-import { GetAmountSummaryInput, GetAmountSummaryOutput } from './dto/get-amount-summary.dto';
+import { GetAmountSummaryInput, GetAmountSummaryOutput } from "./dto/get-amount-summary.dto";
 import {
   CreateAccountInput,
   CreateAccountOutput,
@@ -11,6 +11,9 @@ import {
   UpdateAccountInput,
   UpdateAccountOutput,
 } from "./dto";
+import { UseGuards } from "@nestjs/common";
+import { GqlAuthGuard } from "../Auth/gql-auth.guard";
+import { CurrentUser, UserPayload } from "../common/decorators/current-user.decorator";
 
 @Resolver()
 export class AccountResolver {
@@ -22,8 +25,12 @@ export class AccountResolver {
    * @return CreateAccountOutput
    */
   @Mutation(() => CreateAccountOutput)
-  async createAccount(@Args("input") input: CreateAccountInput): Promise<CreateAccountOutput> {
-    return this.accountService.createAccount(input);
+  @UseGuards(GqlAuthGuard)
+  async createAccount(
+    @CurrentUser() user: UserPayload,
+    @Args("input") input: CreateAccountInput,
+  ): Promise<CreateAccountOutput> {
+    return this.accountService.createAccount(user.userId, input);
   }
 
   /**
@@ -32,8 +39,12 @@ export class AccountResolver {
    * @return UpdateAccountOutput
    */
   @Mutation(() => UpdateAccountOutput)
-  async updateAccount(@Args("input") input: UpdateAccountInput): Promise<UpdateAccountOutput> {
-    return this.accountService.updateAccount(input);
+  @UseGuards(GqlAuthGuard)
+  async updateAccount(
+    @CurrentUser() user: UserPayload,
+    @Args("input") input: UpdateAccountInput,
+  ): Promise<UpdateAccountOutput> {
+    return this.accountService.updateAccount(user.userId, input);
   }
 
   /**
@@ -42,9 +53,9 @@ export class AccountResolver {
    * @return GetAccountOutput
    */
   @Query(() => GetAccountOutput)
-  async getAccount(@Args("input") input: GetAccountInput): Promise<GetAccountOutput> {
-    const { bankName } = input;
-    return this.accountService.getAccount({ bankName });
+  @UseGuards(GqlAuthGuard)
+  async getAccount(@CurrentUser() user: UserPayload, @Args("input") input: GetAccountInput): Promise<GetAccountOutput> {
+    return this.accountService.getAccount(user.userId, input);
   }
 
   /**
@@ -53,8 +64,12 @@ export class AccountResolver {
    * @return GetTransactionListOutput
    */
   @Query(() => GetAccountListOutput)
-  async getAccountList(@Args("input", { nullable: true }) input?: GetAccountListInput): Promise<GetAccountListOutput> {
-    return this.accountService.getAccountList();
+  @UseGuards(GqlAuthGuard)
+  async getAccountList(
+    @CurrentUser() user: UserPayload,
+    @Args("input", { nullable: true }) input?: GetAccountListInput,
+  ): Promise<GetAccountListOutput> {
+    return this.accountService.getAccountList(user.userId);
   }
 
   /**
@@ -63,7 +78,11 @@ export class AccountResolver {
    * @return GetAmountSummaryOutput
    */
   @Query(() => GetAmountSummaryOutput)
-  async getAmountSummary(@Args("input", { nullable: true }) input?: GetAmountSummaryInput): Promise<GetAmountSummaryOutput> {
-    return this.accountService.getAmountSummary();
+  @UseGuards(GqlAuthGuard)
+  async getAmountSummary(
+    @CurrentUser() user: UserPayload,
+    @Args("input", { nullable: true }) input?: GetAmountSummaryInput,
+  ): Promise<GetAmountSummaryOutput> {
+    return this.accountService.getAmountSummary(user.userId, input);
   }
 }

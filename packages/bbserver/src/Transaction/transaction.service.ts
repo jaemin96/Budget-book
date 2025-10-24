@@ -10,8 +10,8 @@ import {
   UpdateTransactionInput,
   UpdateTransactionOutput,
 } from "./dto";
-import { Prisma } from "@prisma/client";
 import { TransactionModel } from "./model";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class TransactionService {
@@ -20,7 +20,7 @@ export class TransactionService {
   /**
    * 입출금 항목 추가
    */
-  async createTransaction(input: CreateTransactionInput): Promise<CreateTransactionOutput> {
+  async createTransaction(userId: number, input: CreateTransactionInput): Promise<CreateTransactionOutput> {
     const validFields = [
       "availableBalance",
       "savingBalance",
@@ -48,8 +48,12 @@ export class TransactionService {
         transactionData.fromAccountId = accountId;
       }
 
-
-      const transaction = await prisma.transaction.create({ data: transactionData });
+      const transaction = await prisma.transaction.create({
+        data: {
+          userId,
+          ...transactionData,
+        },
+      });
 
       // 1️⃣ 계좌 간 이체 처리
       if (type === "TRANSFER") {
@@ -108,7 +112,7 @@ export class TransactionService {
         }
 
         await prisma.account.update({
-          where: { id: accountId },
+          where: { userId, id: accountId },
           data: updateData,
         });
       }
@@ -122,9 +126,10 @@ export class TransactionService {
   /**
    * 입출금 항목 수정
    */
-  async updateTransaction(input: UpdateTransactionInput): Promise<UpdateTransactionOutput> {
+  async updateTransaction(userId: number, input: UpdateTransactionInput): Promise<UpdateTransactionOutput> {
     const transaction = await this.prisma.transaction.update({
       where: {
+        userId,
         id: input.id,
       },
       data: {
@@ -138,9 +143,9 @@ export class TransactionService {
   /**
    * 입출금 단건 조회
    */
-  async getTransaction(input: GetTransactionInput): Promise<GetTransactionOutput> {
+  async getTransaction(userId: number, input: GetTransactionInput): Promise<GetTransactionOutput> {
     const transactionData = await this.prisma.transaction.findUnique({
-      where: { id: input.id },
+      where: { userId, id: input.id },
       include: { fromAccount: true, toAccount: true },
     });
 
@@ -181,11 +186,12 @@ export class TransactionService {
   /**
    * 입출금 리스트 조회
    */
-  async getTransactionList(input?: GetTransactionListInput): Promise<GetTransactionListOutput> {
+  async getTransactionList(userId: number, input?: GetTransactionListInput): Promise<GetTransactionListOutput> {
     const page = input?.page ?? 1;
     const size = input?.size ?? 10;
 
     const where: Prisma.TransactionWhereInput = {
+      userId,
       type: input?.type ?? undefined,
       category: input?.category ?? undefined,
     };
@@ -216,7 +222,7 @@ export class TransactionService {
   /**
    * 계좌 총액 조회
    */
-  async getTotalAmount(): Promise<number> {
+  async getTotalAmount(userId: number): Promise<number> {
     const result = await this.prisma.$queryRawUnsafe<{ total_balance: number }>(`
       SELECT SUM(
         CASE
@@ -226,6 +232,7 @@ export class TransactionService {
         END
       ) AS total_balance
       FROM "Transaction"
+      WHERE userId = ${userId}
     `);
 
     return result?.[0]?.total_balance ?? 0;
