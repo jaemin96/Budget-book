@@ -34,9 +34,10 @@ export class AccountService {
   /**
    * 계좌 수정
    */
-  async updateAccount(input: UpdateAccountInput): Promise<UpdateAccountOutput> {
+  async updateAccount(userId: number, input: UpdateAccountInput): Promise<UpdateAccountOutput> {
     const account = await this.prisma.account.update({
       where: {
+        userId,
         id: input.id,
       },
       data: {
@@ -50,9 +51,9 @@ export class AccountService {
   /**
    * 계좌 단건 조회
    */
-  async getAccount(input: GetAccountInput): Promise<GetAccountOutput> {
+  async getAccount(userId: number, input: GetAccountInput): Promise<GetAccountOutput> {
     const account = await this.prisma.account.findUnique({
-      where: { bankName: input.bankName } as Prisma.AccountWhereUniqueInput,
+      where: { userId, bankName: input.bankName } as Prisma.AccountWhereUniqueInput,
     });
 
     if (!account) {
@@ -75,12 +76,16 @@ export class AccountService {
   /**
    * 전체 계좌 조회
    */
-  async getAccountList(input?: GetAccountListInput): Promise<GetAccountListOutput> {
+  async getAccountList(userId: number, input?: GetAccountListInput): Promise<GetAccountListOutput> {
     const where: Prisma.AccountWhereInput = {
       //   type: input?.type ?? undefined,
     };
 
-    const accounts = await this.prisma.account.findMany();
+    const accounts = await this.prisma.account.findMany({
+      where: {
+        userId,
+      },
+    });
 
     const sanitizedAccounts = accounts.map((account) => ({
       ...account,

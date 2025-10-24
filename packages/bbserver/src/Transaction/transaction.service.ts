@@ -112,7 +112,7 @@ export class TransactionService {
         }
 
         await prisma.account.update({
-          where: { id: accountId },
+          where: { userId, id: accountId },
           data: updateData,
         });
       }
@@ -126,9 +126,10 @@ export class TransactionService {
   /**
    * 입출금 항목 수정
    */
-  async updateTransaction(input: UpdateTransactionInput): Promise<UpdateTransactionOutput> {
+  async updateTransaction(userId: number, input: UpdateTransactionInput): Promise<UpdateTransactionOutput> {
     const transaction = await this.prisma.transaction.update({
       where: {
+        userId,
         id: input.id,
       },
       data: {
@@ -142,9 +143,9 @@ export class TransactionService {
   /**
    * 입출금 단건 조회
    */
-  async getTransaction(input: GetTransactionInput): Promise<GetTransactionOutput> {
+  async getTransaction(userId: number, input: GetTransactionInput): Promise<GetTransactionOutput> {
     const transactionData = await this.prisma.transaction.findUnique({
-      where: { id: input.id },
+      where: { userId, id: input.id },
       include: { fromAccount: true, toAccount: true },
     });
 
@@ -190,7 +191,7 @@ export class TransactionService {
     const size = input?.size ?? 10;
 
     const where: Prisma.TransactionWhereInput = {
-      userId: userId,
+      userId,
       type: input?.type ?? undefined,
       category: input?.category ?? undefined,
     };
@@ -221,7 +222,7 @@ export class TransactionService {
   /**
    * 계좌 총액 조회
    */
-  async getTotalAmount(): Promise<number> {
+  async getTotalAmount(userId: number): Promise<number> {
     const result = await this.prisma.$queryRawUnsafe<{ total_balance: number }>(`
       SELECT SUM(
         CASE
@@ -231,6 +232,7 @@ export class TransactionService {
         END
       ) AS total_balance
       FROM "Transaction"
+      WHERE userId = ${userId}
     `);
 
     return result?.[0]?.total_balance ?? 0;

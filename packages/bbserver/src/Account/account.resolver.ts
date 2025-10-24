@@ -40,8 +40,11 @@ export class AccountResolver {
    */
   @Mutation(() => UpdateAccountOutput)
   @UseGuards(GqlAuthGuard)
-  async updateAccount(@Args("input") input: UpdateAccountInput): Promise<UpdateAccountOutput> {
-    return this.accountService.updateAccount(input);
+  async updateAccount(
+    @CurrentUser() user: UserPayload,
+    @Args("input") input: UpdateAccountInput,
+  ): Promise<UpdateAccountOutput> {
+    return this.accountService.updateAccount(user.userId, input);
   }
 
   /**
@@ -51,9 +54,8 @@ export class AccountResolver {
    */
   @Query(() => GetAccountOutput)
   @UseGuards(GqlAuthGuard)
-  async getAccount(@Args("input") input: GetAccountInput): Promise<GetAccountOutput> {
-    const { bankName } = input;
-    return this.accountService.getAccount({ bankName });
+  async getAccount(@CurrentUser() user: UserPayload, @Args("input") input: GetAccountInput): Promise<GetAccountOutput> {
+    return this.accountService.getAccount(user.userId, input);
   }
 
   /**
@@ -63,8 +65,11 @@ export class AccountResolver {
    */
   @Query(() => GetAccountListOutput)
   @UseGuards(GqlAuthGuard)
-  async getAccountList(@Args("input", { nullable: true }) input?: GetAccountListInput): Promise<GetAccountListOutput> {
-    return this.accountService.getAccountList();
+  async getAccountList(
+    @CurrentUser() user: UserPayload,
+    @Args("input", { nullable: true }) input?: GetAccountListInput,
+  ): Promise<GetAccountListOutput> {
+    return this.accountService.getAccountList(user.userId);
   }
 
   /**
