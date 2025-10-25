@@ -27,17 +27,14 @@ export function UserAuthForm() {
           email,
           password,
         },
+        context: {
+          fetchOptions: {
+            credentials: "include",
+          },
+        },
       });
 
-      const token = result.data.login.accessToken;
-
-      Cookies.set("token", token, {
-        expires: 7,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-      });
-
-      if (token) {
+      if (result?.data?.login?.result) {
         await new Promise((r) => setTimeout(r, 100));
         router.replace("/");
       }
