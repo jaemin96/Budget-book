@@ -13,9 +13,20 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.enableCors({
-    origin: ["http://localhost:3030", "https://budget-book-bbclient.vercel.app"],
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    origin: (origin, callback) => {
+      const whitelist = [
+        "https://budget-book-bbclient.vercel.app",
+        "https://budget-book-bbclient-git-main.vercel.app", // Preview URL 등
+      ];
+      if (!origin || whitelist.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    allowedHeaders: ["Content-Type", "Authorization"],
   });
 
   const port = process.env.PORT ?? 4000;
