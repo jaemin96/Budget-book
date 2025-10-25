@@ -1,14 +1,10 @@
-import { Args, Field, Mutation, ObjectType, Resolver } from "@nestjs/graphql";
-import { UserModel } from "../User/model/user.model";
+import { Args, Context, Field, Mutation, ObjectType, Resolver } from "@nestjs/graphql";
 import { AuthService } from "./auth.service";
 
 @ObjectType()
 class AuthOutput {
-  @Field(() => String)
-  accessToken: string;
-
-  @Field(() => UserModel)
-  user: UserModel;
+  @Field(() => Boolean)
+  result: boolean;
 }
 
 @Resolver()
@@ -16,7 +12,19 @@ export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
   @Mutation(() => AuthOutput)
-  async login(@Args("email") email: string, @Args("password") password: string): Promise<AuthOutput> {
-    return this.authService.signIn(email, password);
+  async login(
+    @Args("email") email: string,
+    @Args("password") password: string,
+    @Context() context: any,
+  ): Promise<AuthOutput> {
+    const { accessToken } = await this.authService.signIn(email, password);
+    context.res.cookie("token", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
+    });
+
+    return { result: true };
   }
 }

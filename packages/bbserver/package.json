@@ -21,6 +21,7 @@
     "vercel-build": "prisma generate && tsc && cpx src/schema.gql dist/"
   },
   "dependencies": {
+    "@as-integrations/express5": "^1.1.2",
     "@nestjs/apollo": "^13.1.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
@@ -32,6 +33,7 @@
     "@prisma/client": "^6.18.0",
     "@vendia/serverless-express": "^4.12.6",
     "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "graphiql": "^3.9.0",

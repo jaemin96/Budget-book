@@ -32,8 +32,7 @@ type AccountModel {
 }
 
 type AuthOutput {
-  accessToken: String!
-  user: UserModel!
+  result: Boolean!
 }
 
 input CreateAccountInput {

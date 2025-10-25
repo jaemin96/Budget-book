@@ -1,6 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { CustomLogger } from "./common/log/custom-logger.service";
+import * as cookieParser from "cookie-parser";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -9,13 +10,10 @@ async function bootstrap() {
 
   const logger = new CustomLogger("Main");
   app.useLogger(logger);
+  app.use(cookieParser());
 
   app.enableCors({
-    origin: [
-      "http://localhost:3030",
-      "https://budget-book-bbclient.vercel.app",
-      "/https:\/\/budget-book-bbclient-git-.*\.vercel\.app/",
-    ],
+    origin: ["http://localhost:3030", "https://budget-book-bbclient.vercel.app"],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     credentials: true,
   });

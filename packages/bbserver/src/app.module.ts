@@ -21,20 +21,20 @@ import { LoggingInterceptor } from "./common/interceptor";
 dotenv.config();
 
 const isProd = process.env.NODE_ENV === "production";
-// const schema = readFileSync(join(__dirname, "/schema.gql"), "utf-8"); // 배포할때만 on
+const schema = readFileSync(join(__dirname, "/schema.gql"), "utf-8"); // 배포할때만 on
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       playground: true,
-      // path: "/api/graphql", // 배포할떄만 on
-      // typeDefs: schema, // 배포할떄만 on
+      path: "/api/graphql", // 배포할떄만 on
+      typeDefs: schema, // 배포할떄만 on
       autoSchemaFile: isProd ? false : join(process.cwd(), "src/schema.gql"),
       sortSchema: true,
       introspection: true,
-      context: ({ req }) => {
-        return { req };
+      context: ({ req, res }) => {
+        return { req, res };
       },
     }),
     TransactionModule,
