@@ -7,13 +7,24 @@ const expressApp = express();
 
 let isInitialized = false;
 
+const whitelist = ["https://budget-book-bbclient.vercel.app", "https://budget-book-bbclient-git-main.vercel.app"];
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp));
+
   app.enableCors({
-    origin: "*",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    origin: (origin, callback) => {
+      if (!origin || whitelist.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    allowedHeaders: ["Content-Type", "Authorization"],
   });
+
   await app.init();
   isInitialized = true;
 }
