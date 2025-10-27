@@ -10,27 +10,29 @@ export class CustomLogger extends ConsoleLogger {
   constructor(context?: string) {
     super(context ?? "AppLogger");
 
-    const logDir = path.join(process.cwd(), "logs");
+    if (process.env.NODE_ENV !== "production") {
+      const logDir = path.join(process.cwd(), "logs");
 
-    this.fileLogger = winston.createLogger({
-      transports: [
-        new winston.transports.DailyRotateFile({
-          dirname: logDir,
-          filename: "%DATE%.log",
-          datePattern: "YYYY-MM-DD",
-          zippedArchive: true,
-          maxSize: "10m",
-          maxFiles: "14d",
-          level: "debug",
-          format: winston.format.combine(
-            winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-            winston.format.printf(({ timestamp, level, message }) => {
-              return `[${timestamp}] ${level.toUpperCase()} ${message}`;
-            }),
-          ),
-        }),
-      ],
-    });
+      this.fileLogger = winston.createLogger({
+        transports: [
+          new winston.transports.DailyRotateFile({
+            dirname: logDir,
+            filename: "%DATE%.log",
+            datePattern: "YYYY-MM-DD",
+            zippedArchive: true,
+            maxSize: "10m",
+            maxFiles: "14d",
+            level: "debug",
+            format: winston.format.combine(
+              winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+              winston.format.printf(({ timestamp, level, message }) => {
+                return `[${timestamp}] ${level.toUpperCase()} ${message}`;
+              }),
+            ),
+          }),
+        ],
+      });
+    }
   }
 
   private format(message: string, serviceName?: string, userId?: string) {
@@ -39,7 +41,8 @@ export class CustomLogger extends ConsoleLogger {
     return `${serviceTag} ${userTag} ${message}`;
   }
 
-  private writeToFile(level: string, message: string, serviceName: string = "", userId: string = "") {
+  private writeToFile(level: string, message: string, serviceName?: string, userId?: string) {
+    if (!this.fileLogger) return;
     this.fileLogger.log(level, this.format(message, serviceName, userId));
   }
 
