@@ -8,10 +8,8 @@ import { LOGIN } from "@/graphql/mutations/Auth";
 import { Eye, EyeOff } from "lucide-react";
 import { Spinner } from "@/components";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 
 export function UserAuthForm() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -36,7 +34,7 @@ export function UserAuthForm() {
 
       if (result?.data?.login?.result) {
         await new Promise((r) => setTimeout(r, 100));
-        router.replace("/");
+        window.location.href = "/";
       }
     } catch (err) {
       console.error("Login error:", err);
