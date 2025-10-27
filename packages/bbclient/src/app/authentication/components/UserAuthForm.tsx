@@ -10,6 +10,7 @@ import { Spinner } from "@/components";
 import { useRouter } from "next/navigation";
 
 export function UserAuthForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -34,7 +35,7 @@ export function UserAuthForm() {
 
       if (result?.data?.login?.result) {
         await new Promise((r) => setTimeout(r, 100));
-        window.location.href = "/";
+        router.replace("/");
       }
     } catch (err) {
       console.error("Login error:", err);
