@@ -2,6 +2,7 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { CustomLogger } from "./common/log/custom-logger.service";
 import * as cookieParser from "cookie-parser";
+import { validateOrigin } from "./common/cors.config";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -13,13 +14,10 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.enableCors({
-    origin:
-      process.env.NODE_ENV === "production"
-        ? ["https://budget-book-bbclient.vercel.app", "https://budget-book-bbclient-git-main.vercel.app"]
-        : true,
+    origin: (origin, callback) => {
+      validateOrigin(origin) ? callback(null, true) : callback(new Error("CORS"));
+    },
     credentials: true,
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-    allowedHeaders: ["Content-Type", "Authorization"],
   });
 
   const port = process.env.PORT ?? 4000;

@@ -1,0 +1,20 @@
+# dependencies
+node_modules
+.pnpm-store
+
+# build outputs
+dist
+build
+.out
+.next
+
+# caches
+.cache
+coverage
+
+# vcs
+.git
+
+# misc
+.env
+.env.*

@@ -1,6 +1,5 @@
 import { Args, Context, Field, Mutation, ObjectType, Resolver } from "@nestjs/graphql";
 import { AuthService } from "./auth.service";
-import { serialize } from "cookie";
 
 @ObjectType()
 class AuthOutput {
@@ -19,16 +18,13 @@ export class AuthResolver {
     @Context() context: any,
   ): Promise<AuthOutput> {
     const { accessToken } = await this.authService.signIn(email, password);
-    context.res.setHeader(
-      "Set-Cookie",
-      serialize("token", accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 7,
-      }),
-    );
+    context.res.cookie("token", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      domain: process.env.NODE_ENV === "production" ? ".vercel.app" : undefined,
+      path: "/",
+    });
 
     return { result: true };
   }
