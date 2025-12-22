@@ -8,6 +8,7 @@ import { LOGIN } from "@/graphql/mutations/Auth";
 import { Eye, EyeOff } from "lucide-react";
 import { Spinner } from "@/components";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export function UserAuthForm() {
   const router = useRouter();

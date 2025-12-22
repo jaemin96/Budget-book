@@ -2,29 +2,20 @@ import express from "express";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "../src/app.module";
 import { ExpressAdapter } from "@nestjs/platform-express";
+import { validateOrigin } from "../src/common/cors.config";
 
 const expressApp = express();
 
 let isInitialized = false;
 
-const whitelist = ["https://budget-book-bbclient.vercel.app", "https://budget-book-bbclient-git-main.vercel.app"];
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp));
-
   app.enableCors({
     origin: (origin, callback) => {
-      if (!origin || whitelist.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
+      validateOrigin(origin) ? callback(null, true) : callback(new Error("CORS"));
     },
     credentials: true,
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-    allowedHeaders: ["Content-Type", "Authorization"],
   });
-
   await app.init();
   isInitialized = true;
 }
