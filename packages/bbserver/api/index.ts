@@ -3,6 +3,7 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "../src/app.module";
 import { ExpressAdapter } from "@nestjs/platform-express";
 import { validateOrigin } from "../src/common/cors.config";
+import * as cookieParser from "cookie-parser";
 
 const expressApp = express();
 
@@ -10,6 +11,7 @@ let isInitialized = false;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp));
+  app.use(cookieParser());
   app.enableCors({
     origin: (origin, callback) => {
       validateOrigin(origin) ? callback(null, true) : callback(new Error("CORS"));

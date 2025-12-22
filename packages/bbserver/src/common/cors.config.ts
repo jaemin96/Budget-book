@@ -1,5 +1,5 @@
 const ALLOWED_PATTERNS = [
-  /^https:\/\/budget-book-bbclient.*\.vercel\.app$/,
+  /^https:\/\/budget-book-bbclient(-[^\/]+)?\.vercel\.app$/, // 메인+preview 도메인
   /^http:\/\/localhost:\d+$/,
 ];
 

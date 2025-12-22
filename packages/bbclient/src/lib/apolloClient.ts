@@ -12,23 +12,23 @@ const httpLink = new HttpLink({
   credentials: "include",
 });
 
-function getTokenFromCookie(): string | null {
-  if (typeof document === "undefined") return null;
-  const match = document.cookie.match(/(?:^|;\s*)token=([^;]*)/);
-  return match ? decodeURIComponent(match[1]) : null;
-}
+// function getTokenFromCookie(): string | null {
+//   if (typeof document === "undefined") return null;
+//   const match = document.cookie.match(/(?:^|;\s*)token=([^;]*)/);
+//   return match ? decodeURIComponent(match[1]) : null;
+// }
 
-const authLink = new ApolloLink((operation, forward) => {
-  const token = getTokenFromCookie();
+// const authLink = new ApolloLink((operation, forward) => {
+//   const token = getTokenFromCookie();
 
-  operation.setContext(({ headers = {} }) => ({
-    headers: {
-      ...headers,
-      Authorization: token ? `Bearer ${token}` : "",
-    },
-  }));
-  return forward(operation);
-});
+//   operation.setContext(({ headers = {} }) => ({
+//     headers: {
+//       ...headers,
+//       Authorization: token ? `Bearer ${token}` : "",
+//     },
+//   }));
+//   return forward(operation);
+// });
 
 const errorLink = onError(({ networkError, graphQLErrors }) => {
   if (
@@ -59,7 +59,7 @@ const errorLink = onError(({ networkError, graphQLErrors }) => {
 });
 
 const client = new ApolloClient({
-  link: from([errorLink, authLink.concat(httpLink)]),
+  link: from([errorLink, httpLink]),
   cache: new InMemoryCache(),
 });
 
