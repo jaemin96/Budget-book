@@ -13,6 +13,11 @@ export default function Home() {
     variables: {
       input: {},
     },
+    context: {
+      fetchOptions: {
+        credentials: "include",
+      },
+    },
   });
 
   useEffect(() => {

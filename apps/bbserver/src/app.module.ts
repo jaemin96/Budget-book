@@ -28,7 +28,7 @@ const isProd = process.env.NODE_ENV === "production";
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       playground: true,
-      path: "/api/graphql", // 배포할떄만 on
+      // path: "/api/graphql", // 배포할떄만 on
       // typeDefs: schema, // 배포할떄만 on
       autoSchemaFile: isProd ? false : join(process.cwd(), "src/schema.gql"),
       sortSchema: true,

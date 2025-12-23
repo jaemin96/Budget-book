@@ -1,0 +1,21 @@
+{
+    "extends": "./react.json",
+    "compilerOptions": {
+        "jsx": "preserve",
+        "allowJs": true,
+        "incremental": true,
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ]
+    },
+    "include": [
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

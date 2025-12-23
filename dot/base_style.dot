@@ -1,0 +1,25 @@
+    // ===== GLOBAL GRAPH STYLE =====
+    graph [
+        bgcolor="#1e1e1e",
+        fontcolor="white",
+        fontsize=14,
+        rankdir="LR", // 레이아웃 배치 ("LR" OR "TB")
+        pad=1.0
+    ];
+
+    // ===== DEFAULT NODE STYLE =====
+    node [
+        shape="box",
+        style="rounded,filled",
+        fillcolor="#2d2d30",
+        fontcolor="white",
+        color="#555",
+        penwidth=2
+    ];
+
+    // ===== DEFAULT EDGE STYLE =====
+    edge [
+        color="#647b9eb0",
+        penwidth=2,
+        arrowsize=1.2
+    ];

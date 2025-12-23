@@ -1,0 +1,13 @@
+{
+  "name": "@repo/tsconfig",
+  "version": "1.0.0",
+  "files": [
+    "*.json"
+  ],
+  "exports": {
+    "./react": "./react.json",
+    "./next": "./next.json",
+    "./base": "./base.json"
+  },
+  "license": "MIT"
+}
