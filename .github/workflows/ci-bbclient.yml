@@ -3,14 +3,14 @@ name: bbclient CI
 on:
   pull_request:
     paths:
-      - "packages/bbclient/**"
+      - "apps/bbclient/**"
       - "pnpm-lock.yaml"
     branches:
       - main
       - dev
   push:
     paths:
-      - "packages/bbclient/**"
+      - "apps/bbclient/**"
       - "pnpm-lock.yaml"
     branches:
       - main
@@ -46,8 +46,8 @@ jobs:
       - name: Cache node_modules for bbclient
         uses: actions/cache@v3
         with:
-          path: packages/bbclient/node_modules
-          key: ${{ runner.os }}-node-modules-bbclient-${{ hashFiles('packages/bbclient/pnpm-lock.yaml') }}
+          path: apps/bbclient/node_modules
+          key: ${{ runner.os }}-node-modules-bbclient-${{ hashFiles('apps/bbclient/pnpm-lock.yaml') }}
 
   lint:
     name: Lint (bbclient)
@@ -61,8 +61,8 @@ jobs:
       - name: Restore node_modules cache for bbclient
         uses: actions/cache@v3
         with:
-          path: packages/bbclient/node_modules
-          key: ${{ runner.os }}-node-modules-bbclient-${{ hashFiles('packages/bbclient/pnpm-lock.yaml') }}
+          path: apps/bbclient/node_modules
+          key: ${{ runner.os }}-node-modules-bbclient-${{ hashFiles('apps/bbclient/pnpm-lock.yaml') }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -90,8 +90,8 @@ jobs:
       - name: Restore node_modules cache for bbclient
         uses: actions/cache@v3
         with:
-          path: packages/bbclient/node_modules
-          key: ${{ runner.os }}-node-modules-bbclient-${{ hashFiles('packages/bbclient/pnpm-lock.yaml') }}
+          path: apps/bbclient/node_modules
+          key: ${{ runner.os }}-node-modules-bbclient-${{ hashFiles('apps/bbclient/pnpm-lock.yaml') }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -106,4 +106,4 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Build bbclient
         run: pnpm build
-        working-directory: packages/bbclient
+        working-directory: apps/bbclient

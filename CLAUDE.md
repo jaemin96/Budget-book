@@ -15,8 +15,8 @@ The application uses cookie-based JWT authentication, allowing users to track fi
 
 This is a pnpm workspace monorepo. All packages are located in `packages/`:
 
-- `packages/bbserver/`: Backend API server
-- `packages/bbclient/`: Frontend web application
+- `apps/bbserver/`: Backend API server
+- `apps/bbclient/`: Frontend web application
 
 ## Common Commands
 
@@ -39,7 +39,7 @@ pnpm format
 ### Backend (bbserver)
 
 ```bash
-cd packages/bbserver
+cd apps/bbserver
 
 # Development
 pnpm start:dev          # Start with hot-reload
@@ -64,7 +64,7 @@ pnpm test:e2e           # Run end-to-end tests
 ### Frontend (bbclient)
 
 ```bash
-cd packages/bbclient
+cd apps/bbclient
 
 # Development
 pnpm dev                # Start dev server on port 3030
@@ -167,7 +167,7 @@ pnpm lint               # Run Next.js linter
 
 When modifying Prisma schema:
 
-1. Update `packages/bbserver/prisma/schema.prisma`
+1. Update `apps/bbserver/prisma/schema.prisma`
 2. Run `npx prisma migrate dev` to create and apply migration
 3. Run `npx prisma generate` to update Prisma Client
 

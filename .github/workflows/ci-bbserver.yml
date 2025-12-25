@@ -3,14 +3,14 @@ name: bbserver CI
 on:
   pull_request:
     paths:
-      - "packages/bbserver/**"
+      - "apps/bbserver/**"
       - "pnpm-lock.yaml"
     branches:
       - main
       - dev
   push:
     paths:
-      - "packages/bbserver/**"
+      - "apps/bbserver/**"
       - "pnpm-lock.yaml"
     branches:
       - main
@@ -47,8 +47,8 @@ jobs:
       - name: Cache node_modules for bbserver
         uses: actions/cache@v3
         with:
-          path: packages/bbserver/node_modules
-          key: ${{ runner.os }}-node-modules-bbserver-${{ hashFiles('packages/bbserver/pnpm-lock.yaml') }}
+          path: apps/bbserver/node_modules
+          key: ${{ runner.os }}-node-modules-bbserver-${{ hashFiles('apps/bbserver/pnpm-lock.yaml') }}
 
   lint:
     name: Lint (bbserver)
@@ -62,8 +62,8 @@ jobs:
       - name: Restore node_modules cache for bbserver
         uses: actions/cache@v3
         with:
-          path: packages/bbserver/node_modules
-          key: ${{ runner.os }}-node-modules-bbserver-${{ hashFiles('packages/bbserver/pnpm-lock.yaml') }}
+          path: apps/bbserver/node_modules
+          key: ${{ runner.os }}-node-modules-bbserver-${{ hashFiles('apps/bbserver/pnpm-lock.yaml') }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -91,8 +91,8 @@ jobs:
       - name: Restore node_modules cache for bbserver
         uses: actions/cache@v3
         with:
-          path: packages/bbserver/node_modules
-          key: ${{ runner.os }}-node-modules-bbserver-${{ hashFiles('packages/bbserver/pnpm-lock.yaml') }}
+          path: apps/bbserver/node_modules
+          key: ${{ runner.os }}-node-modules-bbserver-${{ hashFiles('apps/bbserver/pnpm-lock.yaml') }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -111,23 +111,23 @@ jobs:
         run: |
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
           echo "DIRECT_URL=${{ secrets.DIRECT_URL }}" >> .env
-        working-directory: packages/bbserver
+        working-directory: apps/bbserver
 
       - name: Generate Prisma client
         run: pnpm prisma generate
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
-        working-directory: packages/bbserver
+        working-directory: apps/bbserver
 
       - name: Migrate database (optional, if needed)
         run: pnpm prisma migrate deploy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
-        working-directory: packages/bbserver
+        working-directory: apps/bbserver
 
       # All pass - build
       - name: Build bbserver
         run: pnpm build
-        working-directory: packages/bbserver
+        working-directory: apps/bbserver

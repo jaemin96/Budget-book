@@ -26,7 +26,7 @@ export default tseslint.config(
 
   // Server (bbserver) 설정
   {
-    files: ["packages/bbserver/**/*.{ts,js}"],
+    files: ["apps/bbserver/**/*.{ts,js}"],
     languageOptions: {
       parser: tseslint.parser,
       globals: {
@@ -57,11 +57,11 @@ export default tseslint.config(
 
   // Client (bbclient) 설정
   {
-    files: ["packages/bbclient/**/*.{ts,tsx,js,jsx}"],
+    files: ["apps/bbclient/**/*.{ts,tsx,js,jsx}"],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
-        project: [path.resolve(__dirname, "packages/bbclient/tsconfig.json")],
+        project: [path.resolve(__dirname, "apps/bbclient/tsconfig.json")],
         tsconfigRootDir: path.resolve(__dirname, "packages", "bbclient"),
       },
       globals: {
