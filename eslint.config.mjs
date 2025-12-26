@@ -36,7 +36,6 @@ export default tseslint.config(
       parserOptions: {
         projectService: true,
         tsconfigRootDir: path.resolve(__dirname, "apps", "bbserver"),
-        project: [path.resolve(__dirname, "/tsconfig.json")],
       },
       sourceType: "commonjs",
     },
