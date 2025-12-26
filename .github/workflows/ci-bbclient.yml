@@ -2,16 +2,10 @@ name: bbclient CI
 
 on:
   pull_request:
-    paths:
-      - "apps/bbclient/**"
-      - "pnpm-lock.yaml"
     branches:
       - main
       - dev
   push:
-    paths:
-      - "apps/bbclient/**"
-      - "pnpm-lock.yaml"
     branches:
       - main
       - dev
@@ -22,9 +16,38 @@ env:
   PNPM_VERSION: 10
 
 jobs:
+  check-changes:
+    name: Check if bbclient changed
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.filter.outputs.bbclient }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Check for changes
+        uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            bbclient:
+              - 'apps/bbclient/**'
+              - 'pnpm-lock.yaml'
+
+      - name: Force run on main PR
+        id: force_main
+        run: |
+          if [[ "${{ github.base_ref }}" == "main" ]]; then
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          else
+            echo "should_run=${{ steps.filter.outputs.bbclient }}" >> $GITHUB_OUTPUT
+          fi
+
   install:
     name: Install & Cache (bbclient)
     runs-on: ubuntu-latest
+    needs: check-changes
+    if: needs.check-changes.outputs.should_run == 'true'
 
     steps:
       - name: Checkout repository
@@ -47,12 +70,13 @@ jobs:
         uses: actions/cache@v3
         with:
           path: apps/bbclient/node_modules
-          key: ${{ runner.os }}-node-modules-bbclient-${{ hashFiles('apps/bbclient/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node-modules-bbclient-${{ hashFiles('pnpm-lock.yaml') }}
 
   lint:
     name: Lint (bbclient)
     runs-on: ubuntu-latest
-    needs: install
+    needs: [check-changes, install]
+    if: needs.check-changes.outputs.should_run == 'true'
 
     steps:
       - name: Checkout repository
@@ -62,7 +86,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: apps/bbclient/node_modules
-          key: ${{ runner.os }}-node-modules-bbclient-${{ hashFiles('apps/bbclient/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node-modules-bbclient-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -81,7 +105,8 @@ jobs:
   build:
     name: Build (bbclient)
     runs-on: ubuntu-latest
-    needs: [install, lint]
+    needs: [check-changes, install, lint]
+    if: needs.check-changes.outputs.should_run == 'true'
 
     steps:
       - name: Checkout repository
@@ -91,7 +116,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: apps/bbclient/node_modules
-          key: ${{ runner.os }}-node-modules-bbclient-${{ hashFiles('apps/bbclient/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-node-modules-bbclient-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
