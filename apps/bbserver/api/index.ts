@@ -23,6 +23,32 @@ async function bootstrap() {
 }
 
 export default async function handler(req, res) {
+  const origin = req.headers.origin;
+
+  // OPTIONS preflight 처리 (CORS)
+  if (req.method === "OPTIONS") {
+    if (validateOrigin(origin)) {
+      res.setHeader("Access-Control-Allow-Origin", origin);
+      res.setHeader("Access-Control-Allow-Credentials", "true");
+      res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+      res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Content-Type, Authorization, Cookie"
+      );
+      res.status(200).end();
+      return;
+    } else {
+      res.status(403).end();
+      return;
+    }
+  }
+
+  // 실제 요청에도 CORS 헤더 설정
+  if (validateOrigin(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+  }
+
   if (!isInitialized) await bootstrap();
 
   // 만약 api/graphql 경로가 아니면 404
