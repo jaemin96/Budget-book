@@ -38,18 +38,25 @@ async function bootstrap() {
 }
 
 export default async function handler(req, res) {
-  try {
-    const origin = req.headers.origin || req.headers.referer;
+  const origin = req.headers.origin || req.headers.referer;
 
+  // 모든 응답에 CORS 헤더 설정 (에러 응답 포함)
+  const setCorsHeaders = () => {
+    if (origin && validateOrigin(origin)) {
+      res.setHeader("Access-Control-Allow-Origin", origin);
+      res.setHeader("Access-Control-Allow-Credentials", "true");
+      res.setHeader("Vary", "Origin");
+    }
+  };
+
+  try {
     console.log(`[${req.method}] ${req.url} - Origin: ${origin || "none"}`);
 
     // OPTIONS preflight 처리 (CORS)
     if (req.method === "OPTIONS") {
-      // origin이 없거나 유효한 경우 허용
       const isOriginValid = !origin || validateOrigin(origin);
 
       if (isOriginValid) {
-        // origin이 있으면 해당 origin을, 없으면 "*" 대신 요청한 origin을 반환
         if (origin) {
           res.setHeader("Access-Control-Allow-Origin", origin);
         }
@@ -64,24 +71,22 @@ export default async function handler(req, res) {
         return;
       } else {
         console.warn(`[CORS] Blocked OPTIONS from origin: ${origin}`);
+        setCorsHeaders();
         res.status(403).json({ error: "CORS policy: Origin not allowed" });
         return;
       }
     }
 
     // 실제 요청에도 CORS 헤더 설정
-    if (origin && validateOrigin(origin)) {
-      res.setHeader("Access-Control-Allow-Origin", origin);
-      res.setHeader("Access-Control-Allow-Credentials", "true");
-      res.setHeader("Vary", "Origin");
-    }
+    setCorsHeaders();
 
     // 초기화 에러가 있으면 에러 반환
     if (initError) {
-      console.error("[Serverless] Cannot handle request due to init error");
+      console.error("[Serverless] Cannot handle request due to init error:", initError);
       res.status(500).json({
         error: "Server initialization failed",
-        message: initError.message
+        message: initError.message,
+        stack: process.env.NODE_ENV === "development" ? initError.stack : undefined
       });
       return;
     }
@@ -100,13 +105,16 @@ export default async function handler(req, res) {
       return;
     }
 
+    console.log("[Serverless] Forwarding request to Express app...");
     // Express 앱으로 요청 전달
     return expressApp(req, res);
   } catch (error) {
     console.error("[Serverless] Handler error:", error);
+    setCorsHeaders(); // 에러 응답에도 CORS 헤더 추가
     res.status(500).json({
       error: "Internal Server Error",
-      message: error instanceof Error ? error.message : "Unknown error"
+      message: error instanceof Error ? error.message : "Unknown error",
+      stack: process.env.NODE_ENV === "development" ? (error instanceof Error ? error.stack : undefined) : undefined
     });
   }
 }
