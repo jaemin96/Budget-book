@@ -13,10 +13,7 @@ import {
   TransactionCategoryLabels,
   TransactionTypeLabels,
 } from "../../constants/enum/transaction.enum";
-import {
-  TransactionCategory,
-  TransactionType,
-} from "@/model/transaction.model";
+import { TransactionCategory, TransactionType } from "@/model/transaction.model";
 
 interface TransactionProps {}
 

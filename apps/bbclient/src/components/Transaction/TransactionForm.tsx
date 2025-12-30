@@ -10,10 +10,7 @@ import {
   PAYMENT_OPTIONS,
 } from "@/constants/data";
 import { useMutation, useQuery } from "@apollo/client";
-import {
-  CREATE_TRANSACTION,
-  UPDATE_TRANSACTION,
-} from "@/graphql/mutations/Transaction";
+import { CREATE_TRANSACTION, UPDATE_TRANSACTION } from "@/graphql/mutations/Transaction";
 import { GET_TRANSACTION } from "@/graphql/queries/Transaction";
 import LoadingSpinner from "@/components/Loading/Spinner";
 import { Form, useForm, Input, Button } from "@/components";
@@ -28,20 +25,15 @@ export interface TransactionFormProps {
   transactionId?: string;
 }
 
-const TransactionForm: React.FC<TransactionFormProps> = ({
-  mode,
-  transactionId,
-}) => {
+const TransactionForm: React.FC<TransactionFormProps> = ({ mode, transactionId }) => {
   const { formRef, getValues } = useForm<any>();
   const [init, setInit] = useState<any>();
   const [type, setType] = useState<any>();
   const [selected, setSelected] = useState<any>();
   const { accounts, loading, error } = useAccounts();
 
-  const [createMutation, { loading: createLoading }] =
-    useMutation(CREATE_TRANSACTION);
-  const [updateMutation, { loading: updateLoading }] =
-    useMutation(UPDATE_TRANSACTION);
+  const [createMutation, { loading: createLoading }] = useMutation(CREATE_TRANSACTION);
+  const [updateMutation, { loading: updateLoading }] = useMutation(UPDATE_TRANSACTION);
   const { data, refetch } = useQuery(GET_TRANSACTION, {
     variables: {
       input: {
@@ -56,9 +48,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     try {
       const values = getValues();
       const params =
-        mode === "create"
-          ? { ...values }
-          : transactionId && { ...values, id: +transactionId };
+        mode === "create" ? { ...values } : transactionId && { ...values, id: +transactionId };
 
       const res =
         mode === "create"
@@ -105,9 +95,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         <div className={classNames(styles["transaction-form-wrapper-header"])}>
           <div className={classNames(styles["header-title-wrapper"])}>
             <Octagon className={classNames(styles["icon"])} />
-            <span className={classNames(styles["title"])}>
-              {"Create Transaction"}
-            </span>
+            <span className={classNames(styles["title"])}>{"Create Transaction"}</span>
           </div>
           <Button>
             <Link className={styles.link} href="/transaction">
@@ -121,11 +109,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           </Form.Item>
 
           <Form.Item label="거래자">
-            <Input
-              name="depositor"
-              type="text"
-              value={init && init.depositor}
-            />
+            <Input name="depositor" type="text" value={init && init.depositor} />
           </Form.Item>
 
           <Form.Item label="거래 유형" name="type">
@@ -227,10 +211,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               </>
             ) : (
               <>
-                <Button
-                  className={styles[`transaction-submit-button`]}
-                  type="submit"
-                >
+                <Button className={styles[`transaction-submit-button`]} type="submit">
                   Submit
                 </Button>
               </>

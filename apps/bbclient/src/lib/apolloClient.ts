@@ -31,14 +31,21 @@ const httpLink = new HttpLink({
 // });
 
 const errorLink = onError(({ networkError, graphQLErrors }) => {
+  const clearCookie = () => {
+    const isProduction = process.env.NODE_ENV === "production";
+    const cookieString = isProduction
+      ? "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; SameSite=None"
+      : "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax";
+
+    document.cookie = cookieString;
+  };
+
   if (
     networkError &&
     "statusCode" in networkError &&
     networkError.statusCode === 401
   ) {
-    // 인증 실패 시 쿠키 제거
-    document.cookie =
-      "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; SameSite=Lax";
+    clearCookie();
     if (typeof window !== "undefined") {
       window.location.href = "/authentication";
     }
@@ -46,10 +53,8 @@ const errorLink = onError(({ networkError, graphQLErrors }) => {
 
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
-      console.log({ err });
       if (err.extensions?.code === "UNAUTHENTICATED") {
-        document.cookie =
-          "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; SameSite=Lax";
+        clearCookie();
         if (typeof window !== "undefined") {
           window.location.href = "/authentication";
         }
