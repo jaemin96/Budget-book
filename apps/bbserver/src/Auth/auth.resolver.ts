@@ -5,6 +5,9 @@ import { AuthService } from "./auth.service";
 class AuthOutput {
   @Field(() => Boolean)
   result: boolean;
+
+  @Field(() => String)
+  token: string;
 }
 
 @Resolver()
@@ -18,6 +21,8 @@ export class AuthResolver {
     @Context() context: any,
   ): Promise<AuthOutput> {
     const { accessToken } = await this.authService.signIn(email, password);
+
+    // 서버에도 쿠키 설정 (서버 -> 서버 요청용)
     context.res.cookie("token", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -25,6 +30,7 @@ export class AuthResolver {
       path: "/",
     });
 
-    return { result: true };
+    // 클라이언트에서 사용할 token 반환 (클라이언트 middleware용)
+    return { result: true, token: accessToken };
   }
 }

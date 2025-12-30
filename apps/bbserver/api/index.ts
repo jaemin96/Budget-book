@@ -3,7 +3,7 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "../src/app.module";
 import { ExpressAdapter } from "@nestjs/platform-express";
 import { validateOrigin } from "../src/common/cors.config";
-import * as cookieParser from "cookie-parser";
+import cookieParser from "cookie-parser";
 
 const expressApp = express();
 
@@ -12,9 +12,15 @@ let initError: Error | null = null;
 
 async function bootstrap() {
   try {
+    console.log("[Serverless] Starting NestJS initialization...");
+    console.log("[Serverless] DATABASE_URL exists:", !!process.env.DATABASE_URL);
+    console.log("[Serverless] DIRECT_URL exists:", !!process.env.DIRECT_URL);
+
     const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp), {
       logger: console,
     });
+    console.log("[Serverless] NestJS app created");
+
     app.use(cookieParser());
     app.enableCors({
       origin: (origin, callback) => {
@@ -27,12 +33,15 @@ async function bootstrap() {
       },
       credentials: true,
     });
+    console.log("[Serverless] CORS configured");
+
     await app.init();
     isInitialized = true;
     console.log("[Serverless] NestJS app initialized successfully");
   } catch (error) {
     initError = error as Error;
     console.error("[Serverless] Failed to initialize NestJS app:", error);
+    console.error("[Serverless] Error stack:", error instanceof Error ? error.stack : "No stack trace");
     throw error;
   }
 }
@@ -48,6 +57,9 @@ export default async function handler(req, res) {
       res.setHeader("Vary", "Origin");
     }
   };
+
+  // 즉시 CORS 헤더 설정 (모든 에러 응답에 포함되도록)
+  setCorsHeaders();
 
   try {
     console.log(`[${req.method}] ${req.url} - Origin: ${origin || "none"}`);
@@ -71,14 +83,10 @@ export default async function handler(req, res) {
         return;
       } else {
         console.warn(`[CORS] Blocked OPTIONS from origin: ${origin}`);
-        setCorsHeaders();
         res.status(403).json({ error: "CORS policy: Origin not allowed" });
         return;
       }
     }
-
-    // 실제 요청에도 CORS 헤더 설정
-    setCorsHeaders();
 
     // 초기화 에러가 있으면 에러 반환
     if (initError) {
@@ -110,7 +118,6 @@ export default async function handler(req, res) {
     return expressApp(req, res);
   } catch (error) {
     console.error("[Serverless] Handler error:", error);
-    setCorsHeaders(); // 에러 응답에도 CORS 헤더 추가
     res.status(500).json({
       error: "Internal Server Error",
       message: error instanceof Error ? error.message : "Unknown error",

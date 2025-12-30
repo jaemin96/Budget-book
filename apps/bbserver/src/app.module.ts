@@ -21,7 +21,6 @@ import { LoggingInterceptor } from "./common/interceptor";
 dotenv.config();
 
 const isProd = process.env.NODE_ENV === "production";
-// const schema = readFileSync(join(__dirname, "/schema.gql"), "utf-8"); // 배포할때만 on
 
 @Module({
   imports: [
@@ -30,6 +29,7 @@ const isProd = process.env.NODE_ENV === "production";
       playground: true,
       path: "/api/graphql",
       autoSchemaFile: isProd ? false : join(process.cwd(), "src/schema.gql"),
+      typeDefs: isProd ? readFileSync(join(__dirname, "schema.gql"), "utf-8") : undefined,
       sortSchema: true,
       introspection: true,
       context: ({ req, res }) => {
