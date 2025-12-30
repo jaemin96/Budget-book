@@ -26,7 +26,7 @@ export default tseslint.config(
 
   // Server (bbserver) 설정
   {
-    files: ["packages/bbserver/**/*.{ts,js}"],
+    files: ["apps/bbserver/**/*.{ts,js}"],
     languageOptions: {
       parser: tseslint.parser,
       globals: {
@@ -35,8 +35,7 @@ export default tseslint.config(
       },
       parserOptions: {
         projectService: true,
-        tsconfigRootDir: path.resolve(__dirname, "packages", "bbserver"),
-        project: [path.resolve(__dirname, "/tsconfig.json")],
+        tsconfigRootDir: path.resolve(__dirname, "apps", "bbserver"),
       },
       sourceType: "commonjs",
     },
@@ -57,12 +56,12 @@ export default tseslint.config(
 
   // Client (bbclient) 설정
   {
-    files: ["packages/bbclient/**/*.{ts,tsx,js,jsx}"],
+    files: ["apps/bbclient/**/*.{ts,tsx,js,jsx}"],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
-        project: [path.resolve(__dirname, "packages/bbclient/tsconfig.json")],
-        tsconfigRootDir: path.resolve(__dirname, "packages", "bbclient"),
+        project: [path.resolve(__dirname, "apps/bbclient/tsconfig.json")],
+        tsconfigRootDir: path.resolve(__dirname, "apps", "bbclient"),
       },
       globals: {
         ...globals.browser,
@@ -70,10 +69,10 @@ export default tseslint.config(
     },
     settings: {
       next: {
-        rootDir: path.resolve(__dirname, "packages", "bbclient"),
+        rootDir: path.resolve(__dirname, "apps", "bbclient"),
       },
       prettier: {
-        configPath: path.resolve(__dirname, "/prettier.config.mjs"),
+        configPath: path.resolve(__dirname, "prettier.config.mjs"),
       },
     },
     // eslint-disable-next-line prettier/prettier
