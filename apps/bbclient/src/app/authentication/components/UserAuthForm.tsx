@@ -35,6 +35,17 @@ export function UserAuthForm() {
       });
 
       if (result?.data?.login?.result) {
+        // 서버에서 받은 token을 클라이언트 쿠키에 저장
+        const token = result.data.login.token;
+        if (token) {
+          Cookies.set("token", token, {
+            expires: 7, // 7일
+            path: "/",
+            sameSite: "strict",
+            secure: process.env.NODE_ENV === "production",
+          });
+        }
+
         await new Promise((r) => setTimeout(r, 100));
         router.replace("/");
       }
