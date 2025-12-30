@@ -33,6 +33,7 @@ type AccountModel {
 
 type AuthOutput {
   result: Boolean!
+  token: String!
 }
 
 input CreateAccountInput {
