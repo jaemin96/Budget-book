@@ -20,6 +20,9 @@ jobs:
   check-changes:
     name: Check if bbserver changed
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+      contents: read
     outputs:
       should_run: ${{ steps.filter.outputs.bbserver }}
     steps:

@@ -19,6 +19,9 @@ jobs:
   check-changes:
     name: Check if bbclient changed
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+      contents: read
     outputs:
       should_run: ${{ steps.filter.outputs.bbclient }}
     steps:
