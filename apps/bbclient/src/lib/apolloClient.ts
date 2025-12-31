@@ -8,7 +8,7 @@ import {
 import { onError } from "@apollo/client/link/error";
 
 const httpLink = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_API,
+  uri: "/api/graphql", // 프록시 사용
   credentials: "include",
 });
 
