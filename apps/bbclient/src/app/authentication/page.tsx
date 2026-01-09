@@ -34,6 +34,7 @@ export default function AuthenticationPage() {
       {/* Desktop View */}
       <div className={styles.pageContainer}>
         <div className={styles.leftPanel}>
+          <div className={styles.overlay}></div>
           <div className={styles.quote}>
             <blockquote>
               <p className={styles.mainText}>{MAIN_DESCRIPTION}</p>
