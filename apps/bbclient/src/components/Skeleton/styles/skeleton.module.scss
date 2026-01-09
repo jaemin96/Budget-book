@@ -1,0 +1,35 @@
+@use "../../../style/abstracts" as *;
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+
+  &.text {
+    height: 1em;
+    border-radius: 4px;
+  }
+
+  &.circular {
+    border-radius: 50%;
+  }
+
+  &.rectangular {
+    border-radius: 8px;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
