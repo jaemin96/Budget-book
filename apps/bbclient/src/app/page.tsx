@@ -6,6 +6,8 @@ import { Button, Card, Spinner } from "@/components";
 import { useQuery } from "@apollo/client";
 import { GET_AMOUNT_SUMMARY } from "../graphql/queries/Account";
 import { useEffect, useState } from "react";
+import { Wallet, PiggyBank, CircleDollarSign, Clock } from "lucide-react";
+import classNames from "classnames";
 
 export default function Home() {
   const [summary, setSummary] = useState<any>();
@@ -30,60 +32,77 @@ export default function Home() {
   return (
     <div className={styles.container}>
       {/* 거래내역 페이지 이동 */}
-      <Card>
+      <div className={styles.quickActions}>
         <Link href="/transaction">
           <Button buttonMode="ghost">거래내역 이동</Button>
         </Link>
-      </Card>
+      </div>
 
       {!summary ? (
-        <>
-          <div style={{ display: "flex", gap: "0.4rem" }}>
-            <span style={{ color: "white" }}>{`금액 현황 불러오는중 ...`}</span>
-            <Spinner />
-          </div>
-        </>
+        <div className={styles.loadingState}>
+          <Spinner />
+          <span>{`금액 현황 불러오는중 ...`}</span>
+        </div>
       ) : (
         <div className={styles.balances}>
-          {/* 총 금액 */}
-          <section>
-            <Card>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <h3>{`Total amount`}</h3>
-                <span>{`${summary?.totalBalance.toLocaleString()}`}</span>
+          {/* 총 금액 - Hero Card */}
+          <div className={classNames(styles.heroCard, styles.fadeIn)}>
+            <div className={styles.heroContent}>
+              <div className={styles.heroHeader}>
+                <Wallet className={styles.heroIcon} size={32} />
+                <span className={styles.heroLabel}>Total Balance</span>
               </div>
-            </Card>
-          </section>
+              <div className={styles.heroAmount}>
+                <span className={styles.currency}>₩</span>
+                {summary?.totalBalance.toLocaleString()}
+              </div>
+            </div>
+          </div>
 
-          {/* 저축 금액 */}
-          <section>
-            <Card>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <h3>{`Saving amount`}</h3>
-                <span>{`${summary?.savingBalance.toLocaleString()}`}</span>
+          {/* 나머지 카드들 - Grid */}
+          <div className={styles.grid}>
+            {/* 바로 출금 가능 금액 */}
+            <div className={classNames(styles.statCard, styles.fadeIn, styles.delay1)}>
+              <div className={styles.statIcon}>
+                <CircleDollarSign size={24} />
               </div>
-            </Card>
-          </section>
+              <div className={styles.statContent}>
+                <span className={styles.statLabel}>Available</span>
+                <span className={styles.statAmount}>
+                  <span className={styles.currency}>₩</span>
+                  {summary?.availableBalance.toLocaleString()}
+                </span>
+              </div>
+            </div>
 
-          {/* 바로 출금 가능 금액 */}
-          <section>
-            <Card>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <h3>{`Available amount`}</h3>
-                <span>{`${summary?.availableBalance.toLocaleString()}`}</span>
+            {/* 저축 금액 */}
+            <div className={classNames(styles.statCard, styles.fadeIn, styles.delay2)}>
+              <div className={styles.statIcon}>
+                <PiggyBank size={24} />
               </div>
-            </Card>
-          </section>
+              <div className={styles.statContent}>
+                <span className={styles.statLabel}>Saving</span>
+                <span className={styles.statAmount}>
+                  <span className={styles.currency}>₩</span>
+                  {summary?.savingBalance.toLocaleString()}
+                </span>
+              </div>
+            </div>
 
-          {/* 출금 예정 금액  */}
-          <section>
-            <Card>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <h3>{`Holding amount`}</h3>
-                <span>{`${summary?.holdBalance.toLocaleString()}`}</span>
+            {/* 출금 예정 금액 */}
+            <div className={classNames(styles.statCard, styles.fadeIn, styles.delay3)}>
+              <div className={styles.statIcon}>
+                <Clock size={24} />
               </div>
-            </Card>
-          </section>
+              <div className={styles.statContent}>
+                <span className={styles.statLabel}>Holding</span>
+                <span className={styles.statAmount}>
+                  <span className={styles.currency}>₩</span>
+                  {summary?.holdBalance.toLocaleString()}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
