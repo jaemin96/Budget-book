@@ -12,6 +12,181 @@
   border-radius: 20px;
 }
 
+// Transaction List Styles
+.transactionWrapper {
+  background: $budget-card-gray;
+  border: 1px solid $budget-card-border;
+  border-radius: 20px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+
+  @media (max-width: 768px) {
+    padding: 1.25rem;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+
+  .title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $budget-white;
+    letter-spacing: -0.3px;
+  }
+
+  .addButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba($budget-carrot, 0.12);
+    border-radius: 10px;
+    color: $budget-carrot;
+    text-decoration: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba($budget-carrot, 0.2);
+      transform: scale(1.05);
+    }
+  }
+}
+
+.transactionList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.transactionItemLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.transactionItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem;
+  background: rgba($budget-white, 0.03);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba($budget-white, 0.06);
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+}
+
+.itemIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba($budget-carrot, 0.12);
+  border-radius: 12px;
+  color: $budget-carrot;
+  flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.itemCategory {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $budget-white;
+  letter-spacing: -0.2px;
+}
+
+.itemDescription {
+  font-size: 0.85rem;
+  color: $budget-gray;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.itemAmount {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+}
+
+.amountExpense {
+  color: $budget-danger;
+}
+
+.amountIncome {
+  color: $success-500;
+}
+
+.amountTransfer {
+  color: $budget-gray;
+}
+
+.itemTime {
+  font-size: 0.8rem;
+  color: $budget-dark-gray;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  gap: 1rem;
+
+  .emptyIcon {
+    width: 48px;
+    height: 48px;
+    color: $budget-dark-gray;
+    opacity: 0.5;
+  }
+
+  .emptyText {
+    font-size: 0.95rem;
+    color: $budget-gray;
+    text-align: center;
+  }
+}
+
 .transaction-form-wrapper {
   background: $budget-card-gray;
   border: 1px solid $budget-card-border;
@@ -43,7 +218,7 @@
     font-weight: bold;
     font-size: 1.1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $budget-divider-gray;
     margin-bottom: 2rem;
 
     &-btn-wrapper {
@@ -76,17 +251,17 @@
       .item-label {
         width: 8rem;
         font-weight: 500;
-        color: #888;
+        color: $budget-dark-gray;
         flex-shrink: 0;
       }
 
       .item-value {
-        color: #e5e5e5;
+        color: $budget-light-gray;
         word-break: break-word;
         white-space: pre-wrap;
 
         &.highlight {
-          color: $budget-carrot; // orange-500 느낌
+          color: $budget-carrot;
           font-weight: 600;
         }
       }
@@ -94,11 +269,11 @@
   }
 
   .transaction-footer {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid $budget-divider-gray;
     margin-top: 1rem;
     padding-top: 0.75rem;
     font-size: 0.95rem;
-    color: white;
+    color: $budget-white;
     font-family: monospace;
     white-space: pre;
 
@@ -122,7 +297,7 @@
     padding: 0.35rem 0 !important;
     text-align: center;
 
-    background-color: rgba(255, 255, 255, 0.05) !important;
+    background-color: rgba($budget-white, 0.05) !important;
     border-color: $budget-dark-gray !important;
     color: $budget-carrot !important;
   }
