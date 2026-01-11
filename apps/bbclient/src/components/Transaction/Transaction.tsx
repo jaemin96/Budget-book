@@ -11,7 +11,7 @@ import { categoryIcons } from "@/constants/icons/transaction.icons";
 import { TransactionCategoryLabels } from "@/constants/enum/transaction.enum";
 import classNames from "classnames";
 import Skeleton from "@/components/Skeleton/Skeleton";
-import { Card, Button } from "@/components";
+import { Card } from "@/components";
 
 interface TransactionProps {}
 
@@ -154,11 +154,9 @@ const Transaction: React.FC<TransactionProps> = () => {
         icon={Octagon}
         title="Transactions"
         buttons={
-          <Button>
-            <Link className={styles.link} href="/transaction/create">
-              <Plus />
-            </Link>
-          </Button>
+          <Link href="/transaction/create">
+            <Plus size={20} />
+          </Link>
         }
       />
       <Card.Body>
