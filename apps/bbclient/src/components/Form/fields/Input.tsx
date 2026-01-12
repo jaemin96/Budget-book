@@ -1,22 +1,13 @@
 "use client";
 
-import { BaseProps } from "@/common/types";
 import classNames from "classnames";
 import styles from "./styles/input.module.scss";
 
-interface InputProps extends BaseProps {
-  value?: any;
-  name?: string;
-  type?: string;
+interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "className"> {
+  className?: string;
 }
 
-const Input: React.FC<InputProps> = ({
-  value,
-  name,
-  type = "text",
-  className,
-  ...props
-}) => {
+const Input: React.FC<InputProps> = ({ value, name, type = "text", className, ...props }) => {
   return (
     <>
       <input
