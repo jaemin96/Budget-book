@@ -1,10 +1,20 @@
 "use client";
 
-import { Octagon, ArrowLeftIcon } from "lucide-react";
+import {
+  Octagon,
+  ArrowLeft,
+  Pencil,
+  CreditCard,
+  Calendar,
+  Coins,
+  ArrowRightLeft,
+  Building2,
+  Tag,
+  RefreshCw,
+  FileText,
+} from "lucide-react";
 import {
   Card,
-  Button,
-  Spinner,
   useForm,
   Form,
   Input,
@@ -13,6 +23,7 @@ import {
   Select,
   Textarea,
 } from "@/components";
+import Skeleton from "@/components/Skeleton/Skeleton";
 import Link from "next/link";
 import classNames from "classnames";
 import { GET_TRANSACTION } from "@/graphql/queries/Transaction";
@@ -24,7 +35,7 @@ import {
   TransactionPaymentTypeLabels,
   TransactionCategoryLabels,
 } from "@/constants/enum";
-import { Transaction, TransactionType } from "@/model/transaction.model";
+import { Transaction } from "@/model/transaction.model";
 import { AccountBank } from "@/model/account.model";
 import { UPDATE_TRANSACTION } from "@/graphql/mutations/Transaction";
 import { ACCOUNTS, CATEGORY_OPTIONS, PAYMENT_OPTIONS } from "@/constants/data";
@@ -45,9 +56,9 @@ export const TransactionDetail = ({ transactionId }: TransactionDetailProps) => 
   const [selectedType, setSelectedType] = useState<any>();
   const { formRef, getValues } = useForm<any>();
 
-  const [updateMutation, { loading: updateLoading }] = useMutation(UPDATE_TRANSACTION);
+  const [updateMutation] = useMutation(UPDATE_TRANSACTION);
 
-  const { data, loading, error, refetch } = useQuery(GET_TRANSACTION, {
+  const { data, refetch } = useQuery(GET_TRANSACTION, {
     variables: {
       input: {
         id: transactionId,
@@ -94,97 +105,111 @@ export const TransactionDetail = ({ transactionId }: TransactionDetailProps) => 
     setSelectedType(init?.type);
   }, [init]);
 
+  const renderSkeletonItems = () => (
+    <div className={styles.detailSkeleton}>
+      {[...Array(7)].map((_, index) => (
+        <div key={index} className={styles.skeletonItem}>
+          <Skeleton variant="circular" width={36} height={36} />
+          <div className={styles.detailInfo}>
+            <Skeleton variant="text" width="30%" height={12} />
+            <Skeleton variant="text" width="60%" height={16} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const renderReadMode = () => {
+    if (!tr) return renderSkeletonItems();
+
+    const items = [
+      { Icon: CreditCard, label: "결제수단", value: TransactionPaymentTypeLabels[tr.paymentType] },
+      { Icon: Calendar, label: "날짜", value: convertDate(tr.createdAt) },
+      { Icon: Coins, label: "금액", value: `${tr.amount.toLocaleString()}원`, highlight: true },
+      { Icon: ArrowRightLeft, label: "타입", value: TransactionTypeLabels[tr.type] },
+      ...(tr.fromAccountId || tr.toAccountId
+        ? [{
+            Icon: Building2,
+            label: "거래계좌",
+            value: tr.fromAccountId && tr.toAccountId
+              ? `${AccountBank[tr.fromAccountId]} → ${AccountBank[tr.toAccountId]}`
+              : tr.fromAccountId
+                ? AccountBank[tr.fromAccountId]
+                : "계좌 정보 없음",
+          }]
+        : []),
+      { Icon: Tag, label: "카테고리", value: TransactionCategoryLabels[tr.category] },
+      { Icon: RefreshCw, label: "거래흐름", value: tr.depositor || "-" },
+      { Icon: FileText, label: "설명", value: tr.description || "-" },
+    ];
+
+    return (
+      <div className={styles.detailList}>
+        {items.map((item, index) => (
+          <div key={index} className={styles.detailItem}>
+            <div className={styles.detailIcon}>
+              <item.Icon size={18} />
+            </div>
+            <div className={styles.detailInfo}>
+              <div className={styles.detailLabel}>{item.label}</div>
+              <div className={classNames(styles.detailValue, item.highlight && styles.highlight)}>
+                {item.value}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <Card>
       <Card.Header
         icon={Octagon}
-        title="Transaction Summary"
+        title="Transaction Detail"
         buttons={
-          <>
-            <Button>
-              <Link className={styles.link} href="/transaction">
-                <ArrowLeftIcon className={classNames(styles["icon"])} />
-              </Link>
-            </Button>
-          </>
+          <Link href="/transaction">
+            <ArrowLeft size={20} />
+          </Link>
         }
       />
       <Card.Body>
-        <div className={classNames(styles["transaction-summary-wrapper"])}>
-          <div className={styles["transaction-header"]}>
-            <span>거래내역 번호: {transactionId}</span>
-            <div className={styles["transaction-header-btn-wrapper"]}>
-              {editMode ? (
-                <>
-                  <Button
-                    className={styles["common-btn"]}
-                    buttonMode="primary"
-                    type="submit"
-                    onClick={handleUpdate}
-                  >
-                    저장
-                  </Button>
-                  <Button
-                    className={styles["common-btn"]}
-                    buttonMode="outline"
-                    onClick={handleReadMode}
-                  >
-                    취소
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    className={styles["common-btn"]}
-                    buttonMode="primary"
-                    onClick={handleEditMode}
-                  >
-                    수정
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
-
-          <div className={styles["transaction-content"]}>
-            {!tr ? (
-              <Spinner />
-            ) : !editMode ? (
+        <div className={styles.detailHeader}>
+          <span className={styles.detailTitle}>거래내역 #{transactionId}</span>
+          <div className={styles.detailActions}>
+            {editMode ? (
               <>
-                <TransactionItem
-                  label="💳 결제수단"
-                  value={TransactionPaymentTypeLabels[tr.paymentType]}
-                />
-                <TransactionItem label="📅 날짜" value={convertDate(tr.createdAt)} />
-                <TransactionItem
-                  label="💰 금액"
-                  value={`${tr.amount.toLocaleString()}원`}
-                  highlight
-                />
-                <TransactionItem label="📂 타입" value={TransactionTypeLabels[tr.type]} />
-                {(tr.fromAccountId || tr.toAccountId) && (
-                  <TransactionItem
-                    label="💳 거래계좌"
-                    value={
-                      tr.fromAccountId && tr.toAccountId
-                        ? `${AccountBank[tr.fromAccountId]} ➡ ${AccountBank[tr.toAccountId]}`
-                        : tr.fromAccountId
-                          ? `${AccountBank[tr.fromAccountId]}`
-                          : "계좌 정보 없음"
-                    }
-                  />
-                )}
-                <TransactionItem
-                  label="📝 카테고리"
-                  value={TransactionCategoryLabels[tr.category]}
-                />
-                <TransactionItem label="🔁 거래흐름" value={tr.depositor} />
-                <TransactionItem label="🗒️ 설명" value={tr.description} />
+                <button
+                  className={classNames(styles.detailButton, styles.detailButtonPrimary)}
+                  onClick={handleUpdate}
+                >
+                  저장
+                </button>
+                <button
+                  className={classNames(styles.detailButton, styles.detailButtonOutline)}
+                  onClick={handleReadMode}
+                >
+                  취소
+                </button>
               </>
             ) : (
-              <div className={styles["detail-edit-wrapper"]}>
+              <button
+                className={classNames(styles.detailButton, styles.detailButtonPrimary)}
+                onClick={handleEditMode}
+              >
+                <Pencil size={14} style={{ marginRight: 4 }} />
+                수정
+              </button>
+            )}
+          </div>
+        </div>
+
+        {!editMode ? (
+          renderReadMode()
+        ) : (
+          <div className={styles["detail-edit-wrapper"]}>
                 <Form ref={formRef} onSubmit={handleUpdate}>
-                  <Form.Item className={styles["detail"]} label="💳 결제수단" name="paymentType">
+                  <Form.Item label="결제수단" name="paymentType">
                     <Select name="paymentType" defaultValue={init?.paymentType}>
                       {PAYMENT_OPTIONS.map(({ value, label }) => (
                         <Select.Option key={value} value={value}>
@@ -194,11 +219,11 @@ export const TransactionDetail = ({ transactionId }: TransactionDetailProps) => 
                     </Select>
                   </Form.Item>
 
-                  <Form.Item className={styles["detail"]} label="💰 금액">
+                  <Form.Item label="금액">
                     <Input name="amount" defaultValue={init?.amount} type="number" />
                   </Form.Item>
 
-                  <Form.Item className={styles["detail"]} label="📂 타입" name="type">
+                  <Form.Item label="타입" name="type">
                     <RadioGroup name="type" value={selectedType} onChange={setSelectedType}>
                       <Radio value="EXPENSE">지출</Radio>
                       <Radio value="INCOME">수익</Radio>
@@ -207,12 +232,8 @@ export const TransactionDetail = ({ transactionId }: TransactionDetailProps) => 
                   </Form.Item>
 
                   {selectedType === "TRANSFER" ? (
-                    <div className="myTransfer">
-                      <Form.Item
-                        className={styles["detail"]}
-                        label="💳 보낼 계좌"
-                        name="fromAccountId"
-                      >
+                    <div className={styles.transferGroup}>
+                      <Form.Item label="보낼 계좌" name="fromAccountId">
                         <Select name="fromAccountId" defaultValue={init?.fromAccountId}>
                           {ACCOUNTS.map(({ value, label }) => (
                             <Select.Option key={value} value={value}>
@@ -222,11 +243,7 @@ export const TransactionDetail = ({ transactionId }: TransactionDetailProps) => 
                         </Select>
                       </Form.Item>
 
-                      <Form.Item
-                        className={styles["detail"]}
-                        label="💳 받을 계좌"
-                        name="toAccountId"
-                      >
+                      <Form.Item label="받을 계좌" name="toAccountId">
                         <Select name="toAccountId" defaultValue={init?.toAccountId}>
                           {ACCOUNTS.map(({ value, label }) => (
                             <Select.Option key={value} value={value}>
@@ -237,7 +254,7 @@ export const TransactionDetail = ({ transactionId }: TransactionDetailProps) => 
                       </Form.Item>
                     </div>
                   ) : selectedType === "INCOME" ? (
-                    <Form.Item className={styles["detail"]} label="💳 수령 계좌" name="toAccountId">
+                    <Form.Item label="수령 계좌" name="toAccountId">
                       <Select name="toAccountId" defaultValue={init?.toAccountId}>
                         {ACCOUNTS.map(({ value, label }) => (
                           <Select.Option key={value} value={value}>
@@ -247,11 +264,7 @@ export const TransactionDetail = ({ transactionId }: TransactionDetailProps) => 
                       </Select>
                     </Form.Item>
                   ) : (
-                    <Form.Item
-                      className={styles["detail"]}
-                      label="💳 사용 계좌"
-                      name="fromAccountId"
-                    >
+                    <Form.Item label="사용 계좌" name="fromAccountId">
                       <Select name="fromAccountId" defaultValue={init?.fromAccountId}>
                         {ACCOUNTS.map(({ value, label }) => (
                           <Select.Option key={value} value={value}>
@@ -261,7 +274,7 @@ export const TransactionDetail = ({ transactionId }: TransactionDetailProps) => 
                       </Select>
                     </Form.Item>
                   )}
-                  <Form.Item className={styles["detail"]} label="📝 카테고리" name="category">
+                  <Form.Item label="카테고리" name="category">
                     <Select name="category" defaultValue={init?.category}>
                       {CATEGORY_OPTIONS.map(({ value, label }) => (
                         <Select.Option key={value} value={value}>
@@ -270,52 +283,16 @@ export const TransactionDetail = ({ transactionId }: TransactionDetailProps) => 
                       ))}
                     </Select>
                   </Form.Item>
-                  <Form.Item className={styles["detail"]} label="🔁 거래흐름">
+                  <Form.Item label="거래흐름">
                     <Input name="depositor" type="text" defaultValue={init && init.depositor} />
                   </Form.Item>
-                  <Form.Item className={styles["detail"]} label="🗒️ 설명" name="description">
+                  <Form.Item label="설명" name="description">
                     <Textarea name="description" defaultValue={init && init.description} />
                   </Form.Item>
                 </Form>
               </div>
             )}
-          </div>
-
-          {/* TODO: 거래내역 추가할 때 거래 발생 후 계좌 정보 업데이트된 내역도 확인 가능하도록 기능 개선 */}
-          {/* <div className={styles["transaction-footer"]}>
-            <div className={styles["related-account-title"]}>🔗 관련 계좌</div>
-            <ul className={styles["related-account-list"]}>
-              <li>카카오페이 체크카드</li>
-              <li>
-                현재 잔액: <strong>1,254,000원</strong>
-              </li>
-            </ul>
-          </div> */}
-        </div>
       </Card.Body>
     </Card>
-  );
-};
-
-interface TransactionItemProps {
-  label: string;
-  value: string;
-  highlight?: boolean;
-  alignTop?: boolean;
-}
-
-const TransactionItem: React.FC<TransactionItemProps> = ({
-  label,
-  value,
-  highlight = false,
-  alignTop = false,
-}) => {
-  return (
-    <div className={classNames(styles["items"], alignTop && styles["align-top"])}>
-      <span className={classNames(styles["item-label"])}>{label}</span>
-      <span className={classNames(styles["item-value"], highlight && styles["highlight"])}>
-        {value}
-      </span>
-    </div>
   );
 };

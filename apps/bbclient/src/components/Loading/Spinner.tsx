@@ -4,13 +4,19 @@ import { LoaderCircle } from "lucide-react";
 import classNames from "classnames";
 import styles from "./styles/loading.module.scss";
 
-interface LoadingSpinnerProps {}
+interface LoadingSpinnerProps {
+  color?: string;
+  size?: number;
+}
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = () => {
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+  color,
+  size = 20
+}) => {
   return (
     <>
-      <div className={classNames(styles.spinner)}>
-        <LoaderCircle strokeWidth={3} />
+      <div className={classNames(styles.spinner)} style={{ color }}>
+        <LoaderCircle strokeWidth={3} size={size} />
       </div>
     </>
   );

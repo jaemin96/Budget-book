@@ -4,12 +4,14 @@
   background: $budget-card-gray;
   border: 1px solid $budget-card-border;
   border-radius: 20px;
-  padding: 0.95rem;
+  padding: 1.5rem;
   color: $budget-white;
+  transition: all 0.3s ease;
+
   .header {
     display: flex;
     width: 100%;
-    margin-bottom: 3rem;
+    margin-bottom: 1.25rem;
 
     &--horizontal {
       align-items: center;
@@ -19,15 +21,49 @@
     .titleWrapper {
       display: flex;
       align-items: center;
-      gap: 0.2rem;
+      gap: 0.75rem;
+
       .icon {
-        width: 1.875rem;
-        height: 1.875rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        padding: 8px;
+        background: rgba($budget-carrot, 0.12);
+        border-radius: 12px;
+        color: $budget-carrot;
       }
+
       .title {
-        font-size: 1.5rem;
-        font-weight: 800;
-        margin-top: -2px;
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+      }
+    }
+
+    .buttonWrapper {
+      display: flex;
+      gap: 0.5rem;
+
+      button,
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        background: rgba($budget-carrot, 0.12);
+        border: none;
+        border-radius: 10px;
+        color: $budget-carrot;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: rgba($budget-carrot, 0.2);
+          transform: scale(1.05);
+        }
       }
     }
   }
@@ -36,33 +72,30 @@
 /* 모바일 전용 스타일 */
 @media (max-width: 768px) {
   .card {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+    padding: 1.25rem;
+
     .header {
-      margin-bottom: 1.25rem;
+      margin-bottom: 1rem;
+
       .titleWrapper {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+        gap: 0.6rem;
+
         .icon {
-          width: 2rem;
-          height: 2rem;
+          width: 36px;
+          height: 36px;
+          padding: 7px;
         }
+
         .title {
-          font-size: 1.6rem;
-          font-weight: 800;
-          margin-top: 0;
+          font-size: 1.15rem;
         }
       }
+
       .buttonWrapper {
-        display: flex;
-        gap: 0.5rem;
-        button {
+        button,
+        a {
           width: 32px;
           height: 32px;
-          border-radius: 50%;
-          text-align: center;
         }
       }
     }

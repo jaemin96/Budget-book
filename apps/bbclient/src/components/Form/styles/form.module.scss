@@ -1,46 +1,44 @@
 @use "../../../style/abstracts" as *;
 
-// background-color: rgba(255, 255, 255, 0.05);
-// border-color: $budget-dark-gray;
-// color: $budget-carrot;
-
 .form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
   &-item {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem;
-    justify-content: space-between;
+    gap: 0.5rem;
+
     &-vertical {
-      color: $budget-white;
+      flex-direction: column;
     }
 
     &-horizontal {
       flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+
+      .form-label {
+        min-width: 5rem;
+        flex-shrink: 0;
+      }
     }
   }
 
   &-label {
-    color: $budget-light-gray;
-    max-height: 2.75rem !important;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $budget-gray;
+    letter-spacing: -0.2px;
   }
-  // 뱃지 느낌
-  // &-label {
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: center;
-  //   border: 1px solid rgba($budget-card-border, 0.2);
-  //   border-radius: 8px;
-  //   background-color: rgba(255, 255, 255, 0.05);
-  //   color: $budget-yellow;
-  //   text-align: center;
-  //   margin-bottom: 8px;
-  //   width: 25%;
-  //   max-height: 2.75rem !important;
-  // }
-  &-control {
-    min-width: 15rem;
 
-    input[type="text"] {
+  &-control {
+    flex: 1;
+    width: 100%;
+
+    input[type="text"],
+    input[type="number"] {
       width: 100%;
     }
   }
@@ -49,13 +47,29 @@
 /* 모바일 전용 스타일 */
 @media (max-width: 768px) {
   .form {
+    gap: 1rem;
+
     &-item {
-      display: flex;
-      flex-direction: column;
+      gap: 0.4rem;
+
+      // 모바일에서는 세로 레이아웃으로
+      &-horizontal {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.4rem;
+
+        .form-label {
+          min-width: unset;
+        }
+      }
+    }
+
+    &-label {
+      font-size: 0.85rem;
     }
 
     &-control {
-      min-height: 2.75rem !important;
+      min-height: 2.75rem;
     }
   }
 

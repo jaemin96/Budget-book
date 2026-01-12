@@ -89,7 +89,7 @@ export function UserAuthForm() {
           )}
         </button>
       </div>
-      <button type="submit">{loading ? <Spinner /> : `LOGIN`}</button>
+      <button type="submit">{loading ? <Spinner color="white" /> : `LOGIN`}</button>
     </form>
   );
 }

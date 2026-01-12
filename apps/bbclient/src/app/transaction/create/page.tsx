@@ -1,4 +1,5 @@
 import { TransactionForm } from "@/components/Transaction";
+import { Card } from "@/components";
 import styles from "../../styles/transaction.module.scss";
 
 interface CreateTransactionPageProps {}
@@ -6,7 +7,9 @@ interface CreateTransactionPageProps {}
 const CreateTransactionPage = (props: CreateTransactionPageProps) => {
   return (
     <div className={styles.container}>
-      <TransactionForm mode="create" />
+      <Card>
+        <TransactionForm mode="create" />
+      </Card>
     </div>
   );
 };

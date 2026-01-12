@@ -1,0 +1,169 @@
+@use "../../../style/abstracts" as *;
+
+.recentTransactions {
+  background: $budget-card-gray;
+  border: 1px solid $budget-card-border;
+  border-radius: 20px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+
+  @media (max-width: 768px) {
+    padding: 1.25rem;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+
+  .title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $budget-white;
+    letter-spacing: -0.3px;
+  }
+
+  .viewAllLink {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $budget-carrot;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $budget-yellow;
+    }
+  }
+}
+
+.transactionList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.transactionItemLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.transactionItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+}
+
+.itemIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 146, 8, 0.12);
+  border-radius: 12px;
+  color: $budget-carrot;
+  flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.itemCategory {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: $budget-white;
+  letter-spacing: -0.2px;
+}
+
+.itemDescription {
+  font-size: 0.85rem;
+  color: $budget-gray;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.itemAmount {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+}
+
+.amountExpense {
+  color: $budget-danger;
+}
+
+.amountIncome {
+  color: $success-500;
+}
+
+.amountTransfer {
+  color: $budget-gray;
+}
+
+.itemTime {
+  font-size: 0.8rem;
+  color: $budget-dark-gray;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  gap: 1rem;
+
+  .emptyIcon {
+    width: 48px;
+    height: 48px;
+    color: $budget-dark-gray;
+    opacity: 0.5;
+  }
+
+  .emptyText {
+    font-size: 0.95rem;
+    color: $budget-gray;
+    text-align: center;
+  }
+}

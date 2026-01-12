@@ -1,36 +1,100 @@
 @use "../../../../style/abstracts" as *;
 
 .radioGroup {
-  color: $budget-light-gray;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .radio {
   display: flex;
   align-items: center;
+  padding: 0.625rem 1rem;
+  background: $budget-form-bg;
+  border: 1px solid $budget-divider-gray;
+  border-radius: 10px;
   cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: rgba($budget-carrot, 0.5);
+    background: rgba($budget-carrot, 0.05);
+  }
 
   input[type="radio"] {
     display: none;
   }
 
   &__myRadio {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
-    border: 2px solid #999;
-    margin-right: 8px;
-    transition: background-color 0.2s;
+    border: 2px solid $budget-dark-gray;
+    margin-right: 10px;
+    transition: all 0.2s ease;
+    position: relative;
 
     &--checked {
-      background-color: $budget-yellow;
+      background-color: $budget-carrot;
       border-color: $budget-carrot;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 6px;
+        height: 6px;
+        background: $budget-white;
+        border-radius: 50%;
+      }
     }
   }
 
   &__label {
+    font-size: 0.95rem;
+    color: $budget-gray;
+    transition: color 0.2s ease;
+
     &--checked {
-      color: $budget-yellow;
-      // border-bottom: 1px solid $budget-carrot;
+      color: $budget-carrot;
+      font-weight: 600;
+    }
+  }
+
+  // 선택된 상태의 라디오 버튼 컨테이너
+  &--selected {
+    border-color: $budget-carrot;
+    background: rgba($budget-carrot, 0.08);
+  }
+}
+
+/* 모바일 전용 스타일 */
+@media (max-width: 768px) {
+  .radioGroup {
+    gap: 0.5rem;
+  }
+
+  .radio {
+    padding: 0.75rem 0.875rem;
+    flex: 1;
+    min-width: calc(50% - 0.25rem);
+    justify-content: center;
+
+    &__myRadio {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+
+      &--checked::after {
+        width: 5px;
+        height: 5px;
+      }
+    }
+
+    &__label {
+      font-size: 0.9rem;
     }
   }
 }
