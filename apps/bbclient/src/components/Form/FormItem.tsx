@@ -8,7 +8,7 @@ import classNames from "classnames";
 const FormItem = ({
   label,
   children,
-  direction = "horizontal",
+  direction = "vertical",
   style,
   className,
 }: FormItemProps & { className?: string }) => {

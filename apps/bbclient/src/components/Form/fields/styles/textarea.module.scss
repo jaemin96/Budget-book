@@ -5,9 +5,38 @@
   @include fieldBase;
   max-width: 100%;
   width: 100%;
-  min-height: 7.5rem !important;
+  min-height: 7.5rem;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: vertical;
 
   background-color: $budget-form-bg;
   border: 1px solid $budget-divider-gray;
-  border-radius: 8px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+
+  &::placeholder {
+    color: $budget-dark-gray;
+  }
+
+  &:hover {
+    border-color: rgba($budget-carrot, 0.5);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $budget-carrot;
+    box-shadow: 0 0 0 3px rgba($budget-carrot, 0.15);
+  }
+}
+
+/* 모바일 전용 스타일 */
+@media (max-width: 768px) {
+  .textarea {
+    min-height: 6rem;
+    padding: 0.75rem 1rem;
+    font-size: 16px; // iOS 확대 방지
+    border-radius: 10px;
+  }
 }

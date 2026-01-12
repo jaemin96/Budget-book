@@ -8,7 +8,6 @@ import { LOGIN } from "@/graphql/mutations/Auth";
 import { Eye, EyeOff } from "lucide-react";
 import { Spinner } from "@/components";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 
 export function UserAuthForm() {
   const router = useRouter();
@@ -35,18 +34,8 @@ export function UserAuthForm() {
       });
 
       if (result?.data?.login?.result) {
-        // 서버에서 받은 token을 클라이언트 쿠키에 저장
-        const token = result.data.login.token;
-        if (token) {
-          Cookies.set("token", token, {
-            expires: 7, // 7일
-            path: "/",
-            sameSite: "strict",
-            secure: process.env.NODE_ENV === "production",
-          });
-        }
-
-        await new Promise((r) => setTimeout(r, 100));
+        // 서버에서 Set-Cookie 헤더로 쿠키를 설정함 (중복 설정 불필요)
+        // credentials: "include"로 인해 자동으로 쿠키가 저장됨
         router.replace("/");
       }
     } catch (err) {
@@ -100,7 +89,7 @@ export function UserAuthForm() {
           )}
         </button>
       </div>
-      <button type="submit">{loading ? <Spinner /> : `LOGIN`}</button>
+      <button type="submit">{loading ? <Spinner color="white" /> : `LOGIN`}</button>
     </form>
   );
 }

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import styles from "./styles/transaction.module.scss";
-import classNames from "classnames";
 import {
   // ACCOUNT_FIELDS,
   ACCOUNTS,
@@ -10,17 +9,14 @@ import {
   PAYMENT_OPTIONS,
 } from "@/constants/data";
 import { useMutation, useQuery } from "@apollo/client";
-import {
-  CREATE_TRANSACTION,
-  UPDATE_TRANSACTION,
-} from "@/graphql/mutations/Transaction";
+import { CREATE_TRANSACTION, UPDATE_TRANSACTION } from "@/graphql/mutations/Transaction";
 import { GET_TRANSACTION } from "@/graphql/queries/Transaction";
 import LoadingSpinner from "@/components/Loading/Spinner";
-import { Form, useForm, Input, Button } from "@/components";
+import { Form, useForm, Input, Card } from "@/components";
 import { FormMode } from "@/common/types";
 import { RadioGroup, Radio, Select, Textarea } from "../Form/fields";
 import Link from "next/link";
-import { ArrowLeftIcon, Octagon } from "lucide-react";
+import { ArrowLeft, Octagon } from "lucide-react";
 import { useAccounts } from "./hooks/useAccounts";
 
 export interface TransactionFormProps {
@@ -28,20 +24,15 @@ export interface TransactionFormProps {
   transactionId?: string;
 }
 
-const TransactionForm: React.FC<TransactionFormProps> = ({
-  mode,
-  transactionId,
-}) => {
+const TransactionForm: React.FC<TransactionFormProps> = ({ mode, transactionId }) => {
   const { formRef, getValues } = useForm<any>();
   const [init, setInit] = useState<any>();
   const [type, setType] = useState<any>();
   const [selected, setSelected] = useState<any>();
   const { accounts, loading, error } = useAccounts();
 
-  const [createMutation, { loading: createLoading }] =
-    useMutation(CREATE_TRANSACTION);
-  const [updateMutation, { loading: updateLoading }] =
-    useMutation(UPDATE_TRANSACTION);
+  const [createMutation, { loading: createLoading }] = useMutation(CREATE_TRANSACTION);
+  const [updateMutation, { loading: updateLoading }] = useMutation(UPDATE_TRANSACTION);
   const { data, refetch } = useQuery(GET_TRANSACTION, {
     variables: {
       input: {
@@ -56,9 +47,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     try {
       const values = getValues();
       const params =
-        mode === "create"
-          ? { ...values }
-          : transactionId && { ...values, id: +transactionId };
+        mode === "create" ? { ...values } : transactionId && { ...values, id: +transactionId };
 
       const res =
         mode === "create"
@@ -101,31 +90,23 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
   return (
     <>
-      <div className={classNames(styles["transaction-form-wrapper"])}>
-        <div className={classNames(styles["transaction-form-wrapper-header"])}>
-          <div className={classNames(styles["header-title-wrapper"])}>
-            <Octagon className={classNames(styles["icon"])} />
-            <span className={classNames(styles["title"])}>
-              {"Create Transaction"}
-            </span>
-          </div>
-          <Button>
-            <Link className={styles.link} href="/transaction">
-              <ArrowLeftIcon className={classNames(styles["icon"])} />
-            </Link>
-          </Button>
-        </div>
+      <Card.Header
+        icon={Octagon}
+        title={mode === "create" ? "Create Transaction" : "Edit Transaction"}
+        buttons={
+          <Link href="/transaction">
+            <ArrowLeft size={20} />
+          </Link>
+        }
+      />
+      <Card.Body>
         <Form ref={formRef} onSubmit={handleSubmit}>
           <Form.Item label="금액">
             <Input name="amount" type="number" value={init && init.amount} />
           </Form.Item>
 
           <Form.Item label="거래자">
-            <Input
-              name="depositor"
-              type="text"
-              value={init && init.depositor}
-            />
+            <Input name="depositor" type="text" value={init && init.depositor} />
           </Form.Item>
 
           <Form.Item label="거래 유형" name="type">
@@ -137,7 +118,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           </Form.Item>
 
           {selected === "TRANSFER" ? (
-            <div className="myTransfer">
+            <div className={styles.transferGroup}>
               <Form.Item label="보낼 계좌" name="fromAccountId">
                 <Select name="fromAccountId" value={init?.fromAccountId}>
                   {ACCOUNTS.map(({ value, label }) => (
@@ -218,26 +199,19 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             <Textarea name="description" value={init && init.description} />
           </Form.Item>
 
-          <div style={{ width: "100%", textAlign: "right" }}>
+          <div className={styles.formActions}>
             {createLoading || updateLoading ? (
-              <>
-                <div style={{ width: "100%", textAlign: "center" }}>
-                  <LoadingSpinner />
-                </div>
-              </>
+              <div className={styles.loadingWrapper}>
+                <LoadingSpinner />
+              </div>
             ) : (
-              <>
-                <Button
-                  className={styles[`transaction-submit-button`]}
-                  type="submit"
-                >
-                  Submit
-                </Button>
-              </>
+              <button className={styles.submitButton} type="submit">
+                {mode === "create" ? "등록하기" : "수정하기"}
+              </button>
             )}
           </div>
         </Form>
-      </div>
+      </Card.Body>
     </>
   );
 };

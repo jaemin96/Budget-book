@@ -9,7 +9,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) => {
-          // 쿠키에 token이 존재하면 반환
           return req?.cookies?.token || null;
         },
       ]),
