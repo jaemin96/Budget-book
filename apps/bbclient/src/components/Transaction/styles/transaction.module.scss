@@ -187,6 +187,160 @@
   }
 }
 
+// Header Toggle Button (효과 없음 - 심플)
+.headerToggleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: inherit;
+
+  svg {
+    transition: all 0.2s ease;
+  }
+}
+
+.headerToggleButtonActive {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: inherit;
+
+  svg {
+    transition: all 0.2s ease;
+  }
+}
+
+// Quick Actions Styles
+.quickActionsContainer {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid $budget-divider-gray;
+}
+
+.quickActionsContent {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.quickActionsGroup {
+  margin-bottom: 1rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.groupLabel {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: $budget-dark-gray;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.quickActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.presetButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  background: rgba($budget-white, 0.03);
+  border: 1px solid $budget-divider-gray;
+  border-radius: 10px;
+  color: $budget-white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba($budget-carrot, 0.12);
+    border-color: rgba($budget-carrot, 0.3);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  .presetEmoji {
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  .presetName {
+    white-space: nowrap;
+  }
+}
+
+// Error Message Styles (for KakaoPayPresetForm)
+.errorMessage {
+  padding: 0.875rem 1rem;
+  background: rgba($budget-danger, 0.1);
+  border: 1px solid rgba($budget-danger, 0.3);
+  border-radius: 10px;
+  margin-bottom: 1rem;
+
+  p {
+    color: $budget-danger;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .errorAction {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: $budget-danger;
+    color: $budget-white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba($budget-danger, 0.85);
+    }
+  }
+}
+
+.loadingMessage {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: $budget-gray;
+  text-align: center;
+}
+
 // Transaction Form Styles
 .formActions {
   display: flex;
@@ -418,6 +572,35 @@
 
 /* 모바일 전용 스타일 */
 @media (max-width: 768px) {
+  .headerToggleButton,
+  .headerToggleButtonActive {
+    width: 32px;
+    height: 32px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .quickActionsContainer {
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.875rem;
+  }
+
+  .groupLabel {
+    font-size: 0.8rem;
+  }
+
+  .presetButton {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.825rem;
+
+    .presetEmoji {
+      font-size: 1rem;
+    }
+  }
+
   .formActions {
     margin-top: 0.25rem;
   }
