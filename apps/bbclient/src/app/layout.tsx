@@ -18,6 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Budget Book",
   description: "Manage my transaction and assets",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
