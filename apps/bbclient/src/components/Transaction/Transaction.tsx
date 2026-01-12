@@ -5,7 +5,7 @@ import styles from "./styles/transaction.module.scss";
 import { useQuery } from "@apollo/client";
 import { GET_TRANSACTION_LIST } from "@/graphql/queries/Transaction";
 import Link from "next/link";
-import { Octagon, Plus, ReceiptText } from "lucide-react";
+import { Home, Octagon, Plus, ReceiptText } from "lucide-react";
 import { Transaction as TransactionModel } from "@/model/transaction.model";
 import { categoryIcons } from "@/constants/icons/transaction.icons";
 import { TransactionCategoryLabels } from "@/constants/enum/transaction.enum";
@@ -90,9 +90,7 @@ const Transaction: React.FC<TransactionProps> = () => {
       return (
         <div className={styles.emptyState}>
           <ReceiptText className={styles.emptyIcon} />
-          <span className={styles.emptyText}>
-            거래 내역을 불러오는 중 오류가 발생했습니다.
-          </span>
+          <span className={styles.emptyText}>거래 내역을 불러오는 중 오류가 발생했습니다.</span>
         </div>
       );
     }
@@ -130,12 +128,7 @@ const Transaction: React.FC<TransactionProps> = () => {
                   </span>
                 </div>
                 <div className={styles.itemRight}>
-                  <span
-                    className={classNames(
-                      styles.itemAmount,
-                      getAmountClass(transaction.type)
-                    )}
-                  >
+                  <span className={classNames(styles.itemAmount, getAmountClass(transaction.type))}>
                     {formatAmount(transaction)}
                   </span>
                   <span className={styles.itemTime}>{relativeTime}</span>
@@ -154,14 +147,17 @@ const Transaction: React.FC<TransactionProps> = () => {
         icon={Octagon}
         title="Transactions"
         buttons={
-          <Link href="/transaction/create">
-            <Plus size={20} />
-          </Link>
+          <>
+            <Link href="/">
+              <Home size={20} />
+            </Link>
+            <Link href="/transaction/create">
+              <Plus size={20} />
+            </Link>
+          </>
         }
       />
-      <Card.Body>
-        {renderContent()}
-      </Card.Body>
+      <Card.Body>{renderContent()}</Card.Body>
     </>
   );
 };
