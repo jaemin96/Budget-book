@@ -15,3 +15,8 @@ export const ACCOUNT_FIELDS = [
   { value: "investmentBalance", label: "예금" },
   { value: "fixedDepositBalance", label: "투자" },
 ];
+
+export const KAKAOPAY_ACCOUNT_ID = 8;
+
+export const getNonKakaoPayAccounts = () =>
+  ACCOUNTS.filter((account) => account.value !== KAKAOPAY_ACCOUNT_ID);
