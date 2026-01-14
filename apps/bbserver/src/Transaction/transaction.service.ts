@@ -57,24 +57,29 @@ export class TransactionService {
 
       // 1️⃣ 계좌 간 이체 처리
       if (type === "TRANSFER") {
-        const updates: { accountId: number; change: number }[] = [];
+        const updates: { accountId: number; change: number; isTarget: boolean }[] = [];
 
-        if (fromAccountId) updates.push({ accountId: fromAccountId, change: -amount });
-        if (toAccountId) updates.push({ accountId: toAccountId, change: amount });
+        if (fromAccountId) updates.push({ accountId: fromAccountId, change: -amount, isTarget: false });
+        if (toAccountId) updates.push({ accountId: toAccountId, change: amount, isTarget: true });
 
-        for (const { accountId, change } of updates) {
+        // 카테고리에 따른 타겟 필드 결정
+        let targetField: string | undefined;
+        if (category === "SAVINGS" || category === "EMERGENCY_FUND") {
+          targetField = "savingBalance";
+        } else if (category === "INVESTMENT") {
+          targetField = "investmentBalance";
+        }
+
+        for (const { accountId, change, isTarget } of updates) {
           const updateData: Record<string, any> = {
             totalBalance: { increment: change },
+            availableBalance: { increment: change },
           };
 
-          // 적금, 예금 뭐 이런거 관리할 때 고도화
-          // if (accountField) {
-          //   updateData[accountField] = { increment: change };
-          // } else {
-          //   updateData['availableBalance'] = { increment: change };
-          // }
-
-          updateData["availableBalance"] = { increment: change };
+          // 받는 계좌이고 특수 카테고리인 경우 해당 필드도 증가
+          if (isTarget && targetField) {
+            updateData[targetField] = { increment: change };
+          }
 
           await prisma.account.update({
             where: { id: accountId },
@@ -107,8 +112,21 @@ export class TransactionService {
           }
         }
 
+        // accountField가 명시적으로 제공된 경우에만 사용
         if (accountField) {
           updateData[accountField] = { increment: change };
+        }
+
+        // 먼저 해당 계좌가 이 사용자의 것인지 확인
+        const account = await prisma.account.findFirst({
+          where: { userId, id: accountId },
+        });
+
+        if (!account) {
+          throw new HttpException(
+            `Account with id ${accountId} not found for user ${userId}`,
+            HttpStatus.NOT_FOUND,
+          );
         }
 
         await prisma.account.update({

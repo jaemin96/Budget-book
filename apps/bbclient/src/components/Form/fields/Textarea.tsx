@@ -2,19 +2,15 @@
 
 import styles from "./styles/textarea.module.scss";
 import classNames from "classnames";
-import { BaseProps } from "../../../common/types";
 
-export interface TextareaProps extends BaseProps {
-  name: string;
-  value?: string;
+export interface TextareaProps extends Omit<
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+  "className"
+> {
+  className?: string;
 }
 
-const Textarea: React.FC<TextareaProps> = ({
-  name,
-  value,
-  className,
-  ...props
-}) => {
+const Textarea: React.FC<TextareaProps> = ({ name, value, className, ...props }) => {
   return (
     <>
       <textarea

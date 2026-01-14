@@ -19,6 +19,7 @@ const RecentTransactions: React.FC = () => {
         size: 5,
       },
     },
+    fetchPolicy: "cache-and-network",
     context: {
       fetchOptions: {
         credentials: "include",

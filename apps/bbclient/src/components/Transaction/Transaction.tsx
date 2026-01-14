@@ -144,12 +144,15 @@ const Transaction: React.FC<TransactionProps> = () => {
   return (
     <>
       <Card.Header
-        icon={Octagon}
+        icon={<Octagon />}
         title="Transactions"
         buttons={
           <>
             <Link href="/">
               <Home size={20} />
+            </Link>
+            <Link href="/transaction/preset/kakaopay-expense" title="카카오페이 간편입력">
+              <span className={styles.kIcon}>K</span>
             </Link>
             <Link href="/transaction/create">
               <Plus size={20} />

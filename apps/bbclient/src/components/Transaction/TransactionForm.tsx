@@ -4,20 +4,28 @@ import { useEffect, useState } from "react";
 import styles from "./styles/transaction.module.scss";
 import {
   // ACCOUNT_FIELDS,
-  ACCOUNTS,
   CATEGORY_OPTIONS,
   PAYMENT_OPTIONS,
+  getCategoriesByType,
+  getPaymentsByAccount,
 } from "@/constants/data";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_TRANSACTION, UPDATE_TRANSACTION } from "@/graphql/mutations/Transaction";
-import { GET_TRANSACTION } from "@/graphql/queries/Transaction";
+import { GET_TRANSACTION, GET_TRANSACTION_LIST } from "@/graphql/queries/Transaction";
+import { GET_AMOUNT_SUMMARY } from "@/graphql/queries/Account";
 import LoadingSpinner from "@/components/Loading/Spinner";
 import { Form, useForm, Input, Card } from "@/components";
 import { FormMode } from "@/common/types";
 import { RadioGroup, Radio, Select, Textarea } from "../Form/fields";
 import Link from "next/link";
-import { ArrowLeft, Octagon } from "lucide-react";
+import { ArrowLeft, Zap, Octagon } from "lucide-react";
 import { useAccounts } from "./hooks/useAccounts";
+import {
+  TRANSACTION_PRESETS,
+  PRESET_CATEGORIES,
+  getPresetsByCategory,
+  TransactionPreset,
+} from "@/constants/presets/transaction.presets";
 
 export interface TransactionFormProps {
   mode: FormMode;
@@ -29,11 +37,22 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ mode, transactionId }
   const [init, setInit] = useState<any>();
   const [type, setType] = useState<any>();
   const [selected, setSelected] = useState<any>();
+  const [showQuickActions, setShowQuickActions] = useState<boolean>(false);
+  const [selectedAccountId, setSelectedAccountId] = useState<number | null>(null);
   const { accounts, loading, error } = useAccounts();
+
+  // 선택된 계좌 정보
+  const selectedAccount = accounts.find((acc) => acc.value === selectedAccountId);
+
+  // 동적으로 필터링된 카테고리와 결제수단
+  const filteredCategories = getCategoriesByType(selected);
+  const filteredPayments = getPaymentsByAccount(selectedAccount?.bankName);
 
   const [createMutation, { loading: createLoading }] = useMutation(CREATE_TRANSACTION);
   const [updateMutation, { loading: updateLoading }] = useMutation(UPDATE_TRANSACTION);
+
   const { data, refetch } = useQuery(GET_TRANSACTION, {
+    skip: mode === "create" || !transactionId,
     variables: {
       input: {
         id: transactionId,
@@ -46,6 +65,16 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ mode, transactionId }
 
     try {
       const values = getValues();
+
+      // TRANSFER인 경우 depositor 자동 생성
+      if (values.type === "TRANSFER" && values.fromAccountId && values.toAccountId) {
+        const fromAccount = accounts.find((acc) => acc.value === Number(values.fromAccountId));
+        const toAccount = accounts.find((acc) => acc.value === Number(values.toAccountId));
+        if (fromAccount && toAccount) {
+          values.depositor = `${fromAccount.label} → ${toAccount.label}`;
+        }
+      }
+
       const params =
         mode === "create" ? { ...values } : transactionId && { ...values, id: +transactionId };
 
@@ -55,11 +84,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ mode, transactionId }
               variables: {
                 input: { ...params },
               },
+              refetchQueries: ["GetTransactionList", "GetAmountSummary"],
+              awaitRefetchQueries: true,
             })
           : await updateMutation({
               variables: {
                 input: { ...params },
               },
+              refetchQueries: ["GetTransactionList", "GetAmountSummary"],
+              awaitRefetchQueries: true,
             });
 
       if (res && res?.data?.createTransaction?.id) {
@@ -86,27 +119,159 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ mode, transactionId }
     const { transaction } = data?.getTransaction;
     setInit(transaction);
     setType(transaction?.type);
+    setSelected(transaction?.type);
+
+    // 계좌 ID 설정
+    if (transaction?.type === "INCOME" && transaction?.toAccountId) {
+      setSelectedAccountId(transaction.toAccountId);
+    } else if (transaction?.type === "EXPENSE" && transaction?.fromAccountId) {
+      setSelectedAccountId(transaction.fromAccountId);
+    } else {
+      setSelectedAccountId(null);
+    }
   }, [data]);
+
+  // 거래 타입이 변경될 때 계좌 선택 초기화 (create 모드일 때만)
+  useEffect(() => {
+    if (mode === "create" && selected && selected !== type) {
+      setSelectedAccountId(null);
+      setType(selected);
+    }
+  }, [selected, mode]);
+
+  const handlePresetClick = (preset: TransactionPreset) => {
+    // 폼 완전 초기화
+    formRef?.current?.reset();
+
+    // 프리셋 값으로 폼 채우기
+    const presetData: any = {
+      amount: preset.amount || "",
+      depositor: preset.depositor || "",
+      category: preset.category,
+      paymentType: preset.paymentType || "",
+      description: preset.description || "",
+      type: preset.type,
+    };
+
+    // TRANSFER인 경우
+    if (preset.type === "TRANSFER") {
+      presetData.fromAccountId = preset.fromAccountId || "";
+      presetData.toAccountId = preset.toAccountId || "";
+      setSelectedAccountId(null); // TRANSFER는 계좌 선택 안함
+    } else {
+      // INCOME or EXPENSE
+      presetData.accountId = ""; // 사용자가 선택
+      setSelectedAccountId(null); // 초기화
+    }
+
+    setInit(presetData);
+    setType(preset.type);
+    setSelected(preset.type);
+  };
 
   return (
     <>
       <Card.Header
-        icon={Octagon}
+        icon={<Octagon />}
         title={mode === "create" ? "Create Transaction" : "Edit Transaction"}
         buttons={
-          <Link href="/transaction">
-            <ArrowLeft size={20} />
-          </Link>
+          <>
+            {mode === "create" && (
+              <button
+                type="button"
+                className={
+                  showQuickActions ? styles.headerToggleButtonActive : styles.headerToggleButton
+                }
+                onClick={() => setShowQuickActions(!showQuickActions)}
+                title={showQuickActions ? "빠른 입력 닫기" : "빠른 입력 열기"}
+              >
+                <Zap size={20} />
+              </button>
+            )}
+            <Link href="/transaction">
+              <ArrowLeft size={20} />
+            </Link>
+          </>
         }
       />
       <Card.Body>
+        {mode === "create" && showQuickActions && (
+          <div className={styles.quickActionsContainer}>
+            <div className={styles.quickActionsContent}>
+              <div className={styles.quickActionsGroup}>
+                <span className={styles.groupLabel}>{PRESET_CATEGORIES.INCOME}</span>
+                <div className={styles.quickActions}>
+                  {getPresetsByCategory("INCOME").map((preset) => (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      className={styles.presetButton}
+                      onClick={() => handlePresetClick(preset)}
+                    >
+                      <span className={styles.presetEmoji}>{preset.emoji}</span>
+                      <span className={styles.presetName}>{preset.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className={styles.quickActionsGroup}>
+                <span className={styles.groupLabel}>{PRESET_CATEGORIES.FIXED_EXPENSE}</span>
+                <div className={styles.quickActions}>
+                  {getPresetsByCategory("FIXED_EXPENSE").map((preset) => (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      className={styles.presetButton}
+                      onClick={() => handlePresetClick(preset)}
+                    >
+                      <span className={styles.presetEmoji}>{preset.emoji}</span>
+                      <span className={styles.presetName}>{preset.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className={styles.quickActionsGroup}>
+                <span className={styles.groupLabel}>{PRESET_CATEGORIES.FREQUENT}</span>
+                <div className={styles.quickActions}>
+                  {getPresetsByCategory("FREQUENT").map((preset) => (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      className={styles.presetButton}
+                      onClick={() => handlePresetClick(preset)}
+                    >
+                      <span className={styles.presetEmoji}>{preset.emoji}</span>
+                      <span className={styles.presetName}>{preset.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className={styles.quickActionsGroup}>
+                <span className={styles.groupLabel}>{PRESET_CATEGORIES.TRANSFER}</span>
+                <div className={styles.quickActions}>
+                  {getPresetsByCategory("TRANSFER").map((preset) => (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      className={styles.presetButton}
+                      onClick={() => handlePresetClick(preset)}
+                    >
+                      <span className={styles.presetEmoji}>{preset.emoji}</span>
+                      <span className={styles.presetName}>{preset.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <Form ref={formRef} onSubmit={handleSubmit}>
           <Form.Item label="금액">
-            <Input name="amount" type="number" value={init && init.amount} />
-          </Form.Item>
-
-          <Form.Item label="거래자">
-            <Input name="depositor" type="text" value={init && init.depositor} />
+            <Input name="amount" type="number" defaultValue={init && init.amount} />
           </Form.Item>
 
           <Form.Item label="거래 유형" name="type">
@@ -117,11 +282,25 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ mode, transactionId }
             </RadioGroup>
           </Form.Item>
 
+          {selected !== "TRANSFER" && (
+            <Form.Item
+              label={
+                selected === "INCOME"
+                  ? "출처 (누구에게 받았나요?)"
+                  : selected === "EXPENSE"
+                    ? "사용 (어디에 지불했나요?)"
+                    : "거래자"
+              }
+            >
+              <Input name="depositor" type="text" defaultValue={init && init.depositor} />
+            </Form.Item>
+          )}
+
           {selected === "TRANSFER" ? (
             <div className={styles.transferGroup}>
               <Form.Item label="보낼 계좌" name="fromAccountId">
-                <Select name="fromAccountId" value={init?.fromAccountId}>
-                  {ACCOUNTS.map(({ value, label }) => (
+                <Select name="fromAccountId" value={init?.fromAccountId} onChange={() => {}}>
+                  {accounts.map(({ value, label }) => (
                     <Select.Option key={value} value={value}>
                       {label}
                     </Select.Option>
@@ -130,8 +309,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ mode, transactionId }
               </Form.Item>
 
               <Form.Item label="받을 계좌" name="toAccountId">
-                <Select name="toAccountId" value={init?.toAccountId}>
-                  {ACCOUNTS.map(({ value, label }) => (
+                <Select name="toAccountId" value={init?.toAccountId} onChange={() => {}}>
+                  {accounts?.map(({ value, label }) => (
                     <Select.Option key={value} value={value}>
                       {label}
                     </Select.Option>
@@ -141,8 +320,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ mode, transactionId }
             </div>
           ) : selected === "INCOME" ? (
             <Form.Item label="수령 계좌" name="accountId">
-              <Select name="accountId" value={init?.toAccountId}>
-                {ACCOUNTS.map(({ value, label }) => (
+              <Select
+                name="accountId"
+                value={init?.toAccountId}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setSelectedAccountId(value ? Number(value) : null);
+                }}
+              >
+                {accounts.map(({ value, label }) => (
                   <Select.Option key={value} value={value}>
                     {label}
                   </Select.Option>
@@ -151,8 +337,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ mode, transactionId }
             </Form.Item>
           ) : (
             <Form.Item label="사용 계좌" name="accountId">
-              <Select name="accountId" value={init?.fromAccountId}>
-                {ACCOUNTS.map(({ value, label }) => (
+              <Select
+                name="accountId"
+                value={init?.fromAccountId}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setSelectedAccountId(value ? Number(value) : null);
+                }}
+              >
+                {accounts.map(({ value, label }) => (
                   <Select.Option key={value} value={value}>
                     {label}
                   </Select.Option>
@@ -177,7 +370,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ mode, transactionId }
 
           <Form.Item label="거래 분류" name="category">
             <Select name="category" value={init?.category}>
-              {CATEGORY_OPTIONS.map(({ value, label }) => (
+              {filteredCategories.map(({ value, label }) => (
                 <Select.Option key={value} value={value}>
                   {label}
                 </Select.Option>
@@ -186,8 +379,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ mode, transactionId }
           </Form.Item>
 
           <Form.Item label="거래 수단" name="paymentType">
-            <Select name="paymentType" value={init?.paymentType}>
-              {PAYMENT_OPTIONS.map(({ value, label }) => (
+            <Select name="paymentType" value={init?.paymentType} onChange={() => {}}>
+              {filteredPayments.map(({ value, label }) => (
                 <Select.Option key={value} value={value}>
                   {label}
                 </Select.Option>
@@ -196,7 +389,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ mode, transactionId }
           </Form.Item>
 
           <Form.Item label="거래 설명" name="description">
-            <Textarea name="description" value={init && init.description} />
+            <Textarea name="description" defaultValue={init && init.description} />
           </Form.Item>
 
           <div className={styles.formActions}>
