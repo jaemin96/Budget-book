@@ -5,7 +5,7 @@ import styles from "./styles/transaction.module.scss";
 import { useQuery } from "@apollo/client";
 import { GET_TRANSACTION_LIST } from "@/graphql/queries/Transaction";
 import Link from "next/link";
-import { Home, Octagon, Plus, ReceiptText, Zap } from "lucide-react";
+import { Home, Octagon, Plus, ReceiptText } from "lucide-react";
 import { Transaction as TransactionModel } from "@/model/transaction.model";
 import { categoryIcons } from "@/constants/icons/transaction.icons";
 import { TransactionCategoryLabels } from "@/constants/enum/transaction.enum";
@@ -144,7 +144,7 @@ const Transaction: React.FC<TransactionProps> = () => {
   return (
     <>
       <Card.Header
-        icon={Octagon}
+        icon={<Octagon />}
         title="Transactions"
         buttons={
           <>
@@ -152,7 +152,7 @@ const Transaction: React.FC<TransactionProps> = () => {
               <Home size={20} />
             </Link>
             <Link href="/transaction/preset/kakaopay-expense" title="카카오페이 간편입력">
-              <Zap size={20} />
+              <span className={styles.kIcon}>K</span>
             </Link>
             <Link href="/transaction/create">
               <Plus size={20} />

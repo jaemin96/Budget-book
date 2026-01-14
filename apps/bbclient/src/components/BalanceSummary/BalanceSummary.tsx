@@ -14,6 +14,7 @@ const BalanceSummary: React.FC = () => {
     variables: {
       input: {},
     },
+    fetchPolicy: "cache-and-network",
     context: {
       fetchOptions: {
         credentials: "include",

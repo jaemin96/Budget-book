@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import styles from "./styles/transaction.module.scss";
-import { getNonKakaoPayAccounts, KAKAOPAY_ACCOUNT_ID } from "@/constants/data/account.data";
+import { getNonKakaoPayAccounts, findKakaoPayAccountId } from "@/constants/data/account.data";
 import { CATEGORY_OPTIONS } from "@/constants/data";
 import { useMutation } from "@apollo/client";
 import { CREATE_TRANSACTION } from "@/graphql/mutations/Transaction";
@@ -10,14 +10,16 @@ import LoadingSpinner from "@/components/Loading/Spinner";
 import { Form, useForm, Input, Card } from "@/components";
 import { Select, Textarea } from "../Form/fields";
 import Link from "next/link";
-import { ArrowLeft, Zap } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useAccounts } from "./hooks/useAccounts";
 
 type TransactionStep = "idle" | "transferring" | "recording-expense" | "success" | "error";
 
 const KakaoPayPresetForm: React.FC = () => {
   const { formRef, getValues } = useForm<any>();
   const router = useRouter();
+  const { accounts } = useAccounts();
   const [transactionState, setTransactionState] = useState<{
     step: TransactionStep;
     error: string | null;
@@ -27,6 +29,12 @@ const KakaoPayPresetForm: React.FC = () => {
   });
 
   const [createMutation, { loading }] = useMutation(CREATE_TRANSACTION);
+
+  // 동적으로 카카오페이 계좌 ID 찾기
+  const kakaoPayAccountId = useMemo(() => findKakaoPayAccountId(accounts), [accounts]);
+
+  // 카카오페이 제외한 계좌 목록
+  const nonKakaoPayAccounts = useMemo(() => getNonKakaoPayAccounts(accounts), [accounts]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,6 +82,14 @@ const KakaoPayPresetForm: React.FC = () => {
       return;
     }
 
+    if (!kakaoPayAccountId) {
+      setTransactionState({
+        step: "error",
+        error: "카카오페이 계좌를 찾을 수 없습니다.",
+      });
+      return;
+    }
+
     try {
       // Step 1: 충전 거래 생성 (TRANSFER)
       setTransactionState({ step: "transferring", error: null });
@@ -84,7 +100,7 @@ const KakaoPayPresetForm: React.FC = () => {
             type: "TRANSFER",
             amount: Number(values.rechargeAmount),
             fromAccountId: Number(values.fromAccountId),
-            toAccountId: KAKAOPAY_ACCOUNT_ID,
+            toAccountId: kakaoPayAccountId,
             category: "RECHARGE",
             depositor: "카카오페이",
             description: `카카오페이 자동충전 - ${values.depositor} (지출: ${Number(values.expenseAmount).toLocaleString()}원)`,
@@ -105,10 +121,11 @@ const KakaoPayPresetForm: React.FC = () => {
           input: {
             type: "EXPENSE",
             amount: Number(values.expenseAmount),
-            accountId: KAKAOPAY_ACCOUNT_ID,
+            accountId: kakaoPayAccountId,
             depositor: values.depositor,
             category: values.category,
-            description: values.description || `자동충전: ${Number(values.rechargeAmount).toLocaleString()}원`,
+            description:
+              values.description || `자동충전: ${Number(values.rechargeAmount).toLocaleString()}원`,
             paymentType: "KAKAO_PAY",
           },
         },
@@ -146,25 +163,28 @@ const KakaoPayPresetForm: React.FC = () => {
     return null;
   };
 
-  const nonKakaoPayAccounts = getNonKakaoPayAccounts();
-
   // 지출 관련 카테고리만 필터링 (충전, 급여, 저축 등 제외)
   const expenseCategories = CATEGORY_OPTIONS.filter(
     (option) =>
-      ![
-        "RECHARGE",
-        "SALARY",
-        "SAVINGS",
-        "EMERGENCY_FUND",
-        "INVESTMENT",
-        "LOAN_REPAYMENT",
-      ].includes(option.value)
+      !["RECHARGE", "SALARY", "SAVINGS", "EMERGENCY_FUND", "INVESTMENT", "LOAN_REPAYMENT"].includes(
+        option.value,
+      ),
   );
 
   return (
     <>
       <Card.Header
-        icon={Zap}
+        icon={
+          <span
+            style={{
+              fontSize: "20px",
+              fontWeight: 700,
+              userSelect: "none",
+            }}
+          >
+            K
+          </span>
+        }
         title="카카오페이 간편 지출"
         buttons={
           <Link href="/transaction">
@@ -225,7 +245,9 @@ const KakaoPayPresetForm: React.FC = () => {
           </Form.Item>
 
           <div className={styles.formActions}>
-            {loading || transactionState.step === "transferring" || transactionState.step === "recording-expense" ? (
+            {loading ||
+            transactionState.step === "transferring" ||
+            transactionState.step === "recording-expense" ? (
               <div className={styles.loadingWrapper}>
                 <LoadingSpinner />
                 {getLoadingMessage() && (

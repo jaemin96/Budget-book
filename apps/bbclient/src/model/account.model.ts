@@ -16,6 +16,9 @@ export type Account = {
   totalBalance: number;
 };
 
+/**
+ * @deprecated 하드코딩된 계좌 ID 타입입니다. 동적 계좌 시스템을 사용하세요.
+ */
 export type AccountValue = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 export enum AccountBalanceField {
@@ -26,6 +29,9 @@ export enum AccountBalanceField {
   HOLD = "holdBalance",
 }
 
+/**
+ * @deprecated 하드코딩된 계좌 ID와 은행명 매핑입니다. useAccounts 훅에서 반환하는 동적 accountMap을 사용하세요.
+ */
 export enum AccountBank {
   "농협은행(NH)" = 1,
   "기업은행(IBK)" = 2,

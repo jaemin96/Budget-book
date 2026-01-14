@@ -187,6 +187,22 @@
   }
 }
 
+// K Initial Icon
+.kIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  user-select: none;
+  pointer-events: none;
+  color: inherit;
+  letter-spacing: -0.5px;
+}
+
 // Header Toggle Button (효과 없음 - 심플)
 .headerToggleButton {
   display: flex;
