@@ -14,7 +14,6 @@ on:
 env:
   NODE_ENV: production
   NODE_VERSION: 22
-  PNPM_VERSION: 10
 
 jobs:
   check-changes:
@@ -64,8 +63,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
 
       - name: Install dependencies (filtered)
         run: pnpm install
@@ -99,8 +96,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
 
       - run: pnpm install --frozen-lockfile
       - name: Lint bbserver
@@ -129,8 +124,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
 
       - run: pnpm install --frozen-lockfile
 
@@ -148,14 +141,7 @@ jobs:
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
         working-directory: apps/bbserver
 
-      - name: Migrate database (optional, if needed)
-        run: pnpm prisma migrate deploy
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.DIRECT_URL }}
-        working-directory: apps/bbserver
-
-      # All pass - build
+      # Build should validate compilation only. Database migrations belong in deploy/release workflows.
       - name: Build bbserver
         run: pnpm build
         working-directory: apps/bbserver

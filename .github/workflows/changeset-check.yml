@@ -1,0 +1,40 @@
+name: Changeset Check
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  changeset-check:
+    name: Changeset Required
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect release-related changes
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            release_files:
+              - 'apps/**'
+              - 'packages/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+            changeset_files:
+              - '.changeset/*.md'
+              - '!.changeset/README.md'
+
+      - name: Require changeset for app/package changes
+        if: steps.filter.outputs.release_files == 'true' && steps.filter.outputs.changeset_files != 'true'
+        run: |
+          echo "A changeset file is required for changes under apps/** or packages/**."
+          echo "Run 'pnpm changeset:add' and commit the generated .changeset/*.md file."
+          exit 1
