@@ -6,8 +6,12 @@
   "scripts": {
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
+    "build:ci": "pnpm build",
     "lint": "turbo run lint",
+    "lint:ci": "pnpm lint",
     "lint:fix": "turbo run lint -- --fix",
+    "test": "turbo run test",
+    "test:ci": "pnpm --filter bbserver exec jest --runInBand",
     "format": "turbo run format",
     "graph:turbo": "node dot/scripts/gen-turbo-graph.js",
     "graph:merge": "node dot/scripts/merge-graph.js",
