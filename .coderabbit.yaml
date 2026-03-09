@@ -1,0 +1,64 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "ko-KR"
+enable_free_tier: true
+tone_instructions: "Keep reviews concise, pragmatic, and focused on bugs, regressions, security issues, and missing tests."
+
+reviews:
+  profile: "chill"
+  high_level_summary: true
+  poem: false
+  review_status: true
+  request_changes_workflow: false
+  collapse_walkthrough: false
+  suggested_labels: false
+  suggested_reviewers: false
+  sequence_diagrams: false
+  related_issues: false
+  related_prs: false
+  path_filters:
+    - "apps/**"
+    - "packages/**"
+    - ".github/workflows/**"
+    - "package.json"
+    - "pnpm-lock.yaml"
+    - "pnpm-workspace.yaml"
+    - "turbo.json"
+    - "!**/*.md"
+    - "!.changeset/README.md"
+    - "!**/*.svg"
+    - "!**/*.png"
+    - "!**/*.jpg"
+    - "!**/*.jpeg"
+    - "!**/*.gif"
+    - "!**/*.sql"
+    - "!apps/bbserver/src/schema.gql"
+  path_instructions:
+    - path: "apps/bbclient/**"
+      instructions: "Focus on Next.js routing, React state safety, GraphQL client usage, and browser-side regressions."
+    - path: "apps/bbserver/**"
+      instructions: "Focus on NestJS resolver/service boundaries, auth and Prisma-related risks, runtime exceptions, and test coverage gaps."
+    - path: ".github/workflows/**"
+      instructions: "Focus on CI correctness, required checks, secret usage, caching, and branch trigger safety."
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: false
+    base_branches:
+      - "main"
+      - "dev"
+    ignore_title_keywords:
+      - "WIP"
+      - "[skip review]"
+  finishing_touches:
+    docstrings:
+      enabled: false
+    unit_tests:
+      enabled: true
+  tools:
+    github-checks:
+      enabled: true
+    gitleaks:
+      enabled: true
+
+chat:
+  auto_reply: true
