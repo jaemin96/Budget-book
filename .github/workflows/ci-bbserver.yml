@@ -141,14 +141,7 @@ jobs:
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
         working-directory: apps/bbserver
 
-      - name: Migrate database (optional, if needed)
-        run: pnpm prisma migrate deploy
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.DIRECT_URL }}
-        working-directory: apps/bbserver
-
-      # All pass - build
+      # Build should validate compilation only. Database migrations belong in deploy/release workflows.
       - name: Build bbserver
         run: pnpm build
         working-directory: apps/bbserver
