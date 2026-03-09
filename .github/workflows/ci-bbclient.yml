@@ -13,7 +13,6 @@ on:
 env:
   NODE_ENV: production
   NODE_VERSION: 22
-  PNPM_VERSION: 10
 
 jobs:
   check-changes:
@@ -63,8 +62,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
 
       - name: Install dependencies (filtered)
         run: pnpm install
@@ -98,8 +95,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
 
       - run: pnpm install --frozen-lockfile
       - name: Lint bbclient
@@ -128,8 +123,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
 
       - run: pnpm install --frozen-lockfile
       - name: Build bbclient
