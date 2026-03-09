@@ -4,6 +4,8 @@
   "private": true,
   "packageManager": "pnpm@10.17.1",
   "scripts": {
+    "changeset": "changeset",
+    "changeset:add": "changeset add",
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
     "build:ci": "pnpm build",
@@ -12,6 +14,7 @@
     "lint:fix": "turbo run lint -- --fix",
     "test": "turbo run test",
     "test:ci": "pnpm --filter bbserver exec jest --runInBand",
+    "version-packages": "changeset version",
     "format": "turbo run format",
     "graph:turbo": "node dot/scripts/gen-turbo-graph.js",
     "graph:merge": "node dot/scripts/merge-graph.js",
@@ -22,6 +25,7 @@
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.30.0",
     "@types/node": "^24.10.1",
     "@typescript-eslint/eslint-plugin": "^8.8.1",
     "@typescript-eslint/parser": "^8.8.1",
