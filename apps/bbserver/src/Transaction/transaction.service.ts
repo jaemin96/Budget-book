@@ -11,29 +11,151 @@ import {
   UpdateTransactionOutput,
 } from "./dto";
 import { TransactionModel } from "./model";
-import { Prisma } from "@prisma/client";
+import { Prisma, Transaction, TransactionType } from "@prisma/client";
+
+const VALID_ACCOUNT_FIELDS = [
+  "availableBalance",
+  "savingBalance",
+  "investmentBalance",
+  "fixedDepositBalance",
+  "holdBalance",
+] as const;
+
+type TransactionAccountField = (typeof VALID_ACCOUNT_FIELDS)[number];
+
+type TransactionCommandInput = {
+  type?: TransactionType;
+  accountId?: number | null;
+  fromAccountId?: number | null;
+  toAccountId?: number | null;
+  accountField?: string;
+};
+
+type NormalizedTransactionCommand = {
+  type: TransactionType;
+  fromAccountId: number | null;
+  toAccountId: number | null;
+  accountField?: TransactionAccountField;
+};
+
+type AccountUpdateData = Prisma.AccountUpdateInput;
 
 @Injectable()
 export class TransactionService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private isValidAccountField(accountField?: string): accountField is TransactionAccountField {
+    return accountField == null || VALID_ACCOUNT_FIELDS.includes(accountField as TransactionAccountField);
+  }
+
+  private normalizeTransactionCommand(
+    input: TransactionCommandInput,
+    existing?: Pick<Transaction, "type" | "fromAccountId" | "toAccountId">,
+  ): NormalizedTransactionCommand {
+    const type = input.type ?? existing?.type;
+    if (!type) {
+      throw new HttpException("Transaction type is required.", HttpStatus.BAD_REQUEST);
+    }
+
+    if (!this.isValidAccountField(input.accountField)) {
+      throw new HttpException(`Invalid account field: ${input.accountField}`, HttpStatus.BAD_REQUEST);
+    }
+
+    const accountId = input.accountId ?? undefined;
+    const fromAccountId =
+      input.fromAccountId !== undefined ? input.fromAccountId : (existing?.fromAccountId ?? null);
+    const toAccountId =
+      input.toAccountId !== undefined ? input.toAccountId : (existing?.toAccountId ?? null);
+
+    switch (type) {
+      case "INCOME": {
+        if (accountId != null && input.toAccountId != null && input.toAccountId !== accountId) {
+          throw new HttpException(
+            "INCOME cannot receive both accountId and a different toAccountId.",
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+
+        const normalizedToAccountId = accountId ?? toAccountId;
+        if (normalizedToAccountId == null) {
+          throw new HttpException("INCOME requires toAccountId or accountId.", HttpStatus.BAD_REQUEST);
+        }
+
+        if (input.fromAccountId != null) {
+          throw new HttpException("INCOME cannot have fromAccountId.", HttpStatus.BAD_REQUEST);
+        }
+
+        return {
+          type,
+          fromAccountId: null,
+          toAccountId: normalizedToAccountId,
+          accountField: input.accountField as TransactionAccountField | undefined,
+        };
+      }
+
+      case "EXPENSE": {
+        if (accountId != null && input.fromAccountId != null && input.fromAccountId !== accountId) {
+          throw new HttpException(
+            "EXPENSE cannot receive both accountId and a different fromAccountId.",
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+
+        const normalizedFromAccountId = accountId ?? fromAccountId;
+        if (normalizedFromAccountId == null) {
+          throw new HttpException("EXPENSE requires fromAccountId or accountId.", HttpStatus.BAD_REQUEST);
+        }
+
+        if (input.toAccountId != null) {
+          throw new HttpException("EXPENSE cannot have toAccountId.", HttpStatus.BAD_REQUEST);
+        }
+
+        return {
+          type,
+          fromAccountId: normalizedFromAccountId,
+          toAccountId: null,
+          accountField: input.accountField as TransactionAccountField | undefined,
+        };
+      }
+
+      case "TRANSFER": {
+        if (accountId != null) {
+          throw new HttpException("TRANSFER cannot use accountId.", HttpStatus.BAD_REQUEST);
+        }
+
+        if (fromAccountId == null || toAccountId == null) {
+          throw new HttpException(
+            "TRANSFER requires both fromAccountId and toAccountId.",
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+
+        if (fromAccountId === toAccountId) {
+          throw new HttpException(
+            "TRANSFER requires different fromAccountId and toAccountId.",
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+
+        return {
+          type,
+          fromAccountId,
+          toAccountId,
+          accountField: input.accountField as TransactionAccountField | undefined,
+        };
+      }
+    }
+  }
+
   /**
    * 입출금 항목 추가
    */
   async createTransaction(userId: number, input: CreateTransactionInput): Promise<CreateTransactionOutput> {
-    const validFields = [
-      "availableBalance",
-      "savingBalance",
-      "investmentBalance",
-      "fixedDepositBalance",
-      "holdBalance",
-    ];
-
-    const { type, amount, accountField, fromAccountId, toAccountId, paymentType, accountId, category } = input;
-
-    if (accountField && !validFields.includes(accountField)) {
-      throw new Error(`Invalid account field: ${accountField}`);
-    }
+    const normalizedCommand = this.normalizeTransactionCommand(input);
+    const { type, amount, accountField, fromAccountId, toAccountId, paymentType, category } = {
+      ...input,
+      ...normalizedCommand,
+    };
 
     /**
      * $transaction 과 transaction 은 다른 개념 (네이밍 이슈...)
@@ -41,12 +163,12 @@ export class TransactionService {
      * transaction - 거래 관련 테이블명
      */
     const tx = await this.prisma.$transaction(async (prisma) => {
-      const transactionData = { ...input };
+      const transactionData = {
+        ...input,
+        ...normalizedCommand,
+      };
+      delete (transactionData as { id?: number }).id;
       delete transactionData.accountId;
-
-      if ((type === "INCOME" || type === "EXPENSE") && !transactionData.fromAccountId && accountId) {
-        transactionData.fromAccountId = accountId;
-      }
 
       const transaction = await prisma.transaction.create({
         data: {
@@ -71,7 +193,7 @@ export class TransactionService {
         }
 
         for (const { accountId, change, isTarget } of updates) {
-          const updateData: Record<string, any> = {
+          const updateData: AccountUpdateData  = {
             totalBalance: { increment: change },
             availableBalance: { increment: change },
           };
@@ -90,12 +212,15 @@ export class TransactionService {
 
       // 2️⃣ 입금/출금 처리
       else if (type === "INCOME" || type === "EXPENSE") {
-        if (!accountId) throw new Error("accountId is required.");
+        const targetAccountId = type === "INCOME" ? toAccountId : fromAccountId;
+        if (!targetAccountId) {
+          throw new HttpException(`${type} requires a target account.`, HttpStatus.BAD_REQUEST);
+        }
 
         const change = type === "INCOME" ? amount : -amount;
         const isCreditCard = paymentType === "CREDIT_CARD";
 
-        const updateData: Record<string, any> = {
+        const updateData: AccountUpdateData = {
           totalBalance: { increment: change },
         };
 
@@ -119,18 +244,18 @@ export class TransactionService {
 
         // 먼저 해당 계좌가 이 사용자의 것인지 확인
         const account = await prisma.account.findFirst({
-          where: { userId, id: accountId },
+          where: { userId, id: targetAccountId },
         });
 
         if (!account) {
           throw new HttpException(
-            `Account with id ${accountId} not found for user ${userId}`,
+            `Account with id ${targetAccountId} not found for user ${userId}`,
             HttpStatus.NOT_FOUND,
           );
         }
 
         await prisma.account.update({
-          where: { userId, id: accountId },
+          where: { userId, id: targetAccountId },
           data: updateData,
         });
       }
@@ -145,14 +270,29 @@ export class TransactionService {
    * 입출금 항목 수정
    */
   async updateTransaction(userId: number, input: UpdateTransactionInput): Promise<UpdateTransactionOutput> {
+    const existingTransaction = await this.prisma.transaction.findUnique({
+      where: {
+        userId,
+        id: input.id,
+      },
+    });
+
+    if (!existingTransaction) {
+      throw new HttpException(`Transaction with id ${input.id} not found.`, HttpStatus.NOT_FOUND);
+    }
+
+    const normalizedCommand = this.normalizeTransactionCommand(input, existingTransaction);
+    const { accountId: _accountId, ...updateData } = {
+      ...input,
+      ...normalizedCommand,
+    };
+
     const transaction = await this.prisma.transaction.update({
       where: {
         userId,
         id: input.id,
       },
-      data: {
-        ...input,
-      },
+      data: updateData,
     });
 
     return { id: transaction.id };
@@ -241,18 +381,17 @@ export class TransactionService {
    * 계좌 총액 조회
    */
   async getTotalAmount(userId: number): Promise<number> {
-    const result = await this.prisma.$queryRawUnsafe<{ total_balance: number }>(`
+    const result = await this.prisma.$queryRaw<{ total_balance: bigint }[]>`
       SELECT SUM(
         CASE
-          WHEN type = '입금' THEN amount
-          WHEN type = '출금' THEN -amount
+          WHEN type = 'INCOME' THEN amount
+          WHEN type = 'EXPENSE' THEN -amount
           ELSE 0
         END
       ) AS total_balance
       FROM "Transaction"
-      WHERE userId = ${userId}
-    `);
-
-    return result?.[0]?.total_balance ?? 0;
+      WHERE "userId" = ${userId}
+    `;
+    return Number(result?.[0]?.total_balance ?? 0);
   }
 }
