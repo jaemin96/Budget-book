@@ -4,6 +4,7 @@ import "../style/globals.css";
 import styles from "./styles/layout.module.scss";
 import { Providers } from "@/app/providers";
 import classNames from "classnames";
+import { isDemoModeEnabled } from "@/lib/demo/demoMode";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,9 +29,24 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isDemoMode = isDemoModeEnabled();
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        {isDemoMode ? (
+          <div
+            style={{
+              padding: "8px 12px",
+              fontSize: 12,
+              textAlign: "center",
+              backgroundColor: "#111827",
+              color: "#f9fafb",
+            }}
+          >
+            Demo mode: 모든 변경사항은 세션이 유지되는 동안에만 유지됩니다.
+          </div>
+        ) : null}
         <main className={classNames(styles.layout)}>
           <Providers>{children}</Providers>
         </main>

@@ -8,11 +8,12 @@ import { LOGIN } from "@/graphql/mutations/Auth";
 import { Eye, EyeOff } from "lucide-react";
 import { Spinner } from "@/components";
 import { useRouter } from "next/navigation";
+import { DEMO_LOGIN_EMAIL, DEMO_LOGIN_PASSWORD, isDemoModeEnabled } from "@/lib/demo/demoMode";
 
 export function UserAuthForm() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(isDemoModeEnabled() ? DEMO_LOGIN_EMAIL : "");
+  const [password, setPassword] = useState(isDemoModeEnabled() ? DEMO_LOGIN_PASSWORD : "");
   const [showPassword, setShowPassword] = useState(false);
 
   const [loginMutation, { loading }] = useMutation(LOGIN);

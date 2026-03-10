@@ -2,11 +2,14 @@
 
 import styles from "./authenticationPage.module.scss";
 import { UserAuthForm } from "./components/UserAuthForm";
+import { DEMO_LOGIN_EMAIL, DEMO_LOGIN_PASSWORD, isDemoModeEnabled } from "@/lib/demo/demoMode";
 
 const MAIN_DESCRIPTION = "Simple money tracking, easier budgeting";
 const SUB_DESCRIPTION = "© 2025 by Jaemin Kim";
 
 const LoginForm: React.FC = () => {
+  const isDemoMode = isDemoModeEnabled();
+
   return (
     <div className={styles.formContainer}>
       <div className={styles.header}>
@@ -14,6 +17,11 @@ const LoginForm: React.FC = () => {
         <p>Enter your email</p>
       </div>
       <UserAuthForm />
+      {isDemoMode ? (
+        <p className={styles.terms}>
+          Demo login: {DEMO_LOGIN_EMAIL} / {DEMO_LOGIN_PASSWORD}
+        </p>
+      ) : null}
       <p className={styles.terms}>By Jaemin Kim</p>
     </div>
   );

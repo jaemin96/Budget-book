@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { handleDemoGraphQL, handleDemoGraphQLGet } from "@/lib/demo/demoGraphql";
+import { isDemoModeEnabled } from "@/lib/demo/demoMode";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+
+    if (isDemoModeEnabled()) {
+      return handleDemoGraphQL(request, body);
+    }
 
     // 백엔드 GraphQL 엔드포인트
     const backendUrl =
@@ -46,6 +52,10 @@ export async function POST(request: NextRequest) {
 
 // GET 요청도 지원 (GraphQL Playground 등)
 export async function GET(request: NextRequest) {
+  if (isDemoModeEnabled()) {
+    return handleDemoGraphQLGet(request);
+  }
+
   const backendUrl =
     process.env.GRAPHQL_BACKEND_URL ||
     process.env.NEXT_PUBLIC_GRAPHQL_API ||
