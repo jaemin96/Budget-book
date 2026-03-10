@@ -1,4 +1,4 @@
-## Budget Book Client (demo)
+## Budget Book Client
 
 <table>
   <tr>
